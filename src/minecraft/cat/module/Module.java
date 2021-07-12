@@ -1,10 +1,13 @@
 package cat.module;
 
-import cat.module.modules.render.HUD;
+import cat.module.value.Value;
 import cat.util.MinecraftInstance;
 import net.minecraft.block.Block;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class Module extends MinecraftInstance {
     //TODO: improve event system
@@ -12,6 +15,7 @@ public class Module extends MinecraftInstance {
     ModuleCategory category;
     public boolean enabled;
     public int keyBind = 0;
+    protected List<Value<?>> values = new LinkedList<>();
 
     public Module(String name, String tag, ModuleCategory cat){
         enabled = false;
@@ -72,5 +76,13 @@ public class Module extends MinecraftInstance {
     }
     public boolean getState(){
         return enabled;
+    }
+    public Value<?> getValue(String name){
+        for (Value<?> v : values) {
+            if(v.name.equalsIgnoreCase(name)){
+                return v;
+            }
+        }
+        return null;
     }
 }

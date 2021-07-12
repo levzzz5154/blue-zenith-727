@@ -6,7 +6,6 @@ import cat.util.EntityManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.C02PacketUseEntity;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 
 public class Aura extends Module {
@@ -16,7 +15,7 @@ public class Aura extends Module {
     EntityLivingBase target = null;
     public void onUpdate(){
         for (Entity ent : mc.theWorld.loadedEntityList) {
-            if(ent instanceof EntityLivingBase && mc.thePlayer.getDistanceToEntity(ent) <= 3 && EntityManager.isTarget(ent)){
+            if(ent != null && mc.thePlayer.getDistanceToEntity(ent) <= 3 && EntityManager.isTarget(ent)){
                 target = (EntityLivingBase) ent;
             }
         }

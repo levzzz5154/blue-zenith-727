@@ -6,9 +6,9 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class EntityManager extends MinecraftInstance{
-    static boolean mobs = false;
+    static boolean mobs = true;
     static boolean players = true;
-    static boolean animals = false;
+    static boolean animals = true;
     public static boolean isTarget(Entity ent){
         return ent != mc.thePlayer && ((mobs && isMob(ent)) || (players && ent instanceof EntityPlayer) || (animals && isAnimal(ent)));
     }
