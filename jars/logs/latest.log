@@ -1,0 +1,25 @@
+[13:44:57] [Client thread/INFO]: Setting user: Player168
+[13:44:57] [Client thread/INFO]: (Session ID is token:0:Player168)
+[13:44:59] [Client thread/INFO]: LWJGL Version: 2.9.4
+[13:45:00] [Client thread/INFO]: Reloading ResourceManager: Default
+[13:45:00] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[13:45:01] [Thread-6/INFO]: Initializing LWJGL OpenAL
+[13:45:01] [Thread-6/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[13:45:01] [Thread-6/INFO]: OpenAL initialized.
+[13:45:01] [Sound Library Loader/INFO]: Sound engine started
+[13:45:03] [Client thread/INFO]: Created: 512x512 textures-atlas
+[13:45:03] [Client thread/INFO]: Starting BlueZenith b7.27
+[13:45:03] [Client thread/INFO]: Finished Starting!
+[13:45:06] [Server thread/INFO]: Starting integrated minecraft server version 1.8.9
+[13:45:06] [Server thread/INFO]: Generating keypair
+[13:45:07] [Server thread/INFO]: Preparing start region for level 0
+[13:45:08] [Server thread/INFO]: Changing view distance to 6, from 10
+[13:45:08] [Server thread/INFO]: Player168[local:E:edcbef51] logged in with entity id 63 at (351.30000001192093, 65.0, 124.4748946961878)
+[13:45:08] [Server thread/INFO]: Player168 joined the game
+[13:45:08] [Server thread/INFO]: Saving and pausing game...
+[13:45:08] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Overworld
+[13:45:08] [Server thread/INFO]: Saving chunks for level 'mcpworld'/Nether
+[13:45:08] [Server thread/INFO]: Saving chunks for level 'mcpworld'/The End
+[13:45:16] [Client thread/INFO]: [CHAT] §3§l[§r§bBlue Zenith§3§l] §r§9Enabled module InventoryMove.
+[13:45:16] [Server thread/INFO]: Player168 has just earned the achievement [Taking Inventory]
+[13:45:16] [Client thread/INFO]: [CHAT] Player168 has just earned the achievement [Taking Inventory]
