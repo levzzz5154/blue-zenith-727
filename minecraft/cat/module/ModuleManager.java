@@ -1,6 +1,8 @@
 package cat.module;
 
+import cat.BlueZenith;
 import cat.module.modules.combat.Aura;
+import cat.module.modules.combat.TestMod;
 import cat.module.modules.misc.InventoryMove;
 import cat.module.modules.movement.*;
 import cat.module.modules.render.*;
@@ -15,6 +17,7 @@ public class ModuleManager {
         modules.add(new FullBright());
         modules.add(new Aura());
         modules.add(new InventoryMove());
+        modules.add(new TestMod());
     }
     public Module getModule(String name){
         for (Module m : modules) {
