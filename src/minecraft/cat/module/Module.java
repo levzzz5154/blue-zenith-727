@@ -1,5 +1,6 @@
 package cat.module;
 
+import cat.BlueZenith;
 import cat.module.value.Value;
 import cat.util.MinecraftInstance;
 import net.minecraft.block.Block;
@@ -42,9 +43,11 @@ public class Module extends MinecraftInstance {
     }
     public void toggle(){
         if(enabled){
+            BlueZenith.eventManager.unregisterListener(this);
             onDisable();
         }else{
             onEnable();
+            BlueZenith.eventManager.registerListener(this);
         }
         enabled = !enabled;
     }

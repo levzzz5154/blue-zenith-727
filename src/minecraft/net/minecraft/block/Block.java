@@ -449,7 +449,7 @@ public class Block {
      */
     public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
         AxisAlignedBB axisalignedbb = this.getCollisionBoundingBox(worldIn, pos, state);
-        for (Module m : BlueZenith.moduleManager.modules) {
+        for (Module m : BlueZenith.moduleManager.getModules()) {
             if(m.getState()){
                 axisalignedbb = m.onBlockBB(pos, blockState.getBlock(), axisalignedbb);
             }

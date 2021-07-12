@@ -610,7 +610,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
      */
     public void onLivingUpdate() {
         if(this == mc.thePlayer){
-            for (Module f : BlueZenith.moduleManager.modules) {
+            for (Module f : BlueZenith.moduleManager.getModules()) {
                 if(f.getState()){
                     f.onUpdate();
                 }

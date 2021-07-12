@@ -4,11 +4,13 @@ import cat.module.modules.combat.Aura;
 import cat.module.modules.misc.InventoryMove;
 import cat.module.modules.movement.*;
 import cat.module.modules.render.*;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModuleManager {
-    public ArrayList<Module> modules = new ArrayList<>();
+    private ArrayList<Module> modules = new ArrayList<>();
     public ModuleManager(){
         modules.add(new HUD().setEnabled(true));
         modules.add(new Flight());
@@ -31,6 +33,9 @@ public class ModuleManager {
             }
         }
         return null;
+    }
+    public ArrayList<Module> getModules() {
+        return modules;
     }
     public void handleKey(int keyCode){
         for (Module m : modules) {

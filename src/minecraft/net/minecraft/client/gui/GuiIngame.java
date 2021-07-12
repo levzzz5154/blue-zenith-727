@@ -1,6 +1,7 @@
 package net.minecraft.client.gui;
 
 import cat.BlueZenith;
+import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -351,12 +352,7 @@ public class GuiIngame extends Gui {
             this.overlayPlayerList.updatePlayerList(true);
             this.overlayPlayerList.renderPlayerlist(i, scoreboard, scoreobjective1);
         }
-
-        for (Module m : BlueZenith.moduleManager.modules) {
-            if(m.getState()){
-                m.onRender2D();
-            }
-        }
+        BlueZenith.eventManager.call(new Render2DEvent(partialTicks, scaledresolution));
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableLighting();
