@@ -2,6 +2,7 @@ package net.minecraft.client.gui;
 
 import cat.BlueZenith;
 import cat.command.Command;
+import cat.util.ClientUtils;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -409,11 +410,16 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
             this.mc.ingameGUI.getChatGUI().addToSentMessages(msg);
         }
         if(msg.startsWith(".")){
+            boolean exec = false;
             String[] args = msg.substring(1).split(" ");
             for (Command c : BlueZenith.commandManager.commands) {
                 if(args[0].equalsIgnoreCase(c.pref)){
                     c.execute(args);
+                    exec = true;
                 }
+            }
+            if(!exec){
+                ClientUtils.displayChatMessage("§3§l[§r§bBlue Zenith§3§l] §r§9 Couldn't find "+args[0]+" command.");
             }
         }else{
             this.mc.thePlayer.sendChatMessage(msg);
