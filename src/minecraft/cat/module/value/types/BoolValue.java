@@ -14,6 +14,11 @@ public class BoolValue extends Value<Boolean> {
 
     @Override
     public void set(Boolean newValue) {
-        this.value = newValue;
+        this.value = onChange(value, newValue);
+    }
+
+    @Override
+    public Boolean onChange(Boolean oldValue, Boolean newValue) {
+        return newValue;
     }
 }

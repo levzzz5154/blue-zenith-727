@@ -3,8 +3,8 @@ package cat.module.value.types;
 import cat.module.value.Value;
 
 public class IntegerValue extends Value<Integer> {
-    Integer max, min;
-    public IntegerValue(String id, String valueName, Integer value, Integer max, Integer min, boolean visible) {
+    public Integer max, min;
+    public IntegerValue(String id, String valueName, Integer value, Integer min, Integer max, boolean visible) {
         super(id, valueName, value, visible);
         this.max = max;
         this.min = min;
@@ -17,6 +17,10 @@ public class IntegerValue extends Value<Integer> {
 
     @Override
     public void set(Integer newValue) {
+        onChange(this.value, newValue);
         this.value = newValue;
+    }
+    public Integer onChange(Integer oldValue, Integer newValue){
+        return newValue;
     }
 }
