@@ -22,6 +22,11 @@ public final class ModeValue extends Value<String> {
 
     }
 
+    @Override
+    public String onChange(String oldValue, String newValue) {
+        return newValue;
+    }
+
     public void next() {
         int index = range.indexOf(this.value);
         if((index + 1) >= range.size()) {

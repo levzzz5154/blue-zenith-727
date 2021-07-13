@@ -17,8 +17,7 @@ public class IntegerValue extends Value<Integer> {
 
     @Override
     public void set(Integer newValue) {
-        onChange(this.value, newValue);
-        this.value = newValue;
+        this.value = onChange(this.value, newValue);
     }
     public Integer onChange(Integer oldValue, Integer newValue){
         return newValue;
