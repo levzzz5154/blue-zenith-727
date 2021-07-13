@@ -1,37 +1,44 @@
 package cat.events;
 
+import cat.BlueZenith;
+import cat.module.ModuleManager;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class EventManager {
-    private Map<Object, ArrayList<Method>> listeners = new LinkedHashMap<>();
+    private final Map<Class, CopyOnWriteArrayList<Method>> listeners = new LinkedHashMap<>();
 
     public void registerListener(Object listener) {
-         ArrayList<Method> methods = new ArrayList<>();
          for (Method method : listener.getClass().getMethods()) {
             if(method.isAnnotationPresent(Subscriber.class) && method.getParameterTypes().length == 1 && method.getParameterTypes()[0].getSuperclass() == Event.class) {
-                methods.add(method);
+                Class<?> ev = method.getParameterTypes()[0];
+                if(!listeners.containsKey(ev)) {
+                    CopyOnWriteArrayList<Method> m = new CopyOnWriteArrayList<>();
+                    m.add(method);
+                    listeners.put(ev, m);
+                } else {
+                    listeners.get(ev).add(method);
+                }
             }
-         }
-         if(!methods.isEmpty()) {
-             listeners.put(listener, methods);
          }
     }
 
     public void unregisterListener(Object listener) {
-        listeners.remove(listener);
+        listeners.values().stream().forEach(list -> list.stream().forEach(func -> list.removeIf(method -> method.getDeclaringClass() == listener.getClass())));
     }
 
     public void call(Event event) {
-        listeners.forEach((key, value) -> value.stream().filter(m -> m.getParameterTypes()[0] == event.getClass())
-                .forEach(func -> {
-                    try {
-                        func.setAccessible(true);
-                        func.invoke(key, event);
-                    } catch(IllegalAccessException | InvocationTargetException ignored) {}
-                }));
+        listeners.get(event.getClass()).forEach(method -> {
+            Object obj = BlueZenith.moduleManager.getModule(method.getDeclaringClass());
+            try {
+                method.invoke(obj, event);
+            } catch (IllegalAccessException | InvocationTargetException ignored) {ignored.printStackTrace();}
+        });
         }
-    }
+      }
+
