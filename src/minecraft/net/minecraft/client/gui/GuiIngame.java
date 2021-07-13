@@ -352,6 +352,7 @@ public class GuiIngame extends Gui {
             this.overlayPlayerList.updatePlayerList(true);
             this.overlayPlayerList.renderPlayerlist(i, scoreboard, scoreobjective1);
         }
+
         BlueZenith.eventManager.call(new Render2DEvent(partialTicks, scaledresolution));
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

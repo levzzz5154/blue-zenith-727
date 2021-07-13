@@ -6,6 +6,7 @@ import cat.module.Module;
 import cat.module.value.Value;
 import cat.module.value.types.BoolValue;
 import cat.module.value.types.FloatValue;
+import cat.module.value.types.IntegerValue;
 
 import java.util.regex.Pattern;
 
@@ -32,15 +33,20 @@ public class ValueCommand extends Command {
                 b.value = !b.value;
                 chat("Set "+b.name+" to "+b.value);
             }else if(args.length > 3){
-                if(value instanceof FloatValue){
-                    if(!Pattern.matches("[a-zA-Z]+", args[3])){
+                if(!Pattern.matches("[a-zA-Z]+", args[3])){
+                    if(value instanceof FloatValue){
                         FloatValue b = (FloatValue) value;
                         float c = Float.parseFloat(args[3]);
                         b.value = c;
                         chat("Set "+b.name+" to "+c);
-                    }else{
-                        chat("Cannot convert "+args[3]+" to number.");
+                    }else if(value instanceof IntegerValue){
+                        IntegerValue b = (IntegerValue) value;
+                        int c = Integer.parseInt(args[3]);
+                        b.value = c;
+                        chat("Set "+b.name+" to "+c);
                     }
+                }else{
+                    chat("Cannot convert "+args[3]+" to number.");
                 }
             }
         }else{

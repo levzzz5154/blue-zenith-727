@@ -1,5 +1,6 @@
 package cat.ui;
 
+import cat.BlueZenith;
 import cat.util.RenderUtil;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
@@ -8,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.io.IOException;
+
+import static cat.module.modules.render.HUD.hi;
 
 public class GuiMain extends GuiScreen {
     public void initGui(){
@@ -30,7 +33,15 @@ public class GuiMain extends GuiScreen {
         float j = this.height / 3.5f + 48;
         GlStateManager.translate(sc.getScaledWidth() / 2f - (font.getStringWidth("BlueZenith") * scale / 2f), j - 48 - font.FONT_HEIGHT, 1);
         GlStateManager.scale(scale,scale,1);
-        font.drawString("BlueZenith", 0, 0, Color.WHITE.getRGB(), true);
+        char[] gd = BlueZenith.name.toCharArray();
+        float v = 0;
+        int n = 0;
+        for (char c : gd) {
+            Color Z = hi(new Color(0, 60, 60), new Color(0, 140, 160), Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * (n + 2.55) / 60);
+            font.drawString(String.valueOf(c), v, 0, Z.getRGB(), true);
+            v += font.getStringWidth(String.valueOf(c));
+            n -= 1;
+        }
         GlStateManager.popMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

@@ -3,3 +3,6 @@ Made completely from scratch, i did it without a tutorial (look mom im pro coder
 
 # why
 i was bored
+
+# thanks
+Huge thanks to port (angles#2018) for helping me in this project (EventSystem and some optimizations)

@@ -6,57 +6,57 @@ import cat.util.MinecraftInstance;
 import net.minecraft.block.Block;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import org.lwjgl.input.Mouse;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class Module extends MinecraftInstance {
-    //TODO: improve event system
     String name, tag;
     ModuleCategory category;
-    public boolean enabled;
-    public int keyBind = 0;
-    protected List<Value<?>> values = new LinkedList<>();
-
+    private boolean state;
+    public int keyBind;
+    public boolean showSettings;
+    private boolean wasPressed;
     public Module(String name, String tag, ModuleCategory cat){
-        enabled = false;
-        this.name = name;
-        this.tag = tag;
-        this.category = cat;
+        this(name, tag, cat, 0);
+    }
+    public List<Value<?>> getValues(){
+        ArrayList<Value<?>> d = new ArrayList<>();
+        for (Field i : getClass().getDeclaredFields()) {
+            i.setAccessible(true);
+            Object o = null;
+            try {
+                o = i.get(this);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            if(o instanceof Value){
+                d.add((Value<?>) o);
+            }
+        }
+        return d;
     }
     public Module(String name, String tag, ModuleCategory cat, int keyBind){
-        enabled = false;
+        state = false;
         this.name = name;
         this.tag = tag;
         this.category = cat;
         this.keyBind = keyBind;
     }
 
-    public void onRender2D(){
-
-    }
-    public void onUpdate(){
-
-    }
-    public AxisAlignedBB onBlockBB(BlockPos pos, Block block, AxisAlignedBB blockBB){
-        return blockBB;
-    }
     public void toggle(){
-        if(enabled){
+        if(state){
             BlueZenith.eventManager.unregisterListener(this);
             onDisable();
         }else{
-            onEnable();
             BlueZenith.eventManager.registerListener(this);
+            onEnable();
         }
-        enabled = !enabled;
+        state = !state;
     }
-    public void onDisable(){
-
-    }
-    public void onEnable(){
-
-    }
+    public void onDisable(){}
+    public void onEnable() {}
 
     public String getTagName(){
         return name + "§7" + (tag.isEmpty() ? "" : " " + tag);
@@ -73,19 +73,32 @@ public class Module extends MinecraftInstance {
     public ModuleCategory getCategory() {
         return category;
     }
-    public Module setEnabled(boolean enabled){
-        this.enabled = enabled;
+    public Module setState(boolean state){
+        if(!state && this.state){
+            BlueZenith.eventManager.unregisterListener(this);
+            onDisable();
+        }else if(state && !this.state){
+            BlueZenith.eventManager.registerListener(this);
+            onEnable();
+        }
+        this.state = state;
         return this;
     }
     public boolean getState(){
-        return enabled;
+        return state;
     }
     public Value<?> getValue(String name){
-        for (Value<?> v : values) {
+        for (Value<?> v : getValues()) {
             if(v.name.equalsIgnoreCase(name)){
                 return v;
             }
         }
         return null;
+    }
+    public boolean wasPressed(){
+        return wasPressed;
+    }
+    public void updatePressed(){
+        wasPressed = Mouse.isButtonDown(0) || Mouse.isButtonDown(1);
     }
 }

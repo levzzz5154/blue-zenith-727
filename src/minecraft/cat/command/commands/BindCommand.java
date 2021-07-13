@@ -23,7 +23,7 @@ public class BindCommand extends Command {
             int k = Keyboard.getKeyIndex(args[2].toUpperCase(Locale.ROOT));
             if(k != 0){
                 m.keyBind = k;
-                chat("Bound "+m.getName()+" to "+args[2]);
+                chat("Bound "+m.getName()+" to "+args[2].toUpperCase(Locale.ROOT));
             }else{
                 m.keyBind = Keyboard.KEY_NONE;
                 chat("Bound "+m.getName()+" to NONE");

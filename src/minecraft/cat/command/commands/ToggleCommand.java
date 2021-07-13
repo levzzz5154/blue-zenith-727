@@ -19,6 +19,8 @@ public class ToggleCommand extends Command {
             }
             m.toggle();
             chat(m.getState() ? "Enabled module "+m.getName()+"." : "Disabled module "+m.getName()+".");
+        }else{
+            chat("Syntax: .t <module>");
         }
     }
 }

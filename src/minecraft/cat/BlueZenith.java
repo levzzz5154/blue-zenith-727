@@ -16,8 +16,11 @@ public class BlueZenith {
     public static void start(){
         ClientUtils.getLogger().info("Starting BlueZenith b"+version);
         eventManager = new EventManager();
+        ClientUtils.getLogger().info("Started event manager.");
         moduleManager = new ModuleManager();
+        ClientUtils.getLogger().info("Loaded "+moduleManager.getModules().size()+" modules.");
         commandManager = new CommandManager();
+        ClientUtils.getLogger().info("Loaded "+commandManager.commands.size()+" commands.");
         guiMain = new GuiMain();
         ClientUtils.getLogger().info("Finished Starting!");
     }
