@@ -1,6 +1,7 @@
 package net.minecraft.client;
 
 import cat.BlueZenith;
+import cat.module.modules.misc.InventoryMove;
 import cat.ui.GuiMain;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -938,7 +939,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         if (guiScreenIn == null && this.theWorld == null) {
             guiScreenIn = BlueZenith.guiMain;
         } else if (guiScreenIn == null && this.thePlayer.getHealth() <= 0.0F) {
-            guiScreenIn = BlueZenith.guiMain;
+            guiScreenIn = new GuiGameOver();
         }
 
         if (guiScreenIn instanceof GuiMain) {
@@ -946,14 +947,14 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             this.ingameGUI.getChatGUI().clearChatMessages();
         }
 
-        this.currentScreen = (GuiScreen) guiScreenIn;
+        this.currentScreen = guiScreenIn;
 
         if (guiScreenIn != null) {
             this.setIngameNotInFocus();
             ScaledResolution scaledresolution = new ScaledResolution(this);
             int i = scaledresolution.getScaledWidth();
             int j = scaledresolution.getScaledHeight();
-            ((GuiScreen) guiScreenIn).setWorldAndResolution(this, i, j);
+            guiScreenIn.setWorldAndResolution(this, i, j);
             this.skipRenderWorld = false;
         } else {
             this.mcSoundHandler.resumeSounds();
@@ -1619,7 +1620,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             }
         }
 
-        if (this.currentScreen == null || this.currentScreen.allowUserInput) {
+        if (this.currentScreen == null || BlueZenith.moduleManager.getModule(InventoryMove.class).getState() || this.currentScreen.allowUserInput) {
             this.mcProfiler.endStartSection("mouse");
 
             while (Mouse.next()) {

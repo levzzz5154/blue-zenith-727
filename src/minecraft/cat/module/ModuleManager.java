@@ -1,6 +1,7 @@
 package cat.module;
 
 import cat.module.modules.combat.Aura;
+import cat.module.modules.combat.Velocity;
 import cat.module.modules.misc.InventoryMove;
 import cat.module.modules.movement.*;
 import cat.module.modules.render.*;
@@ -15,6 +16,9 @@ public class ModuleManager {
         modules.add(new FullBright());
         modules.add(new Aura());
         modules.add(new InventoryMove());
+        modules.add(new Velocity());
+        modules.add(new ClickGUI());
+        modules.add(new Speed());
     }
     public ArrayList<Module> getModules(){
         return modules;

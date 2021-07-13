@@ -5,7 +5,7 @@ public enum ModuleCategory {
     MOVEMENT("Movement"),
     MISC("Misc"),
     RENDER("Render");
-    String displayName;
+    public String displayName;
     ModuleCategory(String displayName) {
         this.displayName = displayName;
     }

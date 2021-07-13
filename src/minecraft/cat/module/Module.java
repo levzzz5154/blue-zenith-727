@@ -6,6 +6,7 @@ import cat.util.MinecraftInstance;
 import net.minecraft.block.Block;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import org.lwjgl.input.Mouse;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -15,11 +16,12 @@ public class Module extends MinecraftInstance {
     ModuleCategory category;
     private boolean state;
     public int keyBind;
-
+    public boolean showSettings;
+    private boolean wasPressed;
     public Module(String name, String tag, ModuleCategory cat){
         this(name, tag, cat, 0);
     }
-    private List<Value<?>> getValues(){
+    public List<Value<?>> getValues(){
         ArrayList<Value<?>> d = new ArrayList<>();
         for (Field i : getClass().getDeclaredFields()) {
             i.setAccessible(true);
@@ -92,5 +94,11 @@ public class Module extends MinecraftInstance {
             }
         }
         return null;
+    }
+    public boolean wasPressed(){
+        return wasPressed;
+    }
+    public void updatePressed(){
+        wasPressed = Mouse.isButtonDown(0) || Mouse.isButtonDown(1);
     }
 }
