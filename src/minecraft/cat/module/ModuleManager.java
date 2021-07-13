@@ -19,6 +19,7 @@ public class ModuleManager {
         modules.add(new Velocity());
         modules.add(new ClickGUI());
         modules.add(new Speed());
+        modules.add(new NoSlowDown());
     }
     public ArrayList<Module> getModules(){
         return modules;

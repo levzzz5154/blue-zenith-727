@@ -3,6 +3,7 @@ package net.minecraft.client.entity;
 import cat.BlueZenith;
 import cat.events.impl.UpdateEvent;
 import cat.module.Module;
+import cat.module.modules.movement.NoSlowDown;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -610,6 +611,8 @@ public class EntityPlayerSP extends AbstractClientPlayer {
      * use this to react to sunlight and start to burn.
      */
     public void onLivingUpdate() {
+        NoSlowDown b = (NoSlowDown) BlueZenith.moduleManager.getModule(NoSlowDown.class);
+
         if(this == mc.thePlayer){
             BlueZenith.eventManager.call(new UpdateEvent());
         }
@@ -670,8 +673,9 @@ public class EntityPlayerSP extends AbstractClientPlayer {
         this.movementInput.updatePlayerMoveState();
 
         if (this.isUsingItem() && !this.isRiding()) {
-            this.movementInput.moveStrafe *= 0.2F;
-            this.movementInput.moveForward *= 0.2F;
+            float multi = b.getState() ? b.itemMulti.get() : 0.2f;
+            this.movementInput.moveStrafe *= multi;
+            this.movementInput.moveForward *= multi;
             this.sprintToggleTimer = 0;
         }
 
@@ -689,7 +693,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
             }
         }
 
-        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown()) {
+        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !(this.isUsingItem() && !b.getState()) && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown()) {
             this.setSprinting(true);
         }
 

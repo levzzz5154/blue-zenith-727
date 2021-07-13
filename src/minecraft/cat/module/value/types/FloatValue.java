@@ -4,10 +4,10 @@ import cat.module.Module;
 import cat.module.value.Value;
 
 public class FloatValue extends Value<Float> {
-    Float max;
-    Float min;
+    public Float max;
+    public Float min;
 
-    public FloatValue(String id, String valueName, Float value, Float max, Float min, boolean visible) {
+    public FloatValue(String id, String valueName, Float value, Float min, Float max, boolean visible) {
         super(id, valueName, value, visible);
         this.max = max;
         this.min = min;

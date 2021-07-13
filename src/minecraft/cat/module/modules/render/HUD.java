@@ -34,12 +34,11 @@ public class HUD extends Module {
         font.drawString("BlueZenith b" + BlueZenith.version, 5, 5, Color.cyan.darker().getRGB(), true);
         float y = 5;
         int cf = 0;
-        for (int i = 0; i < modules.size(); i++) {
-            Module m = modules.get(i);
-            Color c = hi(new Color(50,170, 150), new Color(50, 140, 160), Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * (cf + 2.55) / 60);
+        for (Module m : modules) {
+            Color c = hi(new Color(50, 170, 150), new Color(50, 140, 160), Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * (cf + 2.55) / 60);
             font.drawString(m.getTagName(), sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - 5, y, c.getRGB(), true);
             y += font.FONT_HEIGHT + 2;
-            cf -= 5;
+            cf -= 1;
         }
     }
     public static Color hi(final Color color, final Color color2, double delay) {

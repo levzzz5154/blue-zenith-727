@@ -8,7 +8,7 @@ import cat.module.value.types.FloatValue;
 import cat.util.MovementUtil;
 
 public class Speed extends Module {
-    FloatValue speed = new FloatValue("", "Speed", 0f, 5f, 0.1f, true);
+    FloatValue speed = new FloatValue("", "Speed", 0f, 0f, 5f, true);
     public Speed() {
         super("Speed", "", ModuleCategory.MOVEMENT);
     }
