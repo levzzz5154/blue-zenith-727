@@ -1,5 +1,7 @@
 package cat.module.modules.combat;
 
+import cat.events.Subscriber;
+import cat.events.impl.UpdateEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.util.EntityManager;
@@ -13,7 +15,8 @@ public class Aura extends Module {
         super("Aura", "", ModuleCategory.COMBAT, Keyboard.KEY_R);
     }
     EntityLivingBase target = null;
-    public void onUpdate(){
+    @Subscriber
+    public void onUpdate(UpdateEvent e){
         for (Entity ent : mc.theWorld.loadedEntityList) {
             if(ent != null && mc.thePlayer.getDistanceToEntity(ent) <= 3 && EntityManager.isTarget(ent)){
                 target = (EntityLivingBase) ent;

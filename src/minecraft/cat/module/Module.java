@@ -42,12 +42,7 @@ public class Module extends MinecraftInstance {
         this.category = cat;
         this.keyBind = keyBind;
     }
-    public void onUpdate(){
 
-    }
-    public AxisAlignedBB onBlockBB(BlockPos pos, Block block, AxisAlignedBB blockBB){
-        return blockBB;
-    }
     public void toggle(){
         if(state){
             BlueZenith.eventManager.unregisterListener(this);
