@@ -7,8 +7,8 @@ public class FloatValue extends Value<Float> {
     Float max;
     Float min;
 
-    public FloatValue(Module parentModule, String id, String valueName, Float value, Float max, Float min, boolean visible) {
-        super(parentModule, id, valueName, value, visible);
+    public FloatValue(String id, String valueName, Float value, Float max, Float min, boolean visible) {
+        super(id, valueName, value, visible);
         this.max = max;
         this.min = min;
     }

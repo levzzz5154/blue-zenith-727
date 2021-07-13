@@ -8,13 +8,16 @@ import cat.module.modules.render.*;
 import java.util.ArrayList;
 
 public class ModuleManager {
-    public ArrayList<Module> modules = new ArrayList<>();
+    private final ArrayList<Module> modules = new ArrayList<>();
     public ModuleManager(){
-        modules.add(new HUD().setEnabled(true));
+        modules.add(new HUD().setState(true));
         modules.add(new Flight());
         modules.add(new FullBright());
         modules.add(new Aura());
         modules.add(new InventoryMove());
+    }
+    public ArrayList<Module> getModules(){
+        return modules;
     }
     public Module getModule(String name){
         for (Module m : modules) {

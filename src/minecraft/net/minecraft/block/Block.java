@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import cat.BlueZenith;
+import cat.events.impl.BlockBBEvent;
 import cat.module.Module;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -449,11 +450,12 @@ public class Block {
      */
     public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
         AxisAlignedBB axisalignedbb = this.getCollisionBoundingBox(worldIn, pos, state);
-        for (Module m : BlueZenith.moduleManager.modules) {
-            if(m.getState()){
-                axisalignedbb = m.onBlockBB(pos, blockState.getBlock(), axisalignedbb);
-            }
+        BlockBBEvent bbEvent = new BlockBBEvent(pos, blockState.getBlock(), axisalignedbb);
+        BlueZenith.eventManager.call(bbEvent);
+        if(bbEvent.cancelled){
+            return;
         }
+        axisalignedbb = bbEvent.blockBB;
         if (axisalignedbb != null && mask.intersectsWith(axisalignedbb)) {
             list.add(axisalignedbb);
         }

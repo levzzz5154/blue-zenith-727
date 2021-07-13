@@ -1,6 +1,7 @@
 package net.minecraft.client.entity;
 
 import cat.BlueZenith;
+import cat.events.impl.UpdateEvent;
 import cat.module.Module;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
@@ -610,11 +611,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
      */
     public void onLivingUpdate() {
         if(this == mc.thePlayer){
-            for (Module f : BlueZenith.moduleManager.modules) {
-                if(f.getState()){
-                    f.onUpdate();
-                }
-            }
+            BlueZenith.eventManager.call(new UpdateEvent());
         }
         if (this.sprintingTicksLeft > 0) {
             --this.sprintingTicksLeft;
