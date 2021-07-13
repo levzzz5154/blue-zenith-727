@@ -23,4 +23,8 @@ public class ClientUtils extends MinecraftInstance {
 
         mc.thePlayer.addChatMessage(IChatComponent.Serializer.jsonToComponent(jsonObject.toString()));
     }
+
+    public static void fancyMessage(String f){
+        ClientUtils.displayChatMessage("§3§l[§r§bBlue Zenith§3§l] §r§9"+f);
+    }
 }

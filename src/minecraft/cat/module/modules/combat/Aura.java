@@ -14,7 +14,7 @@ import org.lwjgl.input.Keyboard;
 public class Aura extends Module {
     public FloatValue range = new FloatValue("3", "Range", 3f, 0f, 8f, true);
     public Aura() {
-        super("Aura", "", ModuleCategory.COMBAT, Keyboard.KEY_R);
+        super("Aura", "", ModuleCategory.COMBAT, Keyboard.KEY_R, "aura", "ka", "killaura");
     }
     EntityLivingBase target = null;
     @Subscriber

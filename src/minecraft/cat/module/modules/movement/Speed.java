@@ -10,7 +10,7 @@ import cat.util.MovementUtil;
 public class Speed extends Module {
     FloatValue speed = new FloatValue("", "Speed", 0f, 0f, 5f, true);
     public Speed() {
-        super("Speed", "", ModuleCategory.MOVEMENT);
+        super("Speed", "", ModuleCategory.MOVEMENT, "bhop");
     }
     @Subscriber
     public void onUpdate(UpdateEvent e){

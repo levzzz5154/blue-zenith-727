@@ -1,25 +1,10 @@
 package net.minecraft.client.gui;
 
 import cat.BlueZenith;
-import cat.command.Command;
-import cat.util.ClientUtils;
+import cat.events.impl.SentMessageEvent;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
-import java.awt.Toolkit;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
 import net.minecraft.client.renderer.GlStateManager;
@@ -48,6 +33,19 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import tv.twitch.chat.ChatUserInfo;
+
+import java.awt.*;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -406,24 +404,14 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     }
 
     public void sendChatMessage(String msg, boolean addToChat) {
+        SentMessageEvent event = new SentMessageEvent(msg);
+        BlueZenith.commandManager.dispatch(event);
+        BlueZenith.eventManager.call(event);
+        if(event.cancelled) return;
         if (addToChat) {
-            this.mc.ingameGUI.getChatGUI().addToSentMessages(msg);
+            this.mc.ingameGUI.getChatGUI().addToSentMessages(event.message);
         }
-        if(msg.startsWith(".")){
-            boolean exec = false;
-            String[] args = msg.substring(1).split(" ");
-            for (Command c : BlueZenith.commandManager.commands) {
-                if(args[0].equalsIgnoreCase(c.pref)){
-                    c.execute(args);
-                    exec = true;
-                }
-            }
-            if(!exec){
-                ClientUtils.displayChatMessage("§3§l[§r§bBlue Zenith§3§l] §r§9 Couldn't find "+args[0]+" command.");
-            }
-        }else{
-            this.mc.thePlayer.sendChatMessage(msg);
-        }
+        this.mc.thePlayer.sendChatMessage(event.message);
     }
 
     /**

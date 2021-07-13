@@ -5,6 +5,6 @@ import cat.module.ModuleCategory;
 
 public class InventoryMove extends Module {
     public InventoryMove() {
-        super("InventoryMove", "", ModuleCategory.MISC);
+        super("InvMove", "", ModuleCategory.MISC, "InventoryMove");
     }
 }

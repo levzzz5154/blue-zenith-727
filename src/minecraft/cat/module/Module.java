@@ -16,9 +16,10 @@ public class Module extends MinecraftInstance {
     public int keyBind;
     public boolean showSettings;
     private boolean wasPressed;
+    public final String[] aliases;
     private List<Value<?>> values = new ArrayList<>();
-    public Module(String name, String tag, ModuleCategory cat){
-        this(name, tag, cat, 0);
+    public Module(String name, String tag, ModuleCategory cat, String... aliases){
+        this(name, tag, cat, 0, aliases);
     }
     public void loadValues() {
         for(Field i : getClass().getDeclaredFields()) {
@@ -35,12 +36,13 @@ public class Module extends MinecraftInstance {
     public List<Value<?>> getValues(){
         return this.values;
     }
-    public Module(String name, String tag, ModuleCategory cat, int keyBind){
+    public Module(String name, String tag, ModuleCategory cat, int keyBind, String... aliases){
         state = false;
         this.name = name;
         this.tag = tag;
         this.category = cat;
         this.keyBind = keyBind;
+        this.aliases = aliases;
     }
 
     public void toggle(){

@@ -4,8 +4,9 @@ import cat.util.ClientUtils;
 import cat.util.MinecraftInstance;
 
 public class Command extends MinecraftInstance {
-    public String name, pref;
-    public Command(String name, String pref){
+    public String name;
+    public String[] pref;
+    public Command(String name, String... pref){
         this.name = name;
         this.pref = pref;
     }
