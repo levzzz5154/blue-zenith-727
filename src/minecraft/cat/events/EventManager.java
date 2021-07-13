@@ -3,6 +3,7 @@ package cat.events;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -22,17 +23,26 @@ public final class EventManager {
     }
 
     public void unregisterListener(Object listener) {
-        listeners.remove(listener);
+        for (Map.Entry<Object, ArrayList<Method>> s : listeners.entrySet()) {
+            if(s.getKey().getClass() == listener.getClass()){
+                listeners.remove(s.getKey());
+            }
+        }
     }
 
     public void call(Event event) {
-        listeners.forEach((key, value) -> value.stream().filter(m -> m.getParameterTypes()[0] == event.getClass())
-                .forEach(func -> {
+        for (Map.Entry<Object, ArrayList<Method>> s : listeners.entrySet()) {
+            for (Method m : s.getValue()) {
+                if(m.getParameterTypes()[0] == event.getClass()){
                     try {
-                        func.setAccessible(true);
-                        func.invoke(key, event);
-                    } catch (IllegalAccessException | InvocationTargetException ignored) {
+                        m.invoke(s.getKey(), event);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
                     }
-                }));
+                }
+            }
+        }
     }
 }
