@@ -21,7 +21,12 @@ public class FloatValue extends Value<Float> {
     @Override
     public void set(Float newValue) {
         if(newValue <= max && newValue >= min){
-            this.value = newValue;
+            this.value = onChange(value, newValue);
         }
+    }
+
+    @Override
+    public Float onChange(Float oldValue, Float newValue) {
+        return newValue;
     }
 }

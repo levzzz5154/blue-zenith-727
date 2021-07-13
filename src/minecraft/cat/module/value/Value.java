@@ -17,4 +17,5 @@ public abstract class Value<T>{
 
     public abstract T get();
     public abstract void set(T newValue);
+    public abstract T onChange(T oldValue, T newValue);
 }
