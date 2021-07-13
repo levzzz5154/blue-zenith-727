@@ -7,16 +7,15 @@ import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.BoolValue;
 import cat.module.value.types.FloatValue;
+import cat.module.value.types.ModeValue;
 import cat.util.MovementUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import org.lwjgl.input.Keyboard;
 
 public class Flight extends Module {
     FloatValue speed = new FloatValue("1", "Speed", 2f, 0f, 5f, true);
     BoolValue blockBB = new BoolValue("2", "BlockBB", true, true);
+    private final ModeValue mode = new ModeValue("flight_mode", "Mode", "Vanilla", true, "Vanilla", "Mode2", "Mode3", "Mode4");
     public Flight() {
         super("Flight", "Vanilla", ModuleCategory.MOVEMENT, Keyboard.KEY_F);
     }

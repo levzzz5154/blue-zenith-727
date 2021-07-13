@@ -1,10 +1,7 @@
 package cat.module.modules.render;
 
-import cat.events.Subscriber;
-import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
-import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.input.Keyboard;
 
 public class FullBright extends Module {

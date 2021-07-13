@@ -1,11 +1,9 @@
 package cat.events;
 
 import cat.BlueZenith;
-import cat.module.ModuleManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,12 +31,18 @@ public final class EventManager {
     }
 
     public void call(Event event) {
-        listeners.get(event.getClass()).forEach(method -> {
-            Object obj = BlueZenith.moduleManager.getModule(method.getDeclaringClass());
-            try {
-                method.invoke(obj, event);
-            } catch (IllegalAccessException | InvocationTargetException ignored) {ignored.printStackTrace();}
+        listeners.forEach((targetEvent, methods) -> {
+            if(targetEvent == event.getClass()){
+                for (Method m : methods) {
+                    m.setAccessible(true);
+                    try {
+                        m.invoke(BlueZenith.moduleManager.getModule(m.getDeclaringClass()), event);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         });
-        }
-      }
+    }
+}
 

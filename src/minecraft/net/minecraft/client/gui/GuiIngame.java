@@ -2,7 +2,6 @@ package net.minecraft.client.gui;
 
 import cat.BlueZenith;
 import cat.events.impl.Render2DEvent;
-import cat.module.Module;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;

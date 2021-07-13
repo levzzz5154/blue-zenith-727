@@ -1,6 +1,5 @@
 package cat.module.value.types;
 
-import cat.module.Module;
 import cat.module.value.Value;
 
 public class BoolValue extends Value<Boolean> {

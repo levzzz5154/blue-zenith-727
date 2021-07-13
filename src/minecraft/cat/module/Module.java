@@ -3,13 +3,11 @@ package cat.module;
 import cat.BlueZenith;
 import cat.module.value.Value;
 import cat.util.MinecraftInstance;
-import net.minecraft.block.Block;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import org.lwjgl.input.Mouse;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Module extends MinecraftInstance {
     String name, tag;
@@ -18,24 +16,24 @@ public class Module extends MinecraftInstance {
     public int keyBind;
     public boolean showSettings;
     private boolean wasPressed;
+    private List<Value<?>> values = new ArrayList<>();
     public Module(String name, String tag, ModuleCategory cat){
         this(name, tag, cat, 0);
     }
-    public List<Value<?>> getValues(){
-        ArrayList<Value<?>> d = new ArrayList<>();
-        for (Field i : getClass().getDeclaredFields()) {
+    public void loadValues() {
+        for(Field i : getClass().getDeclaredFields()) {
             i.setAccessible(true);
             Object o = null;
             try {
                 o = i.get(this);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            if(o instanceof Value){
-                d.add((Value<?>) o);
+            } catch(IllegalAccessException ignored) {}
+            if(o instanceof Value) {
+                values.add((Value<?>) o);
             }
         }
-        return d;
+    }
+    public List<Value<?>> getValues(){
+        return this.values;
     }
     public Module(String name, String tag, ModuleCategory cat, int keyBind){
         state = false;
@@ -54,6 +52,10 @@ public class Module extends MinecraftInstance {
             onEnable();
         }
         state = !state;
+    }
+
+    protected void setTag(String newTag) {
+        this.tag = newTag;
     }
     public void onDisable(){}
     public void onEnable() {}

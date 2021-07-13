@@ -5,6 +5,7 @@ import cat.module.ModuleCategory;
 import cat.module.value.Value;
 import cat.module.value.types.BoolValue;
 import cat.module.value.types.FloatValue;
+import cat.module.value.types.ModeValue;
 import cat.util.MinecraftInstance;
 import cat.util.RenderUtil;
 import net.minecraft.client.gui.FontRenderer;
@@ -54,7 +55,24 @@ public class Panel extends MinecraftInstance {
             y1 += mHeight;
             if(m.showSettings){
                 for (Value<?> v : m.getValues()) {
-                    if(v instanceof FloatValue){
+                    if(v instanceof ModeValue) {
+                        ModeValue val = (ModeValue) v;
+                        RenderUtil.rect(x, y1, x + width, y1 + mHeight, Color.BLACK);
+                        FontRenderer font = mc.fontRendererObj;
+                        font.drawString(val.name, x + 5, y1 + f.FONT_HEIGHT / 2f, main_color.getRGB());
+                        font.drawString(val.value, x + 10 + font.getStringWidth(val.name), y1 + f.FONT_HEIGHT / 2f, Color.GRAY.getRGB());
+                        //mc.fontRendererObj.drawString(val.name, x + 5, y1 + f.FONT_HEIGHT / 2f, main_color.getRGB());
+                        //mc.fontRendererObj.drawString(val.value, x + 5 , y1 + f.FONT_HEIGHT / 2f, main_color.getRGB());
+                        if(i(mouseX, mouseY, x, y1, x + width, y1 + mHeight) && !m.wasPressed()) {
+                            if(Mouse.isButtonDown(0)) {
+                                val.next();
+                            } else if(Mouse.isButtonDown(1)) {
+                                val.previous();
+                            }
+                        }
+                        y1 += mHeight;
+                    }
+                    else if(v instanceof FloatValue){
                         FloatValue value = (FloatValue) v;
                         float w = width - 4;
                         final float a = x + w * (Math.max(value.min, Math.min(value.get(), value.max)) - value.min) / (value.max - value.min);

@@ -20,6 +20,8 @@ public class ModuleManager {
         modules.add(new ClickGUI());
         modules.add(new Speed());
         modules.add(new NoSlowDown());
+        //keep this at the bottom
+        modules.forEach(Module::loadValues);
     }
     public ArrayList<Module> getModules(){
         return modules;
