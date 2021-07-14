@@ -7,6 +7,7 @@ import cat.module.value.Value;
 import cat.module.value.types.BoolValue;
 import cat.module.value.types.FloatValue;
 import cat.module.value.types.IntegerValue;
+import cat.module.value.types.ModeValue;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
 
@@ -28,20 +29,33 @@ public class ModuleCommand extends Command {
             }
             if (value instanceof BoolValue) {
                 BoolValue v = (BoolValue) value;
-                v.set(!v.get());
+                v.next();
                 chat("Set "+v.name+" to "+v.get());
                 changedSound();
-            }else if(args.length > 2 && !Pattern.matches("[a-zA-Z]+", args[2])){
-                if(value instanceof FloatValue){
-                    FloatValue v = (FloatValue) value;
-                    v.set(Float.parseFloat(args[2]));
-                    chat("Set "+v.name+" to "+v.get());
-                    changedSound();
-                }else if(value instanceof IntegerValue){
-                    IntegerValue v = (IntegerValue) value;
-                    v.set(Integer.parseInt(args[2]));
-                    chat("Set "+v.name+" to "+v.get());
-                    changedSound();
+            }else if(args.length > 2){
+                if(value instanceof ModeValue) {
+                    ModeValue v = (ModeValue) value;
+                    String result = v.find(args[2]);
+                    if(result != null) {
+                        v.set(result);
+                    } else {
+                        chat("Illegal argument: " + args[2] + " is not in the " + value.name + " possible values range.");
+                    }
+                }
+                if(!Pattern.matches("[a-zA-Z]+", args[2])){
+                    if(value instanceof FloatValue){
+                        FloatValue v = (FloatValue) value;
+                        v.set(Float.parseFloat(args[2]));
+                        chat("Set "+v.name+" to "+v.get());
+                        changedSound();
+                    }else if(value instanceof IntegerValue){
+                        IntegerValue v = (IntegerValue) value;
+                        v.set(Integer.parseInt(args[2]));
+                        chat("Set "+v.name+" to "+v.get());
+                        changedSound();
+                    }
+                }else{
+                    chat("Syntax: $m <setting> <value>".replace("$m", name.toLowerCase()));
                 }
             }else{
                 chat("Syntax: $m <setting> <value>".replace("$m", name.toLowerCase()));

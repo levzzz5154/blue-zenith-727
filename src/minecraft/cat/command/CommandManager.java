@@ -21,10 +21,7 @@ public class CommandManager {
                 ex.printStackTrace();
             }
         });
-        //idk how to make it better sorry :(
-        for (Module m : BlueZenith.moduleManager.getModules()) {
-            commands.add(new ModuleCommand(m, m.getName().toLowerCase()));
-        }
+        BlueZenith.moduleManager.getModules().forEach(mod -> commands.add(new ModuleCommand(mod, mod.getName())));
     }
 
     public void dispatch(SentMessageEvent event) {

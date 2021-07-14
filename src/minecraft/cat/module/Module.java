@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Module extends MinecraftInstance {
-    String name, tag;
+    final String name;
+    String tag;
     ModuleCategory category;
     private boolean state;
     public int keyBind;
@@ -66,7 +67,7 @@ public class Module extends MinecraftInstance {
         return getName() + "§7" + (getTag().isEmpty() ? "" : " " + getTag());
     }
 
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
@@ -74,16 +75,12 @@ public class Module extends MinecraftInstance {
         return tag;
     }
 
-    public ModuleCategory getCategory() {
+    public final ModuleCategory getCategory() {
         return category;
     }
     public Module setState(boolean state){
-        if(!state && this.state){
-            BlueZenith.eventManager.unregisterListener(this);
-            onDisable();
-        }else if(state && !this.state){
-            BlueZenith.eventManager.registerListener(this);
-            onEnable();
+        if(state != this.state) {
+            this.toggle();
         }
         this.state = state;
         return this;
