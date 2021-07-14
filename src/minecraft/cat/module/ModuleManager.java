@@ -1,25 +1,19 @@
 package cat.module;
 
-import cat.module.modules.combat.Aura;
-import cat.module.modules.combat.Velocity;
-import cat.module.modules.misc.InventoryMove;
-import cat.module.modules.movement.*;
-import cat.module.modules.render.*;
+import org.reflections.Reflections;
 
 import java.util.ArrayList;
 
 public class ModuleManager {
     private final ArrayList<Module> modules = new ArrayList<>();
     public ModuleManager(){
-        modules.add(new HUD().setState(true));
-        modules.add(new Flight());
-        modules.add(new FullBright());
-        modules.add(new Aura());
-        modules.add(new InventoryMove());
-        modules.add(new Velocity());
-        modules.add(new ClickGUI());
-        modules.add(new Speed());
-        modules.add(new NoSlowDown());
+        new Reflections("cat.module.modules").getSubTypesOf(Module.class).forEach(mod -> {
+            try {
+                modules.add(mod.getDeclaredConstructor().newInstance());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         //keep this at the bottom
         modules.forEach(Module::loadValues);
     }
@@ -30,6 +24,11 @@ public class ModuleManager {
         for (Module m : modules) {
             if(m.getName().equalsIgnoreCase(name)){
                 return m;
+            }
+            for(String alias : m.aliases) {
+                if(alias.equalsIgnoreCase(name)) {
+                    return m;
+                }
             }
         }
         return null;

@@ -2,6 +2,7 @@ package net.minecraft.client.entity;
 
 import cat.BlueZenith;
 import cat.events.impl.UpdateEvent;
+import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.modules.movement.NoSlowDown;
 import net.minecraft.client.Minecraft;
@@ -215,41 +216,48 @@ public class EntityPlayerSP extends AbstractClientPlayer {
         }
 
         if (this.isCurrentViewEntity()) {
-            double d0 = this.posX - this.lastReportedPosX;
-            double d1 = this.getEntityBoundingBox().minY - this.lastReportedPosY;
-            double d2 = this.posZ - this.lastReportedPosZ;
-            double d3 = (double) (this.rotationYaw - this.lastReportedYaw);
-            double d4 = (double) (this.rotationPitch - this.lastReportedPitch);
+            UpdatePlayerEvent ev = new UpdatePlayerEvent(this.rotationYaw, this.rotationPitch, this.posX, getEntityBoundingBox().minY, this.posZ);
+            BlueZenith.eventManager.call(ev);
+            float yaw = ev.yaw;
+            float pitch = ev.pitch;
+            double x = ev.x;
+            double y = ev.y;
+            double z = ev.z;
+            double d0 = x - this.lastReportedPosX;
+            double d1 = y - this.lastReportedPosY;
+            double d2 = z - this.lastReportedPosZ;
+            double d3 = yaw - this.lastReportedYaw;
+            double d4 = pitch - this.lastReportedPitch;
             boolean flag2 = d0 * d0 + d1 * d1 + d2 * d2 > 9.0E-4D || this.positionUpdateTicks >= 20;
             boolean flag3 = d3 != 0.0D || d4 != 0.0D;
 
             if (this.ridingEntity == null) {
                 if (flag2 && flag3) {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.posX, this.getEntityBoundingBox().minY, this.posZ, this.rotationYaw, this.rotationPitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(x, y, z, yaw, pitch, this.onGround));
                 } else if (flag2) {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(this.posX, this.getEntityBoundingBox().minY, this.posZ, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(x, y, z, this.onGround));
                 } else if (flag3) {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(this.rotationYaw, this.rotationPitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(yaw, pitch, this.onGround));
                 } else {
                     this.sendQueue.addToSendQueue(new C03PacketPlayer(this.onGround));
                 }
             } else {
-                this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.motionX, -999.0D, this.motionZ, this.rotationYaw, this.rotationPitch, this.onGround));
+                this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.motionX, -999.0D, this.motionZ, yaw, pitch, this.onGround));
                 flag2 = false;
             }
 
             ++this.positionUpdateTicks;
 
             if (flag2) {
-                this.lastReportedPosX = this.posX;
-                this.lastReportedPosY = this.getEntityBoundingBox().minY;
-                this.lastReportedPosZ = this.posZ;
+                this.lastReportedPosX = x;
+                this.lastReportedPosY = y;
+                this.lastReportedPosZ = z;
                 this.positionUpdateTicks = 0;
             }
 
             if (flag3) {
-                this.lastReportedYaw = this.rotationYaw;
-                this.lastReportedPitch = this.rotationPitch;
+                this.lastReportedYaw = yaw;
+                this.lastReportedPitch = pitch;
             }
         }
     }

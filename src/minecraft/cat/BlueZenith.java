@@ -8,7 +8,8 @@ import cat.util.ClientUtils;
 
 public class BlueZenith {
     public static String name = "BlueZenith";
-    public static String version = "7.27";
+    //da real version
+    public static String version = "1.1";
     public static EventManager eventManager;
     public static ModuleManager moduleManager;
     public static CommandManager commandManager;

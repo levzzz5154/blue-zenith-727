@@ -9,59 +9,23 @@ import org.lwjgl.input.Keyboard;
 import java.awt.*;
 
 public class ClickGUI extends Module {
-    public static ClickGui clickGui = new ClickGui();
+    public static ClickGui clickGui = null;
     public Color main_color = Color.WHITE;
     public Color backgroundColor = Color.BLACK;
-    public IntegerValue r = new IntegerValue("1", "MainR", 152, 0, 255, true){
-        @Override
-        public Integer onChange(Integer oldValue, Integer newValue) {
-            updateMainColor();
-            return super.onChange(oldValue, newValue);
-        }
-    };
-    public IntegerValue g = new IntegerValue("1", "MainG", 195, 0, 255, true){
-        @Override
-        public Integer onChange(Integer oldValue, Integer newValue) {
-            updateMainColor();
-            return super.onChange(oldValue, newValue);
-        }
-    };
-    public IntegerValue b = new IntegerValue("1", "MainB", 121, 0, 255, true){
-        @Override
-        public Integer onChange(Integer oldValue, Integer newValue) {
-            updateMainColor();
-            return super.onChange(oldValue, newValue);
-        }
-    };
-    public IntegerValue rg = new IntegerValue("1", "BackgroundR", 40, 0, 255, true){
-        @Override
-        public Integer onChange(Integer oldValue, Integer newValue) {
-            updateBackgroundColor();
-            return super.onChange(oldValue, newValue);
-        }
-    };
-    public IntegerValue gg = new IntegerValue("1", "BackgroundG", 44, 0, 255, true){
-        @Override
-        public Integer onChange(Integer oldValue, Integer newValue) {
-            updateBackgroundColor();
-            return super.onChange(oldValue, newValue);
-        }
-    };
-    public IntegerValue bg = new IntegerValue("1", "BackgroundB", 52, 0, 255, true){
-        @Override
-        public Integer onChange(Integer oldValue, Integer newValue) {
-            updateBackgroundColor();
-            return super.onChange(oldValue, newValue);
-        }
-    };
+    public IntegerValue r = new IntegerValue("1", "MainR", 152, 0, 255, true, (p1, p2) -> {updateMainColor(); return p2;});
+    public IntegerValue g = new IntegerValue("1", "MainG", 195, 0, 255, true, (p1, p2) -> {updateMainColor(); return p2;});
+    public IntegerValue b = new IntegerValue("1", "MainB", 121, 0, 255, true, (p1, p2) -> {updateMainColor(); return p2;});
+    public IntegerValue rg = new IntegerValue("1", "BackgroundR", 40, 0, 255, true, (p1, p2) -> {updateBackgroundColor(); return p2;});
+    public IntegerValue gg = new IntegerValue("1", "BackgroundG", 44, 0, 255, true, (p1, p2) -> {updateBackgroundColor(); return p2;});
+    public IntegerValue bg = new IntegerValue("1", "BackgroundB", 52, 0, 255, true, (p1, p2) -> {updateBackgroundColor(); return p2;});
     {
         updateMainColor();
         updateBackgroundColor();
     }
-    public void updateMainColor(){
+    private void updateMainColor(){
         main_color = new Color(r.get(), g.get(), b.get());
     }
-    public void updateBackgroundColor(){
+    private void updateBackgroundColor(){
         backgroundColor = new Color(rg.get(), gg.get(), bg.get());
     }
     public ClickGUI() {
@@ -69,6 +33,9 @@ public class ClickGUI extends Module {
     }
     @Override
     public void onEnable(){
+        if(clickGui == null){
+            clickGui = new ClickGui();
+        }
         mc.displayGuiScreen(clickGui);
     }
 }

@@ -7,7 +7,7 @@ import cat.util.ClientUtils;
 
 public class ToggleCommand extends Command {
     public ToggleCommand() {
-        super("Toggle", "t");
+        super("Toggle", "t", "enable");
     }
     @Override
     public void execute(String[] args){

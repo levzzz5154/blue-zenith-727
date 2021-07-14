@@ -21,6 +21,7 @@ public class HUD extends Module {
 
     @Subscriber
     public void onRender2D(Render2DEvent e) {
+        if(mc.gameSettings.showDebugInfo) return;
         for (Module m : BlueZenith.moduleManager.getModules()) {
             if (m.getState() && !modules.contains(m)) {
                 modules.add(m);

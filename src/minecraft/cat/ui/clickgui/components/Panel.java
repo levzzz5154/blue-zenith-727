@@ -11,23 +11,30 @@ import cat.module.value.types.IntegerValue;
 import cat.module.value.types.ModeValue;
 import cat.util.MinecraftInstance;
 import cat.util.RenderUtil;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class Panel extends MinecraftInstance {
     ModuleCategory category;
     Module[] modules;
-    float width;
+    public float width;
     float mHeight;
+    public float x,y;
+    public float prevX,prevY;
     FontRenderer f = mc.fontRendererObj;
     ClickGUI click = (ClickGUI) BlueZenith.moduleManager.getModule(ClickGUI.class);
-    public Panel(ModuleCategory category, Module... modules){
+    public Panel(float x, float y, ModuleCategory category, Module... modules){
         this.category = category;
         this.modules = modules;
+        this.x = x;
+        this.y = y;
 
         width = f.getStringWidth(category.displayName) + 12;
         mHeight = f.FONT_HEIGHT + 16;
@@ -39,7 +46,7 @@ public class Panel extends MinecraftInstance {
         width = Math.max(width, 150);
     }
     Value<?> sliderVal = null;
-    public float drawPanel(float x, float y, int mouseX, int mouseY){
+    public void drawPanel(int mouseX, int mouseY){
         Color main_color = click.main_color;
         Color backgroundColor = click.backgroundColor;
 
@@ -47,12 +54,15 @@ public class Panel extends MinecraftInstance {
         mc.fontRendererObj.drawString(category.displayName, x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
         float y1 = y + mHeight;
         for (Module m : modules) {
+            List<Value<?>> vl = m.getValues();
             if(i(mouseX, mouseY, x, y1, x + width, y1 + mHeight) && !m.wasPressed()){
                 if(Mouse.isButtonDown(0)){
                     m.toggle();
+                    mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                 }
-                if(Mouse.isButtonDown(1)){
+                if(Mouse.isButtonDown(1) && !vl.isEmpty()){
                     m.showSettings = !m.showSettings;
+                    mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                 }
             }
 
@@ -60,7 +70,7 @@ public class Panel extends MinecraftInstance {
             mc.fontRendererObj.drawString(m.getName(), x + 5, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), m.getState() ? Color.WHITE.getRGB() : Color.DARK_GRAY.getRGB());
             y1 += mHeight;
             if(m.showSettings){
-                for (Value<?> v : m.getValues()) {
+                for (Value<?> v : vl) {
                     Color settingsColor = backgroundColor.brighter();
                     float h = f.FONT_HEIGHT + 14;
                     if(v instanceof ModeValue) {
@@ -72,8 +82,10 @@ public class Panel extends MinecraftInstance {
                         if(i(mouseX, mouseY, x, y1, x + width, y1 + h) && !m.wasPressed()) {
                             if(Mouse.isButtonDown(0)) {
                                 val.next();
+                                mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                             } else if(Mouse.isButtonDown(1)) {
                                 val.previous();
+                                mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                             }
                         }
                         y1 += h;
@@ -124,7 +136,8 @@ public class Panel extends MinecraftInstance {
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
                         mc.fontRendererObj.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), val.value ? main_color.getRGB() : Color.DARK_GRAY.getRGB());
                         if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && Mouse.isButtonDown(0) && !m.wasPressed()) {
-                            val.value = !val.value;
+                            val.set(!val.get());
+                            mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                         }
                         y1 += h;
                     }
@@ -132,7 +145,6 @@ public class Panel extends MinecraftInstance {
             }
             m.updatePressed();
         }
-        return width;
     }
     public boolean i(int mouseX, int mouseY, float x, float y, float x2, float y2){
         return mouseX >= x && mouseY >= y && mouseX <= x2 && mouseY <= y2;
