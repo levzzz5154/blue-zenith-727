@@ -2,26 +2,14 @@ package net.minecraft.client.entity;
 
 import cat.BlueZenith;
 import cat.events.impl.UpdateEvent;
-import cat.module.Module;
+import cat.events.impl.UpdatePlayerEvent;
 import cat.module.modules.movement.NoSlowDown;
+import cat.module.modules.render.Rotations;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiCommandBlock;
-import net.minecraft.client.gui.GuiEnchantment;
-import net.minecraft.client.gui.GuiHopper;
-import net.minecraft.client.gui.GuiMerchant;
-import net.minecraft.client.gui.GuiRepair;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiScreenBook;
-import net.minecraft.client.gui.inventory.GuiBeacon;
-import net.minecraft.client.gui.inventory.GuiBrewingStand;
-import net.minecraft.client.gui.inventory.GuiChest;
-import net.minecraft.client.gui.inventory.GuiCrafting;
-import net.minecraft.client.gui.inventory.GuiDispenser;
-import net.minecraft.client.gui.inventory.GuiEditSign;
-import net.minecraft.client.gui.inventory.GuiFurnace;
-import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
+import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.inventory.*;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.entity.Entity;
@@ -33,26 +21,12 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C01PacketChatMessage;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraft.network.play.client.C0BPacketEntityAction;
-import net.minecraft.network.play.client.C0CPacketInput;
-import net.minecraft.network.play.client.C0DPacketCloseWindow;
-import net.minecraft.network.play.client.C13PacketPlayerAbilities;
-import net.minecraft.network.play.client.C16PacketClientStatus;
+import net.minecraft.network.play.client.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MovementInput;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 
@@ -215,41 +189,58 @@ public class EntityPlayerSP extends AbstractClientPlayer {
         }
 
         if (this.isCurrentViewEntity()) {
-            double d0 = this.posX - this.lastReportedPosX;
-            double d1 = this.getEntityBoundingBox().minY - this.lastReportedPosY;
-            double d2 = this.posZ - this.lastReportedPosZ;
-            double d3 = (double) (this.rotationYaw - this.lastReportedYaw);
-            double d4 = (double) (this.rotationPitch - this.lastReportedPitch);
+            UpdatePlayerEvent ev = new UpdatePlayerEvent(this.rotationYaw, this.rotationPitch, this.posX, getEntityBoundingBox().minY, this.posZ);
+            BlueZenith.eventManager.call(ev);
+            float yaw = ev.yaw;
+            float pitch = ev.pitch;
+            Rotations r = (Rotations) BlueZenith.moduleManager.getModule(Rotations.class);
+            r.prevYaw = r.yaw;
+            r.prevPitch = r.pitch;
+
+            r.yaw = yaw;
+            r.pitch = pitch;
+            double x = ev.x;
+            double y = ev.y;
+            double z = ev.z;
+            double d0 = x - this.lastReportedPosX;
+            double d1 = y - this.lastReportedPosY;
+            double d2 = z - this.lastReportedPosZ;
+            double d3 = yaw - this.lastReportedYaw;
+            double d4 = pitch - this.lastReportedPitch;
+            if(yaw != this.rotationYaw){
+                d3 = 0;
+                d4 = 0;
+            }
             boolean flag2 = d0 * d0 + d1 * d1 + d2 * d2 > 9.0E-4D || this.positionUpdateTicks >= 20;
             boolean flag3 = d3 != 0.0D || d4 != 0.0D;
 
             if (this.ridingEntity == null) {
                 if (flag2 && flag3) {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.posX, this.getEntityBoundingBox().minY, this.posZ, this.rotationYaw, this.rotationPitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(x, y, z, yaw, pitch, this.onGround));
                 } else if (flag2) {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(this.posX, this.getEntityBoundingBox().minY, this.posZ, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(x, y, z, this.onGround));
                 } else if (flag3) {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(this.rotationYaw, this.rotationPitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(yaw, pitch, this.onGround));
                 } else {
                     this.sendQueue.addToSendQueue(new C03PacketPlayer(this.onGround));
                 }
             } else {
-                this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.motionX, -999.0D, this.motionZ, this.rotationYaw, this.rotationPitch, this.onGround));
+                this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.motionX, -999.0D, this.motionZ, yaw, pitch, this.onGround));
                 flag2 = false;
             }
 
             ++this.positionUpdateTicks;
 
             if (flag2) {
-                this.lastReportedPosX = this.posX;
-                this.lastReportedPosY = this.getEntityBoundingBox().minY;
-                this.lastReportedPosZ = this.posZ;
+                this.lastReportedPosX = x;
+                this.lastReportedPosY = y;
+                this.lastReportedPosZ = z;
                 this.positionUpdateTicks = 0;
             }
 
             if (flag3) {
-                this.lastReportedYaw = this.rotationYaw;
-                this.lastReportedPitch = this.rotationPitch;
+                this.lastReportedYaw = yaw;
+                this.lastReportedPitch = pitch;
             }
         }
     }

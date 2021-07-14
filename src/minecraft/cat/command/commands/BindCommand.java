@@ -31,13 +31,12 @@ public class BindCommand extends Command {
                 }
                 return;
             }
-                int k = Keyboard.getKeyIndex(args[2].toUpperCase(Locale.ROOT));
-                bind(k, m);
+            int k = Keyboard.getKeyIndex(args[2].toUpperCase(Locale.ROOT));
+            bind(k, m);
         }else{
             chat("Syntax: .bind <module> <key>");
         }
     }
-
     private void checkKey(String key, String modName) {
         if(Keyboard.getKeyIndex(key.toUpperCase()) == 0) {
             chat("Failed to find module " + modName);

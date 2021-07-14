@@ -3,6 +3,7 @@ package net.minecraft.client;
 import cat.BlueZenith;
 import cat.module.modules.misc.InventoryMove;
 import cat.ui.GuiMain;
+import cat.util.RenderUtil;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -637,7 +638,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
     private void createDisplay() throws LWJGLException {
         Display.setResizable(true);
-        Display.setTitle("Minecraft 1.8.9");
+        //Display.setTitle("Minecraft 1.8.9");
+        Display.setTitle(BlueZenith.name+" b"+BlueZenith.version+" DEV (1.8.9)");
 
         try {
             Display.create((new PixelFormat()).withDepthBits(24));
@@ -1548,10 +1550,20 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         return this.mcMusicTicker;
     }
 
+    private long lastFrame = getTime();
+    public long getTime() {
+        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+    }
     /**
      * Runs the current tick.
      */
     public void runTick() throws IOException {
+        final long currentTime = getTime();
+        final int delta = (int) (currentTime - lastFrame);
+        lastFrame = currentTime;
+
+        RenderUtil.delta = delta;
+
         if (this.rightClickDelayTimer > 0) {
             --this.rightClickDelayTimer;
         }

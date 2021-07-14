@@ -10,6 +10,7 @@ import java.awt.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class RenderUtil extends MinecraftInstance {
+    public static int delta = 0;
     public static void drawImage(ResourceLocation image, float x, float y, float width, float height, float alpha) {
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);

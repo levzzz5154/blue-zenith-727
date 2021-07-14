@@ -12,7 +12,6 @@ public final class ModeValue extends Value<String> {
         super(id, valueName, defaultValue, visible, update);
         this.range = new ArrayList<>(Arrays.asList(range));
     }
-
     public ModeValue(String id, String valueName, String defaultValue, boolean visible, String... range) {
         super(id, valueName, defaultValue, visible, (p, p1) -> null);
         this.range = new ArrayList<>(Arrays.asList(range));
@@ -24,10 +23,10 @@ public final class ModeValue extends Value<String> {
 
     @Override
     public void set(String newValue) {
-       String consumerResult = valueConsumer.method(this.value, newValue);
-       if(consumerResult != null) {
-           this.value = consumerResult;
-       } else this.value = newValue;
+        String consumerResult = valueConsumer.method(this.value, newValue);
+        if(consumerResult != null) {
+            this.value = consumerResult;
+        } else this.value = newValue;
     }
 
 

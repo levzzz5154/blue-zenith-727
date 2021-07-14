@@ -1,5 +1,6 @@
 package cat.module.value;
 
+import cat.module.Module;
 import cat.module.value.types.ValueConsumer;
 
 public abstract class Value<T>{

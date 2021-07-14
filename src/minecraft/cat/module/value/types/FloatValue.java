@@ -1,5 +1,6 @@
 package cat.module.value.types;
 
+import cat.module.Module;
 import cat.module.value.Value;
 
 public class FloatValue extends Value<Float> {
@@ -25,10 +26,13 @@ public class FloatValue extends Value<Float> {
 
     @Override
     public void set(Float newValue) {
+        //lmao
         float consumerResult = valueConsumer.method(this.value, newValue);
         if(consumerResult != 69420F) {
             this.value = consumerResult;
-        } else this.value = newValue;
+        } else{
+            this.value = onChange(this.value, newValue);
+        }
     }
 
     @Override

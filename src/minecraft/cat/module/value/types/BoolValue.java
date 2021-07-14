@@ -20,7 +20,9 @@ public class BoolValue extends Value<Boolean> {
     public void set(Boolean newValue) {
         if(valueConsumer.method(this.value, newValue) != null) {
             this.value = valueConsumer.method(this.value, newValue);
-        } else this.value = newValue;
+        } else{
+            this.value = onChange(this.value, newValue);
+        }
     }
 
     @Override

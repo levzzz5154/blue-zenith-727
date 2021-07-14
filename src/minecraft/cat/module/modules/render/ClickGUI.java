@@ -9,7 +9,7 @@ import org.lwjgl.input.Keyboard;
 import java.awt.*;
 
 public class ClickGUI extends Module {
-    public static ClickGui clickGui = new ClickGui();
+    public static ClickGui clickGui = null;
     public Color main_color = Color.WHITE;
     public Color backgroundColor = Color.BLACK;
     public IntegerValue r = new IntegerValue("1", "MainR", 152, 0, 255, true, (p1, p2) -> {updateMainColor(); return p2;});
@@ -33,6 +33,9 @@ public class ClickGUI extends Module {
     }
     @Override
     public void onEnable(){
+        if(clickGui == null){
+            clickGui = new ClickGui();
+        }
         mc.displayGuiScreen(clickGui);
     }
 }

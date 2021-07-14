@@ -7,6 +7,7 @@ import cat.module.ModuleCategory;
 import cat.module.value.types.FloatValue;
 import cat.util.MovementUtil;
 
+@SuppressWarnings("unused")
 public class Speed extends Module {
     FloatValue speed = new FloatValue("", "Speed", 0f, 0f, 5f, true);
     public Speed() {
@@ -14,9 +15,9 @@ public class Speed extends Module {
     }
     @Subscriber
     public void onUpdate(UpdateEvent e){
-        if(mc.thePlayer.onGround){
+        MovementUtil.setSpeed(speed.get());
+        if(mc.thePlayer.onGround && MovementUtil.areMovementKeysPressed()){
             mc.thePlayer.jump();
-            MovementUtil.setSpeed(speed.get());
         }
     }
 }

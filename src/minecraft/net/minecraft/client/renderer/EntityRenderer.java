@@ -1,5 +1,7 @@
 package net.minecraft.client.renderer;
 
+import cat.BlueZenith;
+import cat.events.impl.Render3DEvent;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.gson.JsonSyntaxException;
@@ -1478,6 +1480,8 @@ public class EntityRenderer implements IResourceManagerReloadListener
         }
 
         this.mc.mcProfiler.endStartSection("hand");
+
+        BlueZenith.eventManager.call(new Render3DEvent(partialTicks));
 
         if (this.renderHand)
         {

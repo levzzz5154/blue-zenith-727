@@ -1,6 +1,9 @@
 package cat.util;
 
 public class MovementUtil extends MinecraftInstance{
+    public static boolean areMovementKeysPressed(){
+        return mc.thePlayer.movementInput.moveForward != 0F || mc.thePlayer.movementInput.moveStrafe != 0F;
+    }
     public static void setSpeed(float f){
         if(mc.thePlayer == null || !(mc.thePlayer.movementInput.moveForward != 0F || mc.thePlayer.movementInput.moveStrafe != 0F)){
             return;

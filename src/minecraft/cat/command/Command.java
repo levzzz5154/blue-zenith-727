@@ -2,6 +2,8 @@ package cat.command;
 
 import cat.util.ClientUtils;
 import cat.util.MinecraftInstance;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.util.ResourceLocation;
 
 public class Command extends MinecraftInstance {
     public String name;
@@ -10,7 +12,9 @@ public class Command extends MinecraftInstance {
         this.name = name;
         this.pref = pref;
     }
-
+    public void changedSound(){
+        mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("mob.cat.purreow")));
+    }
     public void execute(String[] args){
 
     }

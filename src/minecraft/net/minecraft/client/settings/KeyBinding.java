@@ -18,7 +18,7 @@ public class KeyBinding implements Comparable<KeyBinding>
     private int keyCode;
 
     /** Is the key held down? */
-    private boolean pressed;
+    public boolean pressed;
     private int pressTime;
 
     public static void onTick(int keyCode)
@@ -95,7 +95,7 @@ public class KeyBinding implements Comparable<KeyBinding>
     }
 
     /**
-     * Returns true on the initial key press. For continuous querying use {@link isKeyDown()}. Should be used in key
+     * Returns true on the initial key press. For continuous querying use {@link}. Should be used in key
      * events.
      */
     public boolean isPressed()
