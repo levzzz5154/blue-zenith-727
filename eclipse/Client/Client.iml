@@ -337,5 +337,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="1.8" level="project" />
+    <orderEntry type="library" name="javassist" level="project" />
+    <orderEntry type="library" name="reflections-0.9.12" level="project" />
   </component>
 </module>
