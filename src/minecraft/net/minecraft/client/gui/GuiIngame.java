@@ -36,6 +36,7 @@ import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.src.Config;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.FoodStats;
@@ -45,6 +46,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.border.WorldBorder;
+import net.optifine.CustomColors;
 
 public class GuiIngame extends Gui {
     private static final ResourceLocation vignetteTexPath = new ResourceLocation("textures/misc/vignette.png");
@@ -93,36 +95,12 @@ public class GuiIngame extends Gui {
      */
     private final GuiSpectator spectatorGui;
     private final GuiPlayerTabOverlay overlayPlayerList;
-
-    /**
-     * A timer for the current title and subtitle displayed
-     */
-    private int titlesTimer;
-
-    /**
-     * The current title displayed
-     */
-    private String displayedTitle = "";
-
-    /**
-     * The current sub-title displayed
-     */
-    private String displayedSubTitle = "";
-
-    /**
-     * The time that the title take to fade in
-     */
-    private int titleFadeIn;
-
-    /**
-     * The time that the title is display
-     */
-    private int titleDisplayTime;
-
-    /**
-     * The time that the title take to fade out
-     */
-    private int titleFadeOut;
+    private int field_175195_w;
+    private String field_175201_x = "";
+    private String field_175200_y = "";
+    private int field_175199_z;
+    private int field_175192_A;
+    private int field_175193_B;
     private int playerHealth = 0;
     private int lastPlayerHealth = 0;
 
@@ -144,16 +122,13 @@ public class GuiIngame extends Gui {
         this.persistantChatGUI = new GuiNewChat(mcIn);
         this.streamIndicator = new GuiStreamIndicator(mcIn);
         this.overlayPlayerList = new GuiPlayerTabOverlay(mcIn, this);
-        this.setDefaultTitlesTimes();
+        this.func_175177_a();
     }
 
-    /**
-     * Set the differents times for the titles to their default values
-     */
-    public void setDefaultTitlesTimes() {
-        this.titleFadeIn = 10;
-        this.titleDisplayTime = 70;
-        this.titleFadeOut = 20;
+    public void func_175177_a() {
+        this.field_175199_z = 10;
+        this.field_175192_A = 70;
+        this.field_175193_B = 20;
     }
 
     public void renderGameOverlay(float partialTicks) {
@@ -163,7 +138,7 @@ public class GuiIngame extends Gui {
         this.mc.entityRenderer.setupOverlayRendering();
         GlStateManager.enableBlend();
 
-        if (Minecraft.isFancyGraphicsEnabled()) {
+        if (Config.isVignetteEnabled()) {
             this.renderVignette(this.mc.thePlayer.getBrightness(partialTicks), scaledresolution);
         } else {
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -179,7 +154,7 @@ public class GuiIngame extends Gui {
             float f = this.mc.thePlayer.prevTimeInPortal + (this.mc.thePlayer.timeInPortal - this.mc.thePlayer.prevTimeInPortal) * partialTicks;
 
             if (f > 0.0F) {
-                this.renderPortal(f, scaledresolution);
+                this.func_180474_b(f, scaledresolution);
             }
         }
 
@@ -199,6 +174,7 @@ public class GuiIngame extends Gui {
             this.drawTexturedModalRect(i / 2 - 7, j / 2 - 7, 0, 0, 16, 16);
         }
 
+        GlStateManager.enableAlpha();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         this.mc.mcProfiler.startSection("bossHealth");
         this.renderBossHealth();
@@ -238,9 +214,9 @@ public class GuiIngame extends Gui {
         }
 
         if (this.mc.gameSettings.heldItemTooltips && !this.mc.playerController.isSpectator()) {
-            this.renderSelectedItem(scaledresolution);
+            this.func_181551_a(scaledresolution);
         } else if (this.mc.thePlayer.isSpectator()) {
-            this.spectatorGui.renderSelectedItem(scaledresolution);
+            this.spectatorGui.func_175263_a(scaledresolution);
         }
 
         if (this.mc.isDemo()) {
@@ -268,7 +244,7 @@ public class GuiIngame extends Gui {
                 int l = 16777215;
 
                 if (this.recordIsPlaying) {
-                    l = MathHelper.hsvToRGB(f2 / 50.0F, 0.7F, 0.6F) & 16777215;
+                    l = MathHelper.func_181758_c(f2 / 50.0F, 0.7F, 0.6F) & 16777215;
                 }
 
                 this.getFontRenderer().drawString(this.recordPlaying, -this.getFontRenderer().getStringWidth(this.recordPlaying) / 2, -4, l + (l1 << 24 & -16777216));
@@ -279,18 +255,18 @@ public class GuiIngame extends Gui {
             this.mc.mcProfiler.endSection();
         }
 
-        if (this.titlesTimer > 0) {
+        if (this.field_175195_w > 0) {
             this.mc.mcProfiler.startSection("titleAndSubtitle");
-            float f3 = (float) this.titlesTimer - partialTicks;
+            float f3 = (float) this.field_175195_w - partialTicks;
             int i2 = 255;
 
-            if (this.titlesTimer > this.titleFadeOut + this.titleDisplayTime) {
-                float f4 = (float) (this.titleFadeIn + this.titleDisplayTime + this.titleFadeOut) - f3;
-                i2 = (int) (f4 * 255.0F / (float) this.titleFadeIn);
+            if (this.field_175195_w > this.field_175193_B + this.field_175192_A) {
+                float f4 = (float) (this.field_175199_z + this.field_175192_A + this.field_175193_B) - f3;
+                i2 = (int) (f4 * 255.0F / (float) this.field_175199_z);
             }
 
-            if (this.titlesTimer <= this.titleFadeOut) {
-                i2 = (int) (f3 * 255.0F / (float) this.titleFadeOut);
+            if (this.field_175195_w <= this.field_175193_B) {
+                i2 = (int) (f3 * 255.0F / (float) this.field_175193_B);
             }
 
             i2 = MathHelper.clamp_int(i2, 0, 255);
@@ -303,11 +279,11 @@ public class GuiIngame extends Gui {
                 GlStateManager.pushMatrix();
                 GlStateManager.scale(4.0F, 4.0F, 4.0F);
                 int j2 = i2 << 24 & -16777216;
-                this.getFontRenderer().drawString(this.displayedTitle, (float) (-this.getFontRenderer().getStringWidth(this.displayedTitle) / 2), -10.0F, 16777215 | j2, true);
+                this.getFontRenderer().drawString(this.field_175201_x, (float) (-this.getFontRenderer().getStringWidth(this.field_175201_x) / 2), -10.0F, 16777215 | j2, true);
                 GlStateManager.popMatrix();
                 GlStateManager.pushMatrix();
                 GlStateManager.scale(2.0F, 2.0F, 2.0F);
-                this.getFontRenderer().drawString(this.displayedSubTitle, (float) (-this.getFontRenderer().getStringWidth(this.displayedSubTitle) / 2), 5.0F, 16777215 | j2, true);
+                this.getFontRenderer().drawString(this.field_175200_y, (float) (-this.getFontRenderer().getStringWidth(this.field_175200_y) / 2), 5.0F, 16777215 | j2, true);
                 GlStateManager.popMatrix();
                 GlStateManager.disableBlend();
                 GlStateManager.popMatrix();
@@ -318,7 +294,7 @@ public class GuiIngame extends Gui {
 
         Scoreboard scoreboard = this.mc.theWorld.getScoreboard();
         ScoreObjective scoreobjective = null;
-        ScorePlayerTeam scoreplayerteam = scoreboard.getPlayersTeam(this.mc.thePlayer.getName());
+        ScorePlayerTeam scoreplayerteam = scoreboard.getPlayersTeam(this.mc.thePlayer.getCommandSenderName());
 
         if (scoreplayerteam != null) {
             int i1 = scoreplayerteam.getChatFormat().getColorIndex();
@@ -345,11 +321,11 @@ public class GuiIngame extends Gui {
         GlStateManager.popMatrix();
         scoreobjective1 = scoreboard.getObjectiveInDisplaySlot(0);
 
-        if (!this.mc.gameSettings.keyBindPlayerList.isKeyDown() || this.mc.isIntegratedServerRunning() && this.mc.thePlayer.sendQueue.getPlayerInfoMap().size() <= 1 && scoreobjective1 == null) {
-            this.overlayPlayerList.updatePlayerList(false);
-        } else {
+        if (this.mc.gameSettings.keyBindPlayerList.isKeyDown() && (!this.mc.isIntegratedServerRunning() || this.mc.thePlayer.sendQueue.getPlayerInfoMap().size() > 1 || scoreobjective1 != null)) {
             this.overlayPlayerList.updatePlayerList(true);
             this.overlayPlayerList.renderPlayerlist(i, scoreboard, scoreobjective1);
+        } else {
+            this.overlayPlayerList.updatePlayerList(false);
         }
 
         BlueZenith.eventManager.call(new Render2DEvent(partialTicks, scaledresolution));
@@ -387,23 +363,23 @@ public class GuiIngame extends Gui {
         }
     }
 
-    public void renderHorseJumpBar(ScaledResolution scaledRes, int x) {
+    public void renderHorseJumpBar(ScaledResolution p_175186_1_, int p_175186_2_) {
         this.mc.mcProfiler.startSection("jumpBar");
         this.mc.getTextureManager().bindTexture(Gui.icons);
         float f = this.mc.thePlayer.getHorseJumpPower();
         int i = 182;
         int j = (int) (f * (float) (i + 1));
-        int k = scaledRes.getScaledHeight() - 32 + 3;
-        this.drawTexturedModalRect(x, k, 0, 84, i, 5);
+        int k = p_175186_1_.getScaledHeight() - 32 + 3;
+        this.drawTexturedModalRect(p_175186_2_, k, 0, 84, i, 5);
 
         if (j > 0) {
-            this.drawTexturedModalRect(x, k, 0, 89, j, 5);
+            this.drawTexturedModalRect(p_175186_2_, k, 0, 89, j, 5);
         }
 
         this.mc.mcProfiler.endSection();
     }
 
-    public void renderExpBar(ScaledResolution scaledRes, int x) {
+    public void renderExpBar(ScaledResolution p_175176_1_, int p_175176_2_) {
         this.mc.mcProfiler.startSection("expBar");
         this.mc.getTextureManager().bindTexture(Gui.icons);
         int i = this.mc.thePlayer.xpBarCap();
@@ -411,11 +387,11 @@ public class GuiIngame extends Gui {
         if (i > 0) {
             int j = 182;
             int k = (int) (this.mc.thePlayer.experience * (float) (j + 1));
-            int l = scaledRes.getScaledHeight() - 32 + 3;
-            this.drawTexturedModalRect(x, l, 0, 64, j, 5);
+            int l = p_175176_1_.getScaledHeight() - 32 + 3;
+            this.drawTexturedModalRect(p_175176_2_, l, 0, 64, j, 5);
 
             if (k > 0) {
-                this.drawTexturedModalRect(x, l, 0, 69, k, 5);
+                this.drawTexturedModalRect(p_175176_2_, l, 0, 69, k, 5);
             }
         }
 
@@ -424,9 +400,14 @@ public class GuiIngame extends Gui {
         if (this.mc.thePlayer.experienceLevel > 0) {
             this.mc.mcProfiler.startSection("expLevel");
             int k1 = 8453920;
+
+            if (Config.isCustomColors()) {
+                k1 = CustomColors.getExpBarTextColor(k1);
+            }
+
             String s = "" + this.mc.thePlayer.experienceLevel;
-            int l1 = (scaledRes.getScaledWidth() - this.getFontRenderer().getStringWidth(s)) / 2;
-            int i1 = scaledRes.getScaledHeight() - 31 - 4;
+            int l1 = (p_175176_1_.getScaledWidth() - this.getFontRenderer().getStringWidth(s)) / 2;
+            int i1 = p_175176_1_.getScaledHeight() - 31 - 4;
             int j1 = 0;
             this.getFontRenderer().drawString(s, l1 + 1, i1, 0);
             this.getFontRenderer().drawString(s, l1 - 1, i1, 0);
@@ -437,7 +418,7 @@ public class GuiIngame extends Gui {
         }
     }
 
-    public void renderSelectedItem(ScaledResolution scaledRes) {
+    public void func_181551_a(ScaledResolution p_181551_1_) {
         this.mc.mcProfiler.startSection("selectedItemName");
 
         if (this.remainingHighlightTicks > 0 && this.highlightingItemStack != null) {
@@ -447,8 +428,8 @@ public class GuiIngame extends Gui {
                 s = EnumChatFormatting.ITALIC + s;
             }
 
-            int i = (scaledRes.getScaledWidth() - this.getFontRenderer().getStringWidth(s)) / 2;
-            int j = scaledRes.getScaledHeight() - 59;
+            int i = (p_181551_1_.getScaledWidth() - this.getFontRenderer().getStringWidth(s)) / 2;
+            int j = p_181551_1_.getScaledHeight() - 59;
 
             if (!this.mc.playerController.shouldDrawHUD()) {
                 j += 14;
@@ -473,7 +454,7 @@ public class GuiIngame extends Gui {
         this.mc.mcProfiler.endSection();
     }
 
-    public void renderDemo(ScaledResolution scaledRes) {
+    public void renderDemo(ScaledResolution p_175185_1_) {
         this.mc.mcProfiler.startSection("demo");
         String s = "";
 
@@ -484,7 +465,7 @@ public class GuiIngame extends Gui {
         }
 
         int i = this.getFontRenderer().getStringWidth(s);
-        this.getFontRenderer().drawStringWithShadow(s, (float) (scaledRes.getScaledWidth() - i - 10), 5.0F, 16777215);
+        this.getFontRenderer().drawStringWithShadow(s, (float) (p_175185_1_.getScaledWidth() - i - 10), 5.0F, 16777215);
         this.mc.mcProfiler.endSection();
     }
 
@@ -510,13 +491,13 @@ public class GuiIngame extends Gui {
         }
     }
 
-    public void renderStreamIndicator(ScaledResolution scaledRes) {
-        this.streamIndicator.render(scaledRes.getScaledWidth() - 10, 10);
+    public void renderStreamIndicator(ScaledResolution p_180478_1_) {
+        this.streamIndicator.render(p_180478_1_.getScaledWidth() - 10, 10);
     }
 
-    private void renderScoreboard(ScoreObjective objective, ScaledResolution scaledRes) {
-        Scoreboard scoreboard = objective.getScoreboard();
-        Collection<Score> collection = scoreboard.getSortedScores(objective);
+    private void renderScoreboard(ScoreObjective p_180475_1_, ScaledResolution p_180475_2_) {
+        Scoreboard scoreboard = p_180475_1_.getScoreboard();
+        Collection<Score> collection = scoreboard.getSortedScores(p_180475_1_);
         List<Score> list = Lists.newArrayList(Iterables.filter(collection, new Predicate<Score>() {
             public boolean apply(Score p_apply_1_) {
                 return p_apply_1_.getPlayerName() != null && !p_apply_1_.getPlayerName().startsWith("#");
@@ -529,7 +510,7 @@ public class GuiIngame extends Gui {
             collection = list;
         }
 
-        int i = this.getFontRenderer().getStringWidth(objective.getDisplayName());
+        int i = this.getFontRenderer().getStringWidth(p_180475_1_.getDisplayName());
 
         for (Score score : collection) {
             ScorePlayerTeam scoreplayerteam = scoreboard.getPlayersTeam(score.getPlayerName());
@@ -538,9 +519,9 @@ public class GuiIngame extends Gui {
         }
 
         int i1 = collection.size() * this.getFontRenderer().FONT_HEIGHT;
-        int j1 = scaledRes.getScaledHeight() / 2 + i1 / 3;
+        int j1 = p_180475_2_.getScaledHeight() / 2 + i1 / 3;
         int k1 = 3;
-        int l1 = scaledRes.getScaledWidth() - i - k1;
+        int l1 = p_180475_2_.getScaledWidth() - i - k1;
         int j = 0;
 
         for (Score score1 : collection) {
@@ -549,13 +530,13 @@ public class GuiIngame extends Gui {
             String s1 = ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName());
             String s2 = EnumChatFormatting.RED + "" + score1.getScorePoints();
             int k = j1 - j * this.getFontRenderer().FONT_HEIGHT;
-            int l = scaledRes.getScaledWidth() - k1 + 2;
+            int l = p_180475_2_.getScaledWidth() - k1 + 2;
             drawRect(l1 - 2, k, l, k + this.getFontRenderer().FONT_HEIGHT, 1342177280);
             this.getFontRenderer().drawString(s1, l1, k, 553648127);
             this.getFontRenderer().drawString(s2, l - this.getFontRenderer().getStringWidth(s2), k, 553648127);
 
             if (j == collection.size()) {
-                String s3 = objective.getDisplayName();
+                String s3 = p_180475_1_.getDisplayName();
                 drawRect(l1 - 2, k - this.getFontRenderer().FONT_HEIGHT - 1, l, k - 1, 1610612736);
                 drawRect(l1 - 2, k - 1, l, k, 1342177280);
                 this.getFontRenderer().drawString(s3, l1 + i / 2 - this.getFontRenderer().getStringWidth(s3) / 2, k - this.getFontRenderer().FONT_HEIGHT, 553648127);
@@ -563,7 +544,7 @@ public class GuiIngame extends Gui {
         }
     }
 
-    private void renderPlayerStats(ScaledResolution scaledRes) {
+    private void renderPlayerStats(ScaledResolution p_180477_1_) {
         if (this.mc.getRenderViewEntity() instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) this.mc.getRenderViewEntity();
             int i = MathHelper.ceiling_float_int(entityplayer.getHealth());
@@ -591,9 +572,9 @@ public class GuiIngame extends Gui {
             int k = foodstats.getFoodLevel();
             int l = foodstats.getPrevFoodLevel();
             IAttributeInstance iattributeinstance = entityplayer.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-            int i1 = scaledRes.getScaledWidth() / 2 - 91;
-            int j1 = scaledRes.getScaledWidth() / 2 + 91;
-            int k1 = scaledRes.getScaledHeight() - 39;
+            int i1 = p_180477_1_.getScaledWidth() / 2 - 91;
+            int j1 = p_180477_1_.getScaledWidth() / 2 + 91;
+            int k1 = p_180477_1_.getScaledHeight() - 39;
             float f = (float) iattributeinstance.getAttributeValue();
             float f1 = entityplayer.getAbsorptionAmount();
             int l1 = MathHelper.ceiling_float_int((f + f1) / 2.0F / 10.0F);
@@ -674,15 +655,7 @@ public class GuiIngame extends Gui {
                     }
                 }
 
-                if (f2 > 0.0F) {
-                    if (f2 == f1 && f1 % 2.0F == 1.0F) {
-                        this.drawTexturedModalRect(i4, j4, j6 + 153, 9 * k4, 9, 9);
-                    } else {
-                        this.drawTexturedModalRect(i4, j4, j6 + 144, 9 * k4, 9, 9);
-                    }
-
-                    f2 -= 2.0F;
-                } else {
+                if (f2 <= 0.0F) {
                     if (i6 * 2 + 1 < i) {
                         this.drawTexturedModalRect(i4, j4, j6 + 36, 9 * k4, 9, 9);
                     }
@@ -690,6 +663,14 @@ public class GuiIngame extends Gui {
                     if (i6 * 2 + 1 == i) {
                         this.drawTexturedModalRect(i4, j4, j6 + 45, 9 * k4, 9, 9);
                     }
+                } else {
+                    if (f2 == f1 && f1 % 2.0F == 1.0F) {
+                        this.drawTexturedModalRect(i4, j4, j6 + 153, 9 * k4, 9, 9);
+                    } else {
+                        this.drawTexturedModalRect(i4, j4, j6 + 144, 9 * k4, 9, 9);
+                    }
+
+                    f2 -= 2.0F;
                 }
             }
 
@@ -699,60 +680,60 @@ public class GuiIngame extends Gui {
                 this.mc.mcProfiler.endStartSection("food");
 
                 for (int k6 = 0; k6 < 10; ++k6) {
-                    int i7 = k1;
+                    int j7 = k1;
                     int l7 = 16;
-                    int j8 = 0;
+                    int k8 = 0;
 
                     if (entityplayer.isPotionActive(Potion.hunger)) {
                         l7 += 36;
-                        j8 = 13;
+                        k8 = 13;
                     }
 
                     if (entityplayer.getFoodStats().getSaturationLevel() <= 0.0F && this.updateCounter % (k * 3 + 1) == 0) {
-                        i7 = k1 + (this.rand.nextInt(3) - 1);
+                        j7 = k1 + (this.rand.nextInt(3) - 1);
                     }
 
                     if (flag1) {
-                        j8 = 1;
+                        k8 = 1;
                     }
 
-                    int i9 = j1 - k6 * 8 - 9;
-                    this.drawTexturedModalRect(i9, i7, 16 + j8 * 9, 27, 9, 9);
+                    int j9 = j1 - k6 * 8 - 9;
+                    this.drawTexturedModalRect(j9, j7, 16 + k8 * 9, 27, 9, 9);
 
                     if (flag1) {
                         if (k6 * 2 + 1 < l) {
-                            this.drawTexturedModalRect(i9, i7, l7 + 54, 27, 9, 9);
+                            this.drawTexturedModalRect(j9, j7, l7 + 54, 27, 9, 9);
                         }
 
                         if (k6 * 2 + 1 == l) {
-                            this.drawTexturedModalRect(i9, i7, l7 + 63, 27, 9, 9);
+                            this.drawTexturedModalRect(j9, j7, l7 + 63, 27, 9, 9);
                         }
                     }
 
                     if (k6 * 2 + 1 < k) {
-                        this.drawTexturedModalRect(i9, i7, l7 + 36, 27, 9, 9);
+                        this.drawTexturedModalRect(j9, j7, l7 + 36, 27, 9, 9);
                     }
 
                     if (k6 * 2 + 1 == k) {
-                        this.drawTexturedModalRect(i9, i7, l7 + 45, 27, 9, 9);
+                        this.drawTexturedModalRect(j9, j7, l7 + 45, 27, 9, 9);
                     }
                 }
             } else if (entity instanceof EntityLivingBase) {
                 this.mc.mcProfiler.endStartSection("mountHealth");
                 EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
-                int j7 = (int) Math.ceil((double) entitylivingbase.getHealth());
+                int i7 = (int) Math.ceil((double) entitylivingbase.getHealth());
                 float f3 = entitylivingbase.getMaxHealth();
-                int k8 = (int) (f3 + 0.5F) / 2;
+                int j8 = (int) (f3 + 0.5F) / 2;
 
-                if (k8 > 30) {
-                    k8 = 30;
+                if (j8 > 30) {
+                    j8 = 30;
                 }
 
-                int j9 = k1;
+                int i9 = k1;
 
-                for (int k9 = 0; k8 > 0; k9 += 20) {
-                    int l4 = Math.min(k8, 10);
-                    k8 -= l4;
+                for (int k9 = 0; j8 > 0; k9 += 20) {
+                    int l4 = Math.min(j8, 10);
+                    j8 -= l4;
 
                     for (int i5 = 0; i5 < l4; ++i5) {
                         int j5 = 52;
@@ -763,18 +744,18 @@ public class GuiIngame extends Gui {
                         }
 
                         int l5 = j1 - i5 * 8 - 9;
-                        this.drawTexturedModalRect(l5, j9, j5 + k5 * 9, 9, 9, 9);
+                        this.drawTexturedModalRect(l5, i9, j5 + k5 * 9, 9, 9, 9);
 
-                        if (i5 * 2 + 1 + k9 < j7) {
-                            this.drawTexturedModalRect(l5, j9, j5 + 36, 9, 9, 9);
+                        if (i5 * 2 + 1 + k9 < i7) {
+                            this.drawTexturedModalRect(l5, i9, j5 + 36, 9, 9, 9);
                         }
 
-                        if (i5 * 2 + 1 + k9 == j7) {
-                            this.drawTexturedModalRect(l5, j9, j5 + 45, 9, 9, 9);
+                        if (i5 * 2 + 1 + k9 == i7) {
+                            this.drawTexturedModalRect(l5, i9, j5 + 45, 9, 9, 9);
                         }
                     }
 
-                    j9 -= 10;
+                    i9 -= 10;
                 }
             }
 
@@ -825,7 +806,7 @@ public class GuiIngame extends Gui {
         }
     }
 
-    private void renderPumpkinOverlay(ScaledResolution scaledRes) {
+    private void renderPumpkinOverlay(ScaledResolution p_180476_1_) {
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -834,11 +815,11 @@ public class GuiIngame extends Gui {
         this.mc.getTextureManager().bindTexture(pumpkinBlurTexPath);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos(0.0D, (double) scaledRes.getScaledHeight(), -90.0D).tex(0.0D, 1.0D).endVertex();
-        worldrenderer.pos((double) scaledRes.getScaledWidth(), (double) scaledRes.getScaledHeight(), -90.0D).tex(1.0D, 1.0D).endVertex();
-        worldrenderer.pos((double) scaledRes.getScaledWidth(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
-        worldrenderer.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
+        worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+        worldrenderer.pos(0.0D, (double) p_180476_1_.getScaledHeight(), -90.0D).func_181673_a(0.0D, 1.0D).func_181675_d();
+        worldrenderer.pos((double) p_180476_1_.getScaledWidth(), (double) p_180476_1_.getScaledHeight(), -90.0D).func_181673_a(1.0D, 1.0D).func_181675_d();
+        worldrenderer.pos((double) p_180476_1_.getScaledWidth(), 0.0D, -90.0D).func_181673_a(1.0D, 0.0D).func_181675_d();
+        worldrenderer.pos(0.0D, 0.0D, -90.0D).func_181673_a(0.0D, 0.0D).func_181675_d();
         tessellator.draw();
         GlStateManager.depthMask(true);
         GlStateManager.enableDepth();
@@ -848,62 +829,64 @@ public class GuiIngame extends Gui {
 
     /**
      * Renders a Vignette arount the entire screen that changes with light level.
-     *
-     * @param lightLevel The current brightness
-     * @param scaledRes  The current resolution of the game
      */
-    private void renderVignette(float lightLevel, ScaledResolution scaledRes) {
-        lightLevel = 1.0F - lightLevel;
-        lightLevel = MathHelper.clamp_float(lightLevel, 0.0F, 1.0F);
-        WorldBorder worldborder = this.mc.theWorld.getWorldBorder();
-        float f = (float) worldborder.getClosestDistance(this.mc.thePlayer);
-        double d0 = Math.min(worldborder.getResizeSpeed() * (double) worldborder.getWarningTime() * 1000.0D, Math.abs(worldborder.getTargetSize() - worldborder.getDiameter()));
-        double d1 = Math.max((double) worldborder.getWarningDistance(), d0);
-
-        if ((double) f < d1) {
-            f = 1.0F - (float) ((double) f / d1);
+    private void renderVignette(float p_180480_1_, ScaledResolution p_180480_2_) {
+        if (!Config.isVignetteEnabled()) {
+            GlStateManager.enableDepth();
+            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         } else {
-            f = 0.0F;
+            p_180480_1_ = 1.0F - p_180480_1_;
+            p_180480_1_ = MathHelper.clamp_float(p_180480_1_, 0.0F, 1.0F);
+            WorldBorder worldborder = this.mc.theWorld.getWorldBorder();
+            float f = (float) worldborder.getClosestDistance(this.mc.thePlayer);
+            double d0 = Math.min(worldborder.getResizeSpeed() * (double) worldborder.getWarningTime() * 1000.0D, Math.abs(worldborder.getTargetSize() - worldborder.getDiameter()));
+            double d1 = Math.max((double) worldborder.getWarningDistance(), d0);
+
+            if ((double) f < d1) {
+                f = 1.0F - (float) ((double) f / d1);
+            } else {
+                f = 0.0F;
+            }
+
+            this.prevVignetteBrightness = (float) ((double) this.prevVignetteBrightness + (double) (p_180480_1_ - this.prevVignetteBrightness) * 0.01D);
+            GlStateManager.disableDepth();
+            GlStateManager.depthMask(false);
+            GlStateManager.tryBlendFuncSeparate(0, 769, 1, 0);
+
+            if (f > 0.0F) {
+                GlStateManager.color(0.0F, f, f, 1.0F);
+            } else {
+                GlStateManager.color(this.prevVignetteBrightness, this.prevVignetteBrightness, this.prevVignetteBrightness, 1.0F);
+            }
+
+            this.mc.getTextureManager().bindTexture(vignetteTexPath);
+            Tessellator tessellator = Tessellator.getInstance();
+            WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+            worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+            worldrenderer.pos(0.0D, (double) p_180480_2_.getScaledHeight(), -90.0D).func_181673_a(0.0D, 1.0D).func_181675_d();
+            worldrenderer.pos((double) p_180480_2_.getScaledWidth(), (double) p_180480_2_.getScaledHeight(), -90.0D).func_181673_a(1.0D, 1.0D).func_181675_d();
+            worldrenderer.pos((double) p_180480_2_.getScaledWidth(), 0.0D, -90.0D).func_181673_a(1.0D, 0.0D).func_181675_d();
+            worldrenderer.pos(0.0D, 0.0D, -90.0D).func_181673_a(0.0D, 0.0D).func_181675_d();
+            tessellator.draw();
+            GlStateManager.depthMask(true);
+            GlStateManager.enableDepth();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         }
-
-        this.prevVignetteBrightness = (float) ((double) this.prevVignetteBrightness + (double) (lightLevel - this.prevVignetteBrightness) * 0.01D);
-        GlStateManager.disableDepth();
-        GlStateManager.depthMask(false);
-        GlStateManager.tryBlendFuncSeparate(0, 769, 1, 0);
-
-        if (f > 0.0F) {
-            GlStateManager.color(0.0F, f, f, 1.0F);
-        } else {
-            GlStateManager.color(this.prevVignetteBrightness, this.prevVignetteBrightness, this.prevVignetteBrightness, 1.0F);
-        }
-
-        this.mc.getTextureManager().bindTexture(vignetteTexPath);
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos(0.0D, (double) scaledRes.getScaledHeight(), -90.0D).tex(0.0D, 1.0D).endVertex();
-        worldrenderer.pos((double) scaledRes.getScaledWidth(), (double) scaledRes.getScaledHeight(), -90.0D).tex(1.0D, 1.0D).endVertex();
-        worldrenderer.pos((double) scaledRes.getScaledWidth(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
-        worldrenderer.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
-        tessellator.draw();
-        GlStateManager.depthMask(true);
-        GlStateManager.enableDepth();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
     }
 
-    private void renderPortal(float timeInPortal, ScaledResolution scaledRes) {
-        if (timeInPortal < 1.0F) {
-            timeInPortal = timeInPortal * timeInPortal;
-            timeInPortal = timeInPortal * timeInPortal;
-            timeInPortal = timeInPortal * 0.8F + 0.2F;
+    private void func_180474_b(float p_180474_1_, ScaledResolution p_180474_2_) {
+        if (p_180474_1_ < 1.0F) {
+            p_180474_1_ = p_180474_1_ * p_180474_1_;
+            p_180474_1_ = p_180474_1_ * p_180474_1_;
+            p_180474_1_ = p_180474_1_ * 0.8F + 0.2F;
         }
 
         GlStateManager.disableAlpha();
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, timeInPortal);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, p_180474_1_);
         this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         TextureAtlasSprite textureatlassprite = this.mc.getBlockRendererDispatcher().getBlockModelShapes().getTexture(Blocks.portal.getDefaultState());
         float f = textureatlassprite.getMinU();
@@ -912,11 +895,11 @@ public class GuiIngame extends Gui {
         float f3 = textureatlassprite.getMaxV();
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos(0.0D, (double) scaledRes.getScaledHeight(), -90.0D).tex((double) f, (double) f3).endVertex();
-        worldrenderer.pos((double) scaledRes.getScaledWidth(), (double) scaledRes.getScaledHeight(), -90.0D).tex((double) f2, (double) f3).endVertex();
-        worldrenderer.pos((double) scaledRes.getScaledWidth(), 0.0D, -90.0D).tex((double) f2, (double) f1).endVertex();
-        worldrenderer.pos(0.0D, 0.0D, -90.0D).tex((double) f, (double) f1).endVertex();
+        worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+        worldrenderer.pos(0.0D, (double) p_180474_2_.getScaledHeight(), -90.0D).func_181673_a((double) f, (double) f3).func_181675_d();
+        worldrenderer.pos((double) p_180474_2_.getScaledWidth(), (double) p_180474_2_.getScaledHeight(), -90.0D).func_181673_a((double) f2, (double) f3).func_181675_d();
+        worldrenderer.pos((double) p_180474_2_.getScaledWidth(), 0.0D, -90.0D).func_181673_a((double) f2, (double) f1).func_181675_d();
+        worldrenderer.pos(0.0D, 0.0D, -90.0D).func_181673_a((double) f, (double) f1).func_181675_d();
         tessellator.draw();
         GlStateManager.depthMask(true);
         GlStateManager.enableDepth();
@@ -924,8 +907,8 @@ public class GuiIngame extends Gui {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    private void renderHotbarItem(int index, int xPos, int yPos, float partialTicks, EntityPlayer player) {
-        ItemStack itemstack = player.inventory.mainInventory[index];
+    private void renderHotbarItem(int index, int xPos, int yPos, float partialTicks, EntityPlayer p_175184_5_) {
+        ItemStack itemstack = p_175184_5_.inventory.mainInventory[index];
 
         if (itemstack != null) {
             float f = (float) itemstack.animationsToGo - partialTicks;
@@ -956,17 +939,17 @@ public class GuiIngame extends Gui {
             --this.recordPlayingUpFor;
         }
 
-        if (this.titlesTimer > 0) {
-            --this.titlesTimer;
+        if (this.field_175195_w > 0) {
+            --this.field_175195_w;
 
-            if (this.titlesTimer <= 0) {
-                this.displayedTitle = "";
-                this.displayedSubTitle = "";
+            if (this.field_175195_w <= 0) {
+                this.field_175201_x = "";
+                this.field_175200_y = "";
             }
         }
 
         ++this.updateCounter;
-        this.streamIndicator.updateStreamAlpha();
+        this.streamIndicator.func_152439_a();
 
         if (this.mc.thePlayer != null) {
             ItemStack itemstack = this.mc.thePlayer.inventory.getCurrentItem();
@@ -985,47 +968,47 @@ public class GuiIngame extends Gui {
         }
     }
 
-    public void setRecordPlayingMessage(String recordName) {
-        this.setRecordPlaying(I18n.format("record.nowPlaying", new Object[]{recordName}), true);
+    public void setRecordPlayingMessage(String p_73833_1_) {
+        this.setRecordPlaying(I18n.format("record.nowPlaying", new Object[]{p_73833_1_}), true);
     }
 
-    public void setRecordPlaying(String message, boolean isPlaying) {
-        this.recordPlaying = message;
+    public void setRecordPlaying(String p_110326_1_, boolean p_110326_2_) {
+        this.recordPlaying = p_110326_1_;
         this.recordPlayingUpFor = 60;
-        this.recordIsPlaying = isPlaying;
+        this.recordIsPlaying = p_110326_2_;
     }
 
-    public void displayTitle(String title, String subTitle, int timeFadeIn, int displayTime, int timeFadeOut) {
-        if (title == null && subTitle == null && timeFadeIn < 0 && displayTime < 0 && timeFadeOut < 0) {
-            this.displayedTitle = "";
-            this.displayedSubTitle = "";
-            this.titlesTimer = 0;
-        } else if (title != null) {
-            this.displayedTitle = title;
-            this.titlesTimer = this.titleFadeIn + this.titleDisplayTime + this.titleFadeOut;
-        } else if (subTitle != null) {
-            this.displayedSubTitle = subTitle;
+    public void displayTitle(String p_175178_1_, String p_175178_2_, int p_175178_3_, int p_175178_4_, int p_175178_5_) {
+        if (p_175178_1_ == null && p_175178_2_ == null && p_175178_3_ < 0 && p_175178_4_ < 0 && p_175178_5_ < 0) {
+            this.field_175201_x = "";
+            this.field_175200_y = "";
+            this.field_175195_w = 0;
+        } else if (p_175178_1_ != null) {
+            this.field_175201_x = p_175178_1_;
+            this.field_175195_w = this.field_175199_z + this.field_175192_A + this.field_175193_B;
+        } else if (p_175178_2_ != null) {
+            this.field_175200_y = p_175178_2_;
         } else {
-            if (timeFadeIn >= 0) {
-                this.titleFadeIn = timeFadeIn;
+            if (p_175178_3_ >= 0) {
+                this.field_175199_z = p_175178_3_;
             }
 
-            if (displayTime >= 0) {
-                this.titleDisplayTime = displayTime;
+            if (p_175178_4_ >= 0) {
+                this.field_175192_A = p_175178_4_;
             }
 
-            if (timeFadeOut >= 0) {
-                this.titleFadeOut = timeFadeOut;
+            if (p_175178_5_ >= 0) {
+                this.field_175193_B = p_175178_5_;
             }
 
-            if (this.titlesTimer > 0) {
-                this.titlesTimer = this.titleFadeIn + this.titleDisplayTime + this.titleFadeOut;
+            if (this.field_175195_w > 0) {
+                this.field_175195_w = this.field_175199_z + this.field_175192_A + this.field_175193_B;
             }
         }
     }
 
-    public void setRecordPlaying(IChatComponent component, boolean isPlaying) {
-        this.setRecordPlaying(component.getUnformattedText(), isPlaying);
+    public void setRecordPlaying(IChatComponent p_175188_1_, boolean p_175188_2_) {
+        this.setRecordPlaying(p_175188_1_.getUnformattedText(), p_175188_2_);
     }
 
     /**
@@ -1051,10 +1034,7 @@ public class GuiIngame extends Gui {
         return this.overlayPlayerList;
     }
 
-    /**
-     * Reset the GuiPlayerTabOverlay's message header and footer
-     */
-    public void resetPlayersOverlayFooterHeader() {
-        this.overlayPlayerList.resetFooterHeader();
+    public void func_181029_i() {
+        this.overlayPlayerList.func_181030_a();
     }
 }

@@ -9,8 +9,21 @@ import cat.module.modules.render.Rotations;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.*;
-import net.minecraft.client.gui.inventory.*;
+import net.minecraft.client.gui.GuiCommandBlock;
+import net.minecraft.client.gui.GuiEnchantment;
+import net.minecraft.client.gui.GuiHopper;
+import net.minecraft.client.gui.GuiMerchant;
+import net.minecraft.client.gui.GuiRepair;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiScreenBook;
+import net.minecraft.client.gui.inventory.GuiBeacon;
+import net.minecraft.client.gui.inventory.GuiBrewingStand;
+import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.gui.inventory.GuiCrafting;
+import net.minecraft.client.gui.inventory.GuiDispenser;
+import net.minecraft.client.gui.inventory.GuiEditSign;
+import net.minecraft.client.gui.inventory.GuiFurnace;
+import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.entity.Entity;
@@ -22,13 +35,26 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.network.play.client.*;
+import net.minecraft.network.play.client.C01PacketChatMessage;
+import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
+import net.minecraft.network.play.client.C0APacketAnimation;
+import net.minecraft.network.play.client.C0BPacketEntityAction;
+import net.minecraft.network.play.client.C0CPacketInput;
+import net.minecraft.network.play.client.C0DPacketCloseWindow;
+import net.minecraft.network.play.client.C13PacketPlayerAbilities;
+import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.potion.Potion;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.MovementInput;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 
@@ -191,58 +217,48 @@ public class EntityPlayerSP extends AbstractClientPlayer {
         }
 
         if (this.isCurrentViewEntity()) {
-            UpdatePlayerEvent ev = new UpdatePlayerEvent(this.rotationYaw, this.rotationPitch, this.posX, getEntityBoundingBox().minY, this.posZ);
-            BlueZenith.eventManager.call(ev);
-            float yaw = ev.yaw;
-            float pitch = ev.pitch;
-            Rotations r = (Rotations) BlueZenith.moduleManager.getModule(Rotations.class);
-            r.prevYaw = r.yaw;
-            r.prevPitch = r.pitch;
-
-            r.yaw = yaw;
-            r.pitch = pitch;
-            double x = ev.x;
-            double y = ev.y;
-            double z = ev.z;
-            double d0 = x - this.lastReportedPosX;
-            double d1 = y - this.lastReportedPosY;
-            double d2 = z - this.lastReportedPosZ;
-            double d3 = yaw - this.lastReportedYaw;
-            double d4 = pitch - this.lastReportedPitch;
-            if(yaw != this.rotationYaw){
-                d3 = 0;
-                d4 = 0;
-            }
+            UpdatePlayerEvent event = new UpdatePlayerEvent(this.rotationYaw, this.rotationPitch, this.posX, this.getEntityBoundingBox().minY, this.posZ, this.onGround);
+            BlueZenith.eventManager.call(event);
+            Rotations rt = (Rotations) BlueZenith.moduleManager.getModule(Rotations.class);
+            rt.prevYaw = event.yaw;
+            rt.prevPitch = event.pitch;
+            rt.yaw = event.yaw;
+            rt.pitch = event.pitch;
+            double d0 = event.x - this.lastReportedPosX;
+            double d1 = event.y - this.lastReportedPosY;
+            double d2 = event.z - this.lastReportedPosZ;
+            double d3 = event.yaw - this.lastReportedYaw;
+            double d4 = event.pitch - this.lastReportedPitch;
             boolean flag2 = d0 * d0 + d1 * d1 + d2 * d2 > 9.0E-4D || this.positionUpdateTicks >= 20;
             boolean flag3 = d3 != 0.0D || d4 != 0.0D;
 
             if (this.ridingEntity == null) {
                 if (flag2 && flag3) {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(x, y, z, yaw, pitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(event.x, event.y, event.z, event.yaw, event.pitch, event.onGround));
                 } else if (flag2) {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(x, y, z, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(event.x, event.y, event.z, event.onGround));
                 } else if (flag3) {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(yaw, pitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(event.yaw, event.pitch, event.onGround));
                 } else {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer(this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer(event.onGround));
                 }
             } else {
-                this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.motionX, -999.0D, this.motionZ, yaw, pitch, this.onGround));
+                this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.motionX, -999.0D, this.motionZ, event.yaw, event.pitch, event.onGround));
                 flag2 = false;
             }
 
             ++this.positionUpdateTicks;
 
             if (flag2) {
-                this.lastReportedPosX = x;
-                this.lastReportedPosY = y;
-                this.lastReportedPosZ = z;
+                this.lastReportedPosX = event.x;
+                this.lastReportedPosY = event.y;
+                this.lastReportedPosZ = event.z;
                 this.positionUpdateTicks = 0;
             }
 
             if (flag3) {
-                this.lastReportedYaw = yaw;
-                this.lastReportedPitch = pitch;
+                this.lastReportedYaw = event.yaw;
+                this.lastReportedPitch = event.pitch;
             }
         }
     }
@@ -264,6 +280,8 @@ public class EntityPlayerSP extends AbstractClientPlayer {
 
     /**
      * Sends a chat message from the player. Args: chatMessage
+     *
+     * @param message used on EntityPlayerSP.sendChatMessage - as inbound message
      */
     public void sendChatMessage(String message) {
         this.sendQueue.addToSendQueue(new C01PacketChatMessage(message));
@@ -461,6 +479,8 @@ public class EntityPlayerSP extends AbstractClientPlayer {
 
     /**
      * Send a chat message to the CommandSender
+     *
+     * @param component The ChatComponent to send
      */
     public void addChatMessage(IChatComponent component) {
         this.mc.ingameGUI.getChatGUI().printChatMessage(component);
@@ -468,6 +488,9 @@ public class EntityPlayerSP extends AbstractClientPlayer {
 
     /**
      * Returns {@code true} if the CommandSender is allowed to execute the command, {@code false} if not
+     *
+     * @param permLevel   The permission level required to execute the command
+     * @param commandName The name of the command
      */
     public boolean canCommandSenderUseCommand(int permLevel, String commandName) {
         return permLevel <= 0;
@@ -604,9 +627,8 @@ public class EntityPlayerSP extends AbstractClientPlayer {
      * use this to react to sunlight and start to burn.
      */
     public void onLivingUpdate() {
-        NoSlowDown b = (NoSlowDown) BlueZenith.moduleManager.getModule(NoSlowDown.class);
-
-        if(this == mc.thePlayer){
+        NoSlowDown ns = (NoSlowDown) BlueZenith.moduleManager.getModule(NoSlowDown.class);
+        if(this == Minecraft.getMinecraft().thePlayer){
             BlueZenith.eventManager.call(new UpdateEvent());
         }
         if (this.sprintingTicksLeft > 0) {
@@ -625,7 +647,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
 
         if (this.inPortal) {
             if (this.mc.currentScreen != null && !this.mc.currentScreen.doesGuiPauseGame()) {
-                this.mc.displayGuiScreen(null);
+                this.mc.displayGuiScreen((GuiScreen) null);
             }
 
             if (this.timeInPortal == 0.0F) {
@@ -665,10 +687,10 @@ public class EntityPlayerSP extends AbstractClientPlayer {
         boolean flag2 = this.movementInput.moveForward >= f;
         this.movementInput.updatePlayerMoveState();
 
-        if (this.isUsingItem() || (getHeldItem() != null && getHeldItem().getItem() instanceof ItemSword && ((Aura) BlueZenith.moduleManager.getModule(Aura.class)).blockStatus) && !this.isRiding()) {
-            float multi = b.getState() ? b.itemMulti.get() : 0.2f;
-            this.movementInput.moveStrafe *= multi;
-            this.movementInput.moveForward *= multi;
+        if ((this.isUsingItem() || ((Aura) BlueZenith.moduleManager.getModule(Aura.class)).blockStatus) && !this.isRiding()) {
+            float m = ns.getState() ? ns.itemMulti.get() : 0.2F;
+            this.movementInput.moveStrafe *= m;
+            this.movementInput.moveForward *= m;
             this.sprintToggleTimer = 0;
         }
 
@@ -686,7 +708,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
             }
         }
 
-        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !(this.isUsingItem() && !b.getState()) && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown()) {
+        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !(this.isUsingItem() && !ns.getState()) && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown()) {
             this.setSprinting(true);
         }
 

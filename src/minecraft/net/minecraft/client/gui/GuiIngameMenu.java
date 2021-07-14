@@ -3,7 +3,6 @@ package net.minecraft.client.gui;
 import java.io.IOException;
 
 import cat.BlueZenith;
-import cat.ui.GuiMain;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -54,7 +53,7 @@ public class GuiIngameMenu extends GuiScreen
 
             case 1:
                 boolean flag = this.mc.isIntegratedServerRunning();
-                boolean flag1 = this.mc.isConnectedToRealms();
+                boolean flag1 = this.mc.func_181540_al();
                 button.enabled = false;
                 this.mc.theWorld.sendQuittingDisconnectingPacket();
                 this.mc.loadWorld((WorldClient)null);
