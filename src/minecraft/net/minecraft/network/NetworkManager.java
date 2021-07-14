@@ -1,6 +1,5 @@
 package net.minecraft.network;
 
-import cat.BlueZenith;
 import cat.events.impl.PacketEvent;
 import com.google.common.collect.Queues;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -63,7 +62,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             return new NioEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Client IO #%d").setDaemon(true).build());
         }
     };
-    public static final LazyLoadBase<EpollEventLoopGroup> CLIENT_EPOLL_EVENTLOOP = new LazyLoadBase<EpollEventLoopGroup>() {
+    public static final LazyLoadBase<EpollEventLoopGroup> field_181125_e = new LazyLoadBase<EpollEventLoopGroup>() {
         protected EpollEventLoopGroup load() {
             return new EpollEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Client IO #%d").setDaemon(true).build());
         }
@@ -75,7 +74,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     };
     private final EnumPacketDirection direction;
     private final Queue<NetworkManager.InboundHandlerTuplePacketListener> outboundPacketsQueue = Queues.<NetworkManager.InboundHandlerTuplePacketListener>newConcurrentLinkedQueue();
-    private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock field_181680_j = new ReentrantReadWriteLock();
 
     /**
      * The active channel
@@ -162,8 +161,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     public void sendPacket(Packet packetIn) {
         PacketEvent event = new PacketEvent(packetIn);
-        BlueZenith.eventManager.call(event);
-        if(event.cancelled){
+        if(event.cancelled) {
             return;
         }
         packetIn = event.packet;
@@ -171,26 +169,27 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             this.flushOutboundQueue();
             this.dispatchPacket(packetIn, null);
         } else {
-            this.readWriteLock.writeLock().lock();
+            this.field_181680_j.writeLock().lock();
 
             try {
                 this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[]) null));
             } finally {
-                this.readWriteLock.writeLock().unlock();
+                this.field_181680_j.writeLock().unlock();
             }
         }
     }
+
     public void sendPacketNoEvent(Packet packetIn) {
         if (this.isChannelOpen()) {
             this.flushOutboundQueue();
             this.dispatchPacket(packetIn, null);
         } else {
-            this.readWriteLock.writeLock().lock();
+            this.field_181680_j.writeLock().lock();
 
             try {
-                this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, null));
+                this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[]) null));
             } finally {
-                this.readWriteLock.writeLock().unlock();
+                this.field_181680_j.writeLock().unlock();
             }
         }
     }
@@ -198,14 +197,14 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     public void sendPacket(Packet packetIn, GenericFutureListener<? extends Future<? super Void>> listener, GenericFutureListener<? extends Future<? super Void>>... listeners) {
         if (this.isChannelOpen()) {
             this.flushOutboundQueue();
-            this.dispatchPacket(packetIn, ArrayUtils.add(listeners, 0, listener));
+            this.dispatchPacket(packetIn, (GenericFutureListener[]) ArrayUtils.add(listeners, 0, listener));
         } else {
-            this.readWriteLock.writeLock().lock();
+            this.field_181680_j.writeLock().lock();
 
             try {
-                this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, ArrayUtils.add(listeners, 0, listener)));
+                this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[]) ArrayUtils.add(listeners, 0, listener)));
             } finally {
-                this.readWriteLock.writeLock().unlock();
+                this.field_181680_j.writeLock().unlock();
             }
         }
     }
@@ -259,7 +258,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
      */
     private void flushOutboundQueue() {
         if (this.channel != null && this.channel.isOpen()) {
-            this.readWriteLock.readLock().lock();
+            this.field_181680_j.readLock().lock();
 
             try {
                 while (!this.outboundPacketsQueue.isEmpty()) {
@@ -267,7 +266,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
                     this.dispatchPacket(networkmanager$inboundhandlertuplepacketlistener.packet, networkmanager$inboundhandlertuplepacketlistener.futureListeners);
                 }
             } finally {
-                this.readWriteLock.readLock().unlock();
+                this.field_181680_j.readLock().unlock();
             }
         }
     }
@@ -310,21 +309,14 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         return this.channel instanceof LocalChannel || this.channel instanceof LocalServerChannel;
     }
 
-    /**
-     * Create a new NetworkManager from the server host and connect it to the server
-     *
-     * @param address            The address of the server
-     * @param serverPort         The server port
-     * @param useNativeTransport True if the client use the native transport system
-     */
-    public static NetworkManager createNetworkManagerAndConnect(InetAddress address, int serverPort, boolean useNativeTransport) {
+    public static NetworkManager func_181124_a(InetAddress p_181124_0_, int p_181124_1_, boolean p_181124_2_) {
         final NetworkManager networkmanager = new NetworkManager(EnumPacketDirection.CLIENTBOUND);
         Class<? extends SocketChannel> oclass;
         LazyLoadBase<? extends EventLoopGroup> lazyloadbase;
 
-        if (Epoll.isAvailable() && useNativeTransport) {
+        if (Epoll.isAvailable() && p_181124_2_) {
             oclass = EpollSocketChannel.class;
-            lazyloadbase = CLIENT_EPOLL_EVENTLOOP;
+            lazyloadbase = field_181125_e;
         } else {
             oclass = NioSocketChannel.class;
             lazyloadbase = CLIENT_NIO_EVENTLOOP;
@@ -340,7 +332,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
                 p_initChannel_1_.pipeline().addLast((String) "timeout", (ChannelHandler) (new ReadTimeoutHandler(30))).addLast((String) "splitter", (ChannelHandler) (new MessageDeserializer2())).addLast((String) "decoder", (ChannelHandler) (new MessageDeserializer(EnumPacketDirection.CLIENTBOUND))).addLast((String) "prepender", (ChannelHandler) (new MessageSerializer2())).addLast((String) "encoder", (ChannelHandler) (new MessageSerializer(EnumPacketDirection.SERVERBOUND))).addLast((String) "packet_handler", (ChannelHandler) networkmanager);
             }
-        })).channel(oclass)).connect(address, serverPort).syncUninterruptibly();
+        })).channel(oclass)).connect(p_181124_0_, p_181124_1_).syncUninterruptibly();
         return networkmanager;
     }
 
