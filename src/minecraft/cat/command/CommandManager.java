@@ -9,6 +9,8 @@ import org.reflections.Reflections;
 
 import java.util.ArrayList;
 
+import static cat.util.MinecraftInstance.mc;
+
 public class CommandManager {
     public String commandPrefix = ".";
     public ArrayList<Command> commands = new ArrayList<>();
@@ -26,6 +28,9 @@ public class CommandManager {
 
     public void dispatch(SentMessageEvent event) {
         if (event.message.startsWith(commandPrefix)) {
+            if(event.sendToChat){
+                mc.ingameGUI.getChatGUI().addToSentMessages(event.message);
+            }
             event.cancel();
             String[] args = event.message.substring(commandPrefix.length()).split(" ");
             for (Command command : commands) {

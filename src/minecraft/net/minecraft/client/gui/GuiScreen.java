@@ -407,7 +407,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     }
 
     public void sendChatMessage(String msg, boolean addToChat) {
-        SentMessageEvent event = new SentMessageEvent(msg);
+        SentMessageEvent event = new SentMessageEvent(msg, addToChat);
         BlueZenith.commandManager.dispatch(event);
         BlueZenith.eventManager.call(event);
         if(event.cancelled) return;

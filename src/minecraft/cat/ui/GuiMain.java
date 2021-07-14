@@ -1,6 +1,7 @@
 package cat.ui;
 
 import cat.BlueZenith;
+import cat.ui.alt.GuiAltLogin;
 import cat.util.RenderUtil;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,6 +22,7 @@ public class GuiMain extends GuiScreen {
         this.buttonList.add(new GuiButton(4, this.width / 2 + 2, j + 72 + 12, 98, 20, I18n.format("menu.quit")));
         this.buttonList.add(new GuiButton(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
         this.buttonList.add(new GuiButton(2, this.width / 2 - 100, j + 24, I18n.format("menu.multiplayer")));
+        this.buttonList.add(new GuiButton(14, this.width / 2 - 100, j + 24 * 2, "Alt Manager"));
     }
     ResourceLocation bg = new ResourceLocation("cat/ui/bluezenith.jpg");
     @Override
@@ -61,6 +63,9 @@ public class GuiMain extends GuiScreen {
                 break;
             case 4:
                 this.mc.shutdown();
+                break;
+            case 14:
+                this.mc.displayGuiScreen(new GuiAltLogin(this));
                 break;
         }
     }
