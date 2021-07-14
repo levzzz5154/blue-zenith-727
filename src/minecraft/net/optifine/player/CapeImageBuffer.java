@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class CapeImageBuffer extends ImageBufferDownload {
     private AbstractClientPlayer player;
-    private ResourceLocation resourceLocation;
+    private final ResourceLocation resourceLocation;
     private boolean elytraOfCape;
 
     public CapeImageBuffer(AbstractClientPlayer player, ResourceLocation resourceLocation) {
@@ -19,6 +19,7 @@ public class CapeImageBuffer extends ImageBufferDownload {
     }
 
     public BufferedImage parseUserSkin(BufferedImage imageRaw) {
+        //noinspection ConstantConditions
         if(BlueZenith.moduleManager.getModule(MemoryFix.class).getState()){
             return CapeUtils.parseCape(imageRaw);
         }
@@ -29,6 +30,7 @@ public class CapeImageBuffer extends ImageBufferDownload {
     }
 
     public void skinAvailable() {
+        //noinspection ConstantConditions
         if(BlueZenith.moduleManager.getModule(MemoryFix.class).getState()){
             if(this.player != null){
                 player.setLocationOfCape(resourceLocation);
