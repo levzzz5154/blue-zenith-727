@@ -32,6 +32,6 @@ public class EntityManager extends MinecraftInstance{
                 || ent instanceof EntityVillager || ent instanceof EntitySlime
                 || ent instanceof EntityCreeper || ent instanceof EntityEnderman
                 || ent instanceof EntityEndermite || ent instanceof EntitySpider
-                || ent instanceof EntityWitch || ent instanceof EntityWither;
+                || ent instanceof EntityWitch || ent instanceof EntityWither || ent instanceof EntityBlaze;
     }
 }
