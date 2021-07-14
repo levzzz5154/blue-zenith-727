@@ -17,7 +17,7 @@ public class Module extends MinecraftInstance {
     public boolean showSettings;
     private boolean wasPressed;
     public final String[] aliases;
-    private List<Value<?>> values = new ArrayList<>();
+    private final List<Value<?>> values = new ArrayList<>();
     public Module(String name, String tag, ModuleCategory cat, String... aliases){
         this(name, tag, cat, 0, aliases);
     }
@@ -63,7 +63,7 @@ public class Module extends MinecraftInstance {
     public void onEnable() {}
 
     public String getTagName(){
-        return name + "§7" + (tag.isEmpty() ? "" : " " + tag);
+        return getName() + "§7" + (getTag().isEmpty() ? "" : " " + getTag());
     }
 
     public String getName() {

@@ -67,7 +67,7 @@ public class Panel extends MinecraftInstance {
             }
 
             RenderUtil.rect(x, y1, x + width, y1 + mHeight, backgroundColor);
-            mc.fontRendererObj.drawString(m.getName(), x + 5, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), m.getState() ? Color.WHITE.getRGB() : Color.DARK_GRAY.getRGB());
+            mc.fontRendererObj.drawString(m.getName(), x + 5, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), m.getState() ? main_color.getRGB() : main_color.darker().darker().getRGB());
             y1 += mHeight;
             if(m.showSettings){
                 for (Value<?> v : vl) {
@@ -115,7 +115,7 @@ public class Panel extends MinecraftInstance {
                         float w = width - 4;
                         final float a = x + w * (Math.max(value.min, Math.min(value.get(), value.max)) - value.min) / (value.max - value.min);
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        mc.fontRendererObj.drawString(value.name + ": " + value.get(), x + 4, y1 + h / 2f - 8f, Color.WHITE.getRGB());
+                        mc.fontRendererObj.drawString(value.name + ": " + value.get(), x + 4, y1 + h / 2f - 8f, main_color.getRGB());
                         RenderUtil.rect(x + 4, y1 + h / 2f + 4f, x + w, y1 + h / 2f + 6f, new Color(63, 65, 68));
                         RenderUtil.rect(x + 4, y1 + h / 2f + 4f, a, y1 + h / 2f + 6f, main_color);
 
@@ -134,7 +134,7 @@ public class Panel extends MinecraftInstance {
                     } else if (v instanceof BoolValue) {
                         BoolValue val = (BoolValue) v;
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        mc.fontRendererObj.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), val.value ? main_color.getRGB() : Color.DARK_GRAY.getRGB());
+                        mc.fontRendererObj.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), val.value ? main_color.getRGB() : main_color.darker().darker().getRGB());
                         if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && Mouse.isButtonDown(0) && !m.wasPressed()) {
                             val.set(!val.get());
                             mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));

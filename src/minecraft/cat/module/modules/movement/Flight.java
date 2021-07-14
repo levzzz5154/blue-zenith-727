@@ -5,7 +5,6 @@ import cat.events.impl.BlockBBEvent;
 import cat.events.impl.UpdateEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
-import cat.module.value.types.BoolValue;
 import cat.module.value.types.FloatValue;
 import cat.module.value.types.ModeValue;
 import cat.util.MovementUtil;
@@ -17,13 +16,13 @@ public class Flight extends Module {
     FloatValue speed = new FloatValue("1", "Speed", 2f, 0f, 5f, true);
     private final ModeValue mode = new ModeValue("flight_mode", "Mode", "Vanilla", true, "Vanilla", "Verus", "Mode3", "Mode4");
     public Flight() {
-        super("Flight", "Vanilla", ModuleCategory.MOVEMENT, Keyboard.KEY_F);
+        super("Flight", "", ModuleCategory.MOVEMENT, Keyboard.KEY_F);
     }
     @Subscriber
     public void onUpdate(UpdateEvent e){
         switch(mode.get()){
             case "Vanilla":
-                if(MovementUtil.isMovementKeysPressed()){
+                if(MovementUtil.areMovementKeysPressed()){
                     MovementUtil.setSpeed(speed.get());
                 }else{
                     mc.thePlayer.motionX = 0;
@@ -41,6 +40,10 @@ public class Flight extends Module {
                 MovementUtil.setSpeed(0.26f);
                 break;
         }
+    }
+    @Override
+    public String getTag(){
+        return this.mode.get();
     }
     @Subscriber
     public void onBlockBB(BlockBBEvent e){

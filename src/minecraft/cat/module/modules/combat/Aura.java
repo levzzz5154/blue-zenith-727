@@ -21,10 +21,12 @@ import net.minecraft.util.Vec3;
 import org.lwjgl.input.Keyboard;
 
 public class Aura extends Module {
+    //TODO: Add autoBlock
+    public boolean blockStatus = false;
     private final IntegerValue minCPS = new IntegerValue("1", "MinCPS", 15, 0, 20, true);
     private final IntegerValue maxCPS = new IntegerValue("2", "MaxCPS", 7, 0, 20, true);
     private final FloatValue range = new FloatValue("3", "Range", 3f, 0f, 8f, true);
-    private final IntegerValue hurtTime = new IntegerValue("4", "hurtTime", 10, 1, 10, true);
+    private final IntegerValue hurtTime = new IntegerValue("4", "HurtTime", 10, 1, 10, true);
     private final BoolValue swing = new BoolValue("5", "SwingItem",true, true);
     private final BoolValue silent = new BoolValue("6", "SilentRotations",true, true);
     public Aura() {
@@ -40,7 +42,7 @@ public class Aura extends Module {
                 target = (EntityLivingBase) ent;
             }
         }
-        if(target != null){
+        if(target != null && target.hurtTime <= hurtTime.get()){
             final Vec3 eyesPos = new Vec3(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY + mc.thePlayer.getEyeHeight(), mc.thePlayer.posZ);
             AxisAlignedBB bb = target.getEntityBoundingBox();
             final Vec3 entPos = new Vec3(bb.minX + (bb.maxX - bb.minX) * 0.5, bb.minY + (bb.maxY - bb.minY) * 0.5, bb.minZ + (bb.maxZ - bb.minZ) * 0.5f);

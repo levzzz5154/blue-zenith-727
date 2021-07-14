@@ -5,6 +5,7 @@ import cat.events.Subscriber;
 import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
+import cat.module.value.types.BoolValue;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -12,8 +13,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class HUD extends Module {
+    BoolValue shadow = new BoolValue("1", "FontShadow", true, true);
     ArrayList<Module> modules = new ArrayList<>();
-
     public HUD() {
         super("HUD", "", ModuleCategory.RENDER);
         this.setState(true);
@@ -29,17 +30,25 @@ public class HUD extends Module {
                 modules.remove(m);
             }
         }
+        Color colorDark = new Color(0,40,40);
+        Color color = new Color(0, 140, 160);
         ScaledResolution sc = e.resolution;
         FontRenderer font = mc.fontRendererObj;
         modules.sort((m, m1) -> Float.compare(font.getStringWidth(m1.getTagName()), font.getStringWidth(m.getTagName())));
-        font.drawString("BlueZenith b" + BlueZenith.version, 5, 5, Color.cyan.darker().getRGB(), true);
+        String str = BlueZenith.name+" b"+BlueZenith.version;
+        char[] strArr = str.toCharArray();
+        float x1 = 5;
+        for (int i = 0; i < strArr.length; i++) {
+            Color c = hi(colorDark, color, Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * (i + 2.55) / 60);;
+            font.drawString(String.valueOf(strArr[i]), x1, 5, c.getRGB(), shadow.get());
+            x1 += font.getStringWidth(String.valueOf(strArr[i]));
+        }
         float y = 5;
-        int cf = 0;
-        for (Module m : modules) {
-            Color c = hi(new Color(50, 170, 150), new Color(50, 140, 160), Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * (cf + 2.55) / 60);
-            font.drawString(m.getTagName(), sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - 5, y, c.getRGB(), true);
+        for (int i = 0; i < modules.size(); i++) {
+            Module m = modules.get(i);
+            Color c = hi(colorDark, color, Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * ((i * 2) + 2.55) / 60);
+            font.drawString(m.getTagName(), sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - 5, y, c.getRGB(), shadow.get());
             y += font.FONT_HEIGHT + 2;
-            cf -= 1;
         }
     }
     public static Color hi(final Color color, final Color color2, double delay) {

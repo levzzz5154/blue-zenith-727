@@ -90,7 +90,7 @@ public class ClickGui extends GuiScreen {
         float y = this.height - h;
         for (EntityManager.Targets c : sex) {
             RenderUtil.rect(this.width - w, y, this.width - 2, y + i, click.backgroundColor);
-            f.drawString(c.displayName, this.width - w + 6, (y + i / 2f - f.FONT_HEIGHT / 2f), c.on ? Color.WHITE.getRGB() : Color.DARK_GRAY.getRGB());
+            f.drawString(c.displayName, this.width - w + 6, (y + i / 2f - f.FONT_HEIGHT / 2f), c.on ? Color.WHITE.getRGB() : Color.WHITE.darker().darker().getRGB());
             if(i(mouseX, mouseY, this.width - w, y, this.width - 2, y + i) && !mousePressed && Mouse.isButtonDown(0)){
                 c.on = !c.on;
                 mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));

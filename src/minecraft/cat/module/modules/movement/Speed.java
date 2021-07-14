@@ -16,7 +16,7 @@ public class Speed extends Module {
     @Subscriber
     public void onUpdate(UpdateEvent e){
         MovementUtil.setSpeed(speed.get());
-        if(mc.thePlayer.onGround){
+        if(mc.thePlayer.onGround && MovementUtil.areMovementKeysPressed()){
             mc.thePlayer.jump();
         }
     }
