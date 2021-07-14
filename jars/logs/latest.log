@@ -165,31 +165,3 @@
 [14:43:35] [Client thread/INFO]: Finished Starting!
 [14:43:35] [Client thread/INFO]: [OptiFine] *** Reloading custom textures ***
 [14:43:35] [Client thread/INFO]: [OptiFine] Enable face culling: acacia_leaves, birch_leaves, dark_oak_leaves, jungle_leaves, oak_leaves, spruce_leaves
-[14:45:55] [Server thread/INFO]: Starting integrated minecraft server version 1.9
-[14:45:55] [Server thread/INFO]: Generating keypair
-[14:45:55] [Server thread/INFO]: Preparing start region for level 0
-[14:45:56] [Server thread/INFO]: Changing view distance to 2, from 10
-[14:45:59] [Server thread/INFO]: Player624[local:E:10a56dc3] logged in with entity id 188 at (-354.8866898967705, 4.0, 419.27773783055886)
-[14:45:59] [Server thread/INFO]: Player624 joined the game
-[14:46:00] [Server thread/INFO]: Saving and pausing game...
-[14:46:00] [Client thread/INFO]: [CHAT] A new §eOptiFine§f version is available: §e§nHD Ultra M5§r§f
-[14:46:00] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
-[14:46:00] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
-[14:46:00] [Server thread/INFO]: Saving chunks for level 'New World'/The End
-[14:47:29] [Server thread/INFO]: Saving and pausing game...
-[14:47:29] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
-[14:47:29] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
-[14:47:29] [Server thread/INFO]: Saving chunks for level 'New World'/The End
-[14:47:40] [Server thread/INFO]: Saving and pausing game...
-[14:47:40] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
-[14:47:40] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
-[14:47:40] [Server thread/INFO]: Saving chunks for level 'New World'/The End
-[15:01:12] [Client thread/INFO]: Stopping!
-[15:01:12] [Client thread/INFO]: SoundSystem shutting down...
-[15:01:12] [Server thread/INFO]: Stopping server
-[15:01:12] [Server thread/INFO]: Saving players
-[15:01:12] [Server thread/INFO]: Saving worlds
-[15:01:12] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
-[15:01:12] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
-[15:01:12] [Server thread/INFO]: Saving chunks for level 'New World'/The End
-[15:01:12] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com

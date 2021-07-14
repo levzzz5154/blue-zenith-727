@@ -1,6 +1,7 @@
 package cat.module.value.types;
 
 import cat.module.value.Value;
+import cat.module.value.ValueConsumer;
 
 import java.util.ArrayList;
 import java.util.Arrays;

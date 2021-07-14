@@ -3,7 +3,6 @@ package cat.command.commands;
 import cat.BlueZenith;
 import cat.command.Command;
 import cat.module.Module;
-import cat.util.ClientUtils;
 
 public class ToggleCommand extends Command {
     public ToggleCommand() {
