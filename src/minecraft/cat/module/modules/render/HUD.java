@@ -13,7 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class HUD extends Module {
-    BoolValue shadow = new BoolValue("1", "FontShadow", true, true);
+    BoolValue shadow = new BoolValue("1", "FontShadow", true, true, null);
     ArrayList<Module> modules = new ArrayList<>();
     public HUD() {
         super("HUD", "", ModuleCategory.RENDER);
@@ -39,7 +39,7 @@ public class HUD extends Module {
         char[] strArr = str.toCharArray();
         float x1 = 5;
         for (int i = 0; i < strArr.length; i++) {
-            Color c = hi(colorDark, color, Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * (i + 2.55) / 60);;
+            Color c = hi(colorDark, color, Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * (i + 2.55) / 60);
             font.drawString(String.valueOf(strArr[i]), x1, 5, c.getRGB(), shadow.get());
             x1 += font.getStringWidth(String.valueOf(strArr[i]));
         }

@@ -71,6 +71,7 @@ public class Panel extends MinecraftInstance {
             y1 += mHeight;
             if(m.showSettings){
                 for (Value<?> v : vl) {
+                    if(!v.isVisible()) continue;
                     Color settingsColor = backgroundColor.brighter();
                     float h = f.FONT_HEIGHT + 14;
                     if(v instanceof ModeValue) {
@@ -135,8 +136,8 @@ public class Panel extends MinecraftInstance {
                         BoolValue val = (BoolValue) v;
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
                         mc.fontRendererObj.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), val.value ? main_color.getRGB() : main_color.darker().darker().getRGB());
-                        if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && Mouse.isButtonDown(0) && !m.wasPressed()) {
-                            val.set(!val.get());
+                        if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !m.wasPressed()) {
+                            val.next();
                             mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                         }
                         y1 += h;

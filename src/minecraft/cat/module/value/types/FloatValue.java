@@ -1,22 +1,27 @@
 package cat.module.value.types;
 
-import cat.module.Module;
 import cat.module.value.Value;
+import cat.module.value.ValueConsumer;
 
-public class FloatValue extends Value<Float> {
+import java.util.function.Predicate;
+
+public final class FloatValue extends Value<Float> {
     public Float max;
     public Float min;
+    public final float increment;
 
-    public FloatValue(String id, String valueName, Float value, Float min, Float max, boolean visible) {
-        super(id, valueName, value, visible, (p1, p2) -> 69420F);
+    public FloatValue(String id, String valueName, float value, float min, float max, float increment, boolean visible, Predicate<Float> modifier) {
+        super(id, valueName, value, visible, (p1, p2) -> 69420F, modifier);
         this.max = max;
         this.min = min;
+        this.increment = increment;
     }
 
-    public FloatValue(String id, String valueName, Float value, Float min, Float max, boolean visible, ValueConsumer<Float, Float> consumer) {
-        super(id, valueName, value, visible, consumer);
+    public FloatValue(String id, String valueName, Float value, Float min, Float max, float increment, boolean visible, ValueConsumer<Float, Float> consumer, Predicate<Float> modifier) {
+        super(id, valueName, value, visible, consumer, modifier);
         this.max = max;
         this.min = min;
+        this.increment = increment;
     }
 
     @Override
@@ -27,16 +32,21 @@ public class FloatValue extends Value<Float> {
     @Override
     public void set(Float newValue) {
         //lmao
-        float consumerResult = valueConsumer.method(this.value, newValue);
+        float consumerResult = valueConsumer.check(this.value, newValue);
         if(consumerResult != 69420F) {
             this.value = consumerResult;
         } else{
-            this.value = onChange(this.value, newValue);
+            this.value = newValue;
         }
     }
 
     @Override
-    public Float onChange(Float oldValue, Float newValue) {
-        return newValue;
+    public void next() {
+        set(Math.min(value + increment, max));
+    }
+
+    @Override
+    public void previous() {
+        set(Math.max(value - increment, min));
     }
 }

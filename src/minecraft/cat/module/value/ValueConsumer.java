@@ -1,8 +1,8 @@
-package cat.module.value.types;
+package cat.module.value;
 
 import com.sun.istack.internal.Nullable;
 
 @FunctionalInterface
 public interface ValueConsumer<P1, P2> {
-    @Nullable P1 method(P1 old, P2 new_);
+    @Nullable P1 check(P1 old, P2 new_);
 }
