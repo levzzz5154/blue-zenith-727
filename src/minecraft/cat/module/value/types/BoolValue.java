@@ -21,8 +21,9 @@ public class BoolValue extends Value<Boolean> {
 
     @Override
     public void set(Boolean newValue) {
-        if(valueConsumer.check(this.value, newValue) != null) {
-            this.value = valueConsumer.check(this.value, newValue);
+        Object result = valueConsumer.check(this.value, newValue);
+        if(result != null) {
+            this.value = (boolean) result;
         } else{
             this.value = newValue;
         }

@@ -43,6 +43,10 @@ public final class ModeValue extends Value<String> {
         this.set(range.get(index));
     }
 
+    public String find(String value) {
+        return range.stream().filter(m -> m.equalsIgnoreCase(value)).findFirst().orElse(null);
+    }
+
     @Override
     public void previous() {
         int index = range.indexOf(this.value);

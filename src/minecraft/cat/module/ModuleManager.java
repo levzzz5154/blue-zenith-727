@@ -4,7 +4,7 @@ import org.reflections.Reflections;
 
 import java.util.ArrayList;
 
-public class ModuleManager {
+public final class ModuleManager {
     private final ArrayList<Module> modules = new ArrayList<>();
     public ModuleManager(){
         new Reflections("cat.module.modules").getSubTypesOf(Module.class).forEach(mod -> {
