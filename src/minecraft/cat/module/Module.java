@@ -12,22 +12,17 @@ import java.util.List;
 public class Module extends MinecraftInstance {
     final String name;
     String tag;
-    final ModuleCategory category;
+    ModuleCategory category;
     private boolean state;
     public int keyBind;
     public boolean showSettings;
     private boolean wasPressed;
     public final String[] aliases;
     private final List<Value<?>> values = new ArrayList<>();
-
     public Module(String name, String tag, ModuleCategory cat, String... aliases){
         this(name, tag, cat, 0, aliases);
     }
-    public List<Value<?>> getValues(){
-        return this.values;
-    }
-
-    public final void loadValues() {
+    public void loadValues() {
         for(Field i : getClass().getDeclaredFields()) {
             i.setAccessible(true);
             Object o = null;
@@ -39,7 +34,9 @@ public class Module extends MinecraftInstance {
             }
         }
     }
-
+    public List<Value<?>> getValues(){
+        return this.values;
+    }
     public Module(String name, String tag, ModuleCategory cat, int keyBind, String... aliases){
         state = false;
         this.name = name;
@@ -63,7 +60,6 @@ public class Module extends MinecraftInstance {
     protected void setTag(String newTag) {
         this.tag = newTag;
     }
-
     public void onDisable(){}
     public void onEnable() {}
 
@@ -82,17 +78,16 @@ public class Module extends MinecraftInstance {
     public final ModuleCategory getCategory() {
         return category;
     }
-
     public Module setState(boolean state){
         if(state != this.state) {
             this.toggle();
         }
+        this.state = state;
         return this;
     }
     public boolean getState(){
         return state;
     }
-
     public Value<?> getValue(String name){
         for (Value<?> v : getValues()) {
             if(v.name.equalsIgnoreCase(name)){
@@ -101,7 +96,6 @@ public class Module extends MinecraftInstance {
         }
         return null;
     }
-
     public boolean wasPressed(){
         return wasPressed;
     }

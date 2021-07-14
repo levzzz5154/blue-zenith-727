@@ -3,6 +3,7 @@ package net.minecraft.client.entity;
 import cat.BlueZenith;
 import cat.events.impl.UpdateEvent;
 import cat.events.impl.UpdatePlayerEvent;
+import cat.module.modules.combat.Aura;
 import cat.module.modules.movement.NoSlowDown;
 import cat.module.modules.render.Rotations;
 import net.minecraft.client.Minecraft;
@@ -21,6 +22,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.stats.StatBase;
@@ -663,7 +665,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
         boolean flag2 = this.movementInput.moveForward >= f;
         this.movementInput.updatePlayerMoveState();
 
-        if (this.isUsingItem() && !this.isRiding()) {
+        if (this.isUsingItem() || (getHeldItem() != null && getHeldItem().getItem() instanceof ItemSword && ((Aura) BlueZenith.moduleManager.getModule(Aura.class)).blockStatus) && !this.isRiding()) {
             float multi = b.getState() ? b.itemMulti.get() : 0.2f;
             this.movementInput.moveStrafe *= multi;
             this.movementInput.moveForward *= multi;

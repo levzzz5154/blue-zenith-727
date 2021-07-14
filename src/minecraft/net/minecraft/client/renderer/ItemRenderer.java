@@ -1,5 +1,8 @@
 package net.minecraft.client.renderer;
 
+import cat.BlueZenith;
+import cat.module.modules.combat.Aura;
+import cat.module.modules.render.Animations;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -20,6 +23,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.MathHelper;
@@ -325,11 +329,11 @@ public class ItemRenderer {
         GlStateManager.rotate(-80.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(60.0F, 0.0F, 1.0F, 0.0F);
     }
-
     /**
      * Renders the active item in the player's hand when in first person mode. Args: partialTickTime
      */
     public void renderItemInFirstPerson(float partialTicks) {
+        Aura aura = (Aura) BlueZenith.moduleManager.getModule(Aura.class);
         float f = 1.0F - (this.prevEquippedProgress + (this.equippedProgress - this.prevEquippedProgress) * partialTicks);
         AbstractClientPlayer abstractclientplayer = this.mc.thePlayer;
         float f1 = abstractclientplayer.getSwingProgress(partialTicks);
@@ -344,8 +348,8 @@ public class ItemRenderer {
         if (this.itemToRender != null) {
             if (this.itemToRender.getItem() == Items.filled_map) {
                 this.renderItemMap(abstractclientplayer, f2, f, f1);
-            } else if (abstractclientplayer.getItemInUseCount() > 0) {
-                EnumAction enumaction = this.itemToRender.getItemUseAction();
+            } else if (abstractclientplayer.getItemInUseCount() > 0 || (itemToRender.getItem() instanceof ItemSword && aura.getState() && aura.blockStatus)) {
+                EnumAction enumaction = aura.getState() && aura.blockStatus ? EnumAction.BLOCK : this.itemToRender.getItemUseAction();
 
                 switch (enumaction) {
                     case NONE:
@@ -359,8 +363,7 @@ public class ItemRenderer {
                         break;
 
                     case BLOCK:
-                        this.transformFirstPersonItem(f, 0.0F);
-                        this.doBlockTransformations();
+                        onBlockTranslate(f, f1);
                         break;
 
                     case BOW:
@@ -382,6 +385,20 @@ public class ItemRenderer {
         RenderHelper.disableStandardItemLighting();
     }
 
+    public void onBlockTranslate(float equipProgress, float swingProgress){
+        Animations anim = (Animations) BlueZenith.moduleManager.getModule(Animations.class);
+        if(anim.getState()){
+            switch (anim.anim.get()){
+                case "SlideDown":
+                    this.transformFirstPersonItem(equipProgress, swingProgress);
+                    this.doBlockTransformations();
+                    break;
+            }
+        }else{
+            this.transformFirstPersonItem(equipProgress, 0.0F);
+            this.doBlockTransformations();
+        }
+    }
     /**
      * Renders all the overlays that are in first person mode. Args: partialTickTime
      */

@@ -1,16 +1,19 @@
 package cat.command;
 
 import cat.BlueZenith;
-import cat.events.impl.SentMessageEvent;
 import cat.module.ModuleCommand;
+import cat.events.impl.SentMessageEvent;
+import cat.module.Module;
 import cat.util.ClientUtils;
 import org.reflections.Reflections;
 
 import java.util.ArrayList;
 
-public final class CommandManager {
+import static cat.util.MinecraftInstance.mc;
+
+public class CommandManager {
     public String commandPrefix = ".";
-    public final ArrayList<Command> commands = new ArrayList<>();
+    public ArrayList<Command> commands = new ArrayList<>();
 
     public CommandManager() {
         new Reflections("cat.command.commands").getSubTypesOf(Command.class).forEach(cmd -> {
@@ -25,6 +28,9 @@ public final class CommandManager {
 
     public void dispatch(SentMessageEvent event) {
         if (event.message.startsWith(commandPrefix)) {
+            if(event.sendToChat){
+                mc.ingameGUI.getChatGUI().addToSentMessages(event.message);
+            }
             event.cancel();
             String[] args = event.message.substring(commandPrefix.length()).split(" ");
             for (Command command : commands) {

@@ -2,6 +2,7 @@ package net.minecraft.client.entity;
 
 import cat.BlueZenith;
 import cat.module.modules.render.CustomCape;
+import cat.util.MinecraftInstance;
 import com.mojang.authlib.GameProfile;
 import java.io.File;
 import net.minecraft.client.Minecraft;
@@ -77,7 +78,7 @@ public abstract class AbstractClientPlayer extends EntityPlayer
     public ResourceLocation getLocationCape()
     {
         CustomCape c = (CustomCape) BlueZenith.moduleManager.getModule(CustomCape.class);
-        if(c.getState()){
+        if(c.getState() && this == MinecraftInstance.mc.thePlayer){
             return c.getCapeLocation();
         }
         NetworkPlayerInfo networkplayerinfo = this.getPlayerInfo();

@@ -1,9 +1,12 @@
 package cat.module.value;
 
+import cat.module.Module;
+import cat.module.value.types.ValueConsumer;
 import com.sun.istack.internal.Nullable;
+
 import java.util.function.Predicate;
 
-public abstract class Value<T> {
+public abstract class Value<T>{
     public String id;
     public String name;
     public T value;

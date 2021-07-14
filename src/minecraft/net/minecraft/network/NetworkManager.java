@@ -180,6 +180,20 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             }
         }
     }
+    public void sendPacketNoEvent(Packet packetIn) {
+        if (this.isChannelOpen()) {
+            this.flushOutboundQueue();
+            this.dispatchPacket(packetIn, null);
+        } else {
+            this.readWriteLock.writeLock().lock();
+
+            try {
+                this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, null));
+            } finally {
+                this.readWriteLock.writeLock().unlock();
+            }
+        }
+    }
 
     public void sendPacket(Packet packetIn, GenericFutureListener<? extends Future<? super Void>> listener, GenericFutureListener<? extends Future<? super Void>>... listeners) {
         if (this.isChannelOpen()) {

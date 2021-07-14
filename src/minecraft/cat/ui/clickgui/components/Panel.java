@@ -71,6 +71,7 @@ public class Panel extends MinecraftInstance {
             y1 += mHeight;
             if(m.showSettings){
                 for (Value<?> v : vl) {
+                    //lmao i forgot this
                     if(!v.isVisible()) continue;
                     Color settingsColor = backgroundColor.brighter();
                     float h = f.FONT_HEIGHT + 14;

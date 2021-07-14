@@ -1,14 +1,12 @@
 package cat.module.value.types;
 
 import cat.module.value.Value;
-import cat.module.value.ValueConsumer;
 
 import java.util.function.Predicate;
 
-public final class IntegerValue extends Value<Integer> {
-    public int max, min;
+public class IntegerValue extends Value<Integer> {
+    public Integer max, min;
     public final int increment;
-
     public IntegerValue(String id, String valueName, int value, int min, int max, int increment, boolean visible, ValueConsumer<Integer, Integer> consumer, Predicate<Integer> modifier) {
         super(id, valueName, value, visible, consumer, modifier);
         this.max = max;
@@ -36,7 +34,6 @@ public final class IntegerValue extends Value<Integer> {
             this.value = consumerResult;
         } else this.value = newValue;
     }
-
     @Override
     public void next() {
         set(Math.min(value + increment, max));
@@ -46,5 +43,4 @@ public final class IntegerValue extends Value<Integer> {
     public void previous() {
         set(Math.max(value - increment, min));
     }
-
 }

@@ -5,4 +5,4 @@ Made completely from scratch, i did it without a tutorial (look mom im pro coder
 i was bored
 
 # thanks
-Huge thanks to port (angles#2018) for helping me in this project (EventSystem and some optimizations)
+Huge thanks to port (поп ит#2018 | @unsmxrt) for helping me in this project 

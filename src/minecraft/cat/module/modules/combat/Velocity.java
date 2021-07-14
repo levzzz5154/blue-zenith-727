@@ -17,7 +17,6 @@ public class Velocity extends Module {
     private final FloatValue horizontal = new FloatValue("velocity_horizontal", "Horizontal", 100F, 0F, 500F, 1F, true, null);
     private final FloatValue vertical = new FloatValue("velocity_vertical", "Vertical", 100F, 0F, 100F, 1F, true, null);
     private final BoolValue explosions = new BoolValue("velocity_explosions", "Explosions", true, true, null);
-
     @Subscriber
     public void onPacket(PacketEvent e){
         this.setTag(horizontal.get() + "% " + vertical.get() + "%");

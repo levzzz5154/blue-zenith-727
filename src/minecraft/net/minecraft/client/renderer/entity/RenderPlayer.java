@@ -1,5 +1,7 @@
 package net.minecraft.client.renderer.entity;
 
+import cat.BlueZenith;
+import cat.module.modules.combat.Aura;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelPlayer;
@@ -96,11 +98,11 @@ public class RenderPlayer extends RendererLivingEntity<AbstractClientPlayer>
             {
                 modelplayer.heldItemRight = 1;
 
-                if (clientPlayer.getItemInUseCount() > 0)
+                if (clientPlayer.getItemInUseCount() > 0 || ((Aura) BlueZenith.moduleManager.getModule(Aura.class)).blockStatus)
                 {
                     EnumAction enumaction = itemstack.getItemUseAction();
 
-                    if (enumaction == EnumAction.BLOCK)
+                    if (enumaction == EnumAction.BLOCK || ((Aura) BlueZenith.moduleManager.getModule(Aura.class)).blockStatus)
                     {
                         modelplayer.heldItemRight = 3;
                     }

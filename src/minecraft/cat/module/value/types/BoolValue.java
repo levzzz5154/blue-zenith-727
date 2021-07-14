@@ -1,7 +1,6 @@
 package cat.module.value.types;
 
 import cat.module.value.Value;
-import cat.module.value.ValueConsumer;
 
 import java.util.function.Predicate;
 
@@ -29,7 +28,6 @@ public class BoolValue extends Value<Boolean> {
         }
     }
 
-    @Override
     public void next() {
         set(!value);
     }

@@ -1,11 +1,11 @@
 package cat.module.value.types;
 
+import cat.module.Module;
 import cat.module.value.Value;
-import cat.module.value.ValueConsumer;
 
 import java.util.function.Predicate;
 
-public final class FloatValue extends Value<Float> {
+public class FloatValue extends Value<Float> {
     public Float max;
     public Float min;
     public final float increment;
@@ -39,8 +39,6 @@ public final class FloatValue extends Value<Float> {
             this.value = newValue;
         }
     }
-
-    @Override
     public void next() {
         set(Math.min(value + increment, max));
     }
