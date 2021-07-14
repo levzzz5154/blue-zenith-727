@@ -47,7 +47,7 @@ public class Flight extends Module {
     }
     @Subscriber
     public void onBlockBB(BlockBBEvent e){
-        if(!e.block.getMaterial().isSolid() && mode.get().equalsIgnoreCase("Verus")){
+        if(!e.block.getMaterial().isSolid() && mode.get().equals("Verus")){
             e.blockBB = AxisAlignedBB.fromBounds(-5, -1, -5, 5 , 1, 5).offset(e.pos.getX(), e.pos.getY(), e.pos.getZ());
         }
     }

@@ -1,109 +1,106 @@
 package cat.ui.alt;
 
+import cat.util.RenderUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
 import java.io.IOException;
 
-public final class GuiAltLogin
-extends GuiScreen {
-    private PasswordField password;
+public final class GuiAltLogin extends GuiScreen {
     private final GuiScreen previousScreen;
     private AltLoginThread thread;
-    private GuiTextField username;
+    private GuiTextField combined;
+    private GuiTextField bruh;
 
     public GuiAltLogin(GuiScreen previousScreen) {
         this.previousScreen = previousScreen;
     }
 
-    @Override
     protected void actionPerformed(GuiButton button) {
-        switch (button.id) {
-            case 1: {
-                this.mc.displayGuiScreen(this.previousScreen);
+        switch(button.id) {
+            case 0:
+                if (!this.combined.getText().isEmpty() && this.combined.getText().contains(":")) {
+                    String u = this.combined.getText().split(":")[0];
+                    String p = this.combined.getText().split(":")[1];
+                    this.thread = new AltLoginThread(u.replaceAll(" ", ""), p.replaceAll(" ", ""));
+                    this.thread.start();
+                }
+                if(this.combined.getText().isEmpty()) {
+                    if(!bruh.getText().isEmpty()) {
+                        String user = this.bruh.getText();
+                        this.thread = new AltLoginThread(user);
+                        this.thread.start();
+                    }
+                }
                 break;
-            }
-            case 0: {
-                this.thread = new AltLoginThread(this.username.getText(), this.password.getText());
-                this.thread.start();
-            }
+            case 1:
+                this.mc.displayGuiScreen(previousScreen);
         }
+
     }
 
-    @Override
-    public void drawScreen(int x2, int y2, float z2) {
-        this.drawDefaultBackground();
-        this.username.drawTextBox();
-        this.password.drawTextBox();
-        this.drawCenteredString(this.mc.fontRendererObj, "Alt Login", width / 2, 20, -1);
-        this.drawCenteredString(this.mc.fontRendererObj, this.thread == null ? (Object)((Object)EnumChatFormatting.GRAY) + "Idle..." : this.thread.getStatus(), width / 2, 29, -1);
-        if (this.username.getText().isEmpty()) {
-            this.drawString(this.mc.fontRendererObj, "Username / E-Mail", width / 2 - 96, 66, -7829368);
+    public void drawScreen(int x, int y, float z) {
+        //       this.drawDefaultBackground();
+        RenderUtil.rect(0, 0, this.width, this.height, new Color(43, 43, 43, 255));
+        this.combined.drawTextBox();
+        this.drawCenteredString(this.mc.fontRendererObj, "Direct login for now", this.width / 2, 20, -1);
+        this.drawCenteredString(this.mc.fontRendererObj, this.thread == null ? EnumChatFormatting.WHITE + "Idling" : this.thread.getStatus(), this.width / 2 - 5, 33, -1);
+        if (this.combined.getText().isEmpty()) {
+            this.drawString(this.mc.fontRendererObj, "Email : Password", this.width / 2 - 96, 56, -5592406);
         }
-        if (this.password.getText().isEmpty()) {
-            this.drawString(this.mc.fontRendererObj, "Password", width / 2 - 96, 106, -7829368);
+        this.bruh.drawTextBox();
+        if(this.bruh.getText().isEmpty()) {
+            this.drawString(this.fontRendererObj, "Username", this.width / 2 - 96, 86, -5592406);
+       //     FontUtil.jelloFontAddAlt3.drawString("Username", this.width / 2 - 96, 86, -5592406);
         }
-        super.drawScreen(x2, y2, z2);
+        super.drawScreen(x, y, z);
     }
 
-    @Override
     public void initGui() {
-        int var3 = height / 4 + 24;
-        this.buttonList.add(new GuiButton(0, width / 2 - 100, var3 + 72 + 12, "Login"));
-        this.buttonList.add(new GuiButton(1, width / 2 - 100, var3 + 72 + 12 + 24, "Back"));
-        this.username = new GuiTextField(var3, this.mc.fontRendererObj, width / 2 - 100, 60, 200, 20);
-        this.password = new PasswordField(this.mc.fontRendererObj, width / 2 - 100, 100, 200, 20);
-        this.username.setFocused(true);
+        int var3 = this.height / 4 + 24;
+        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, var3 + 20, "Login"));
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 100, var3 + 20 + 24, "Back"));
+        this.combined = new GuiTextField(var3, this.mc.fontRendererObj, this.width / 2 - 100, 50, 200, 20);
+        this.bruh = new GuiTextField(var3, this.mc.fontRendererObj, this.width /2 - 100, 80, 200, 20);
+        this.combined.setMaxStringLength(200);
+        this.bruh.setMaxStringLength(16);
         Keyboard.enableRepeatEvents(true);
     }
 
-    @Override
     protected void keyTyped(char character, int key) {
         try {
             super.keyTyped(character, key);
+        } catch (IOException var4) {
+            var4.printStackTrace();
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (character == '\t') {
-            if (!this.username.isFocused() && !this.password.isFocused()) {
-                this.username.setFocused(true);
-            } else {
-                this.username.setFocused(this.password.isFocused());
-                this.password.setFocused(!this.username.isFocused());
-            }
-        }
+
         if (character == '\r') {
             this.actionPerformed((GuiButton)this.buttonList.get(0));
         }
-        this.username.textboxKeyTyped(character, key);
-        this.password.textboxKeyTyped(character, key);
+
+        this.combined.textboxKeyTyped(character, key);
+        this.bruh.textboxKeyTyped(character, key);
     }
 
-    @Override
-    protected void mouseClicked(int x2, int y2, int button) {
+    protected void mouseClicked(int x, int y, int button) {
         try {
-            super.mouseClicked(x2, y2, button);
+            super.mouseClicked(x, y, button);
+        } catch (IOException var5) {
+            var5.printStackTrace();
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.username.mouseClicked(x2, y2, button);
-        this.password.mouseClicked(x2, y2, button);
+        this.bruh.mouseClicked(x,y,button);
+        this.combined.mouseClicked(x, y, button);
     }
 
-    @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
     }
 
-    @Override
     public void updateScreen() {
-        this.username.updateCursorCounter();
-        this.password.updateCursorCounter();
+        this.combined.updateCursorCounter();
     }
 }
-
