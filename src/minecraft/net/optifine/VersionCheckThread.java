@@ -19,9 +19,6 @@ public class VersionCheckThread extends Thread
 
         try
         {
-            Config.dbg("Checking for new version");
-            URL url = new URL("http://optifine.net/version/1.8.9/HD_U.txt");
-            httpurlconnection = (HttpURLConnection)url.openConnection();
 
             if (Config.getGameSettings().snooperEnabled)
             {
