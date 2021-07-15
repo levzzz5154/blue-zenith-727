@@ -77,7 +77,7 @@ public class Flight extends Module {
     }
     @Subscriber
     public void onMove(MoveEvent e){
-        if(movementSpeed[2] <= f){
+        if(movementSpeed[2] <= f && this.mode.get().equals("OldVerus")){
             e.x = 0;
             e.z = 0;
         }

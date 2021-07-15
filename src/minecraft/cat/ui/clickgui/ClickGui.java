@@ -22,12 +22,14 @@ public class ClickGui extends GuiScreen {
     Panel combat;
     Panel misc;
     Panel movement;
+    Panel player;
     Panel render;
     Panel[] panels;
     public ClickGui(){
         ArrayList<Module> combat = new ArrayList<>();
         ArrayList<Module> misc = new ArrayList<>();
         ArrayList<Module> movement = new ArrayList<>();
+        ArrayList<Module> player = new ArrayList<>();
         ArrayList<Module> render = new ArrayList<>();
         ArrayList<Module> configs = new ArrayList<>();
         for (Module m : BlueZenith.moduleManager.getModules()) {
@@ -37,6 +39,9 @@ public class ClickGui extends GuiScreen {
                     break;
                 case MISC:
                     misc.add(m);
+                    break;
+                case PLAYER:
+                    player.add(m);
                     break;
                 case RENDER:
                     render.add(m);
@@ -53,9 +58,10 @@ public class ClickGui extends GuiScreen {
         x += this.misc.width + 6;
         this.movement = new Panel(x, 20, ModuleCategory.MOVEMENT, movement.toArray(new Module[0]));
         x += this.movement.width + 6;
+        this.player = new Panel(x, 20, ModuleCategory.RENDER, player.toArray(new Module[0]));
+        x += this.player.width + 6;
         this.render = new Panel(x, 20,ModuleCategory.RENDER, render.toArray(new Module[0]));
-        x += this.render.width + 6;
-        panels = new Panel[]{this.combat, this.misc, this.movement, this.render};
+        panels = new Panel[]{this.combat, this.misc, this.movement, this.player, this.render};
     }
     Panel selectedPanel = null;
     public boolean mousePressed = false;

@@ -4,6 +4,7 @@ public enum ModuleCategory {
     COMBAT("Combat"),
     MOVEMENT("Movement"),
     MISC("Misc"),
+    PLAYER("Player"),
     RENDER("Render");
     public String displayName;
     ModuleCategory(String displayName) {
