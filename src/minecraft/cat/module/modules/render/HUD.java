@@ -6,7 +6,11 @@ import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.BoolValue;
+import cat.module.value.types.FloatValue;
+import cat.module.value.types.IntegerValue;
+import cat.util.RenderUtil;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 
 import java.awt.*;
@@ -14,6 +18,9 @@ import java.util.ArrayList;
 
 public class HUD extends Module {
     BoolValue shadow = new BoolValue("1", "FontShadow", true, true, null);
+    BoolValue icame = new BoolValue("1", "Border", true, true, null);
+    IntegerValue backgroundOpacity = new IntegerValue("3", "BackgroundOpacity", 50, 0, 255, 1, true, null);
+    IntegerValue margin = new IntegerValue("4", "Margin", 10, 0, 15, 1, true, null);
     ArrayList<Module> modules = new ArrayList<>();
     public HUD() {
         super("HUD", "", ModuleCategory.RENDER);
@@ -43,12 +50,23 @@ public class HUD extends Module {
             font.drawString(String.valueOf(strArr[i]), x1, 5, c.getRGB(), shadow.get());
             x1 += font.getStringWidth(String.valueOf(strArr[i]));
         }
-        float y = 5;
+        float mar = margin.get();
+        float increment = font.FONT_HEIGHT + (mar / 2f);
+        float y = 0;
         for (int i = 0; i < modules.size(); i++) {
             Module m = modules.get(i);
+            Module burgir = modules.get(i > 0 ? i - 1 : i);
             Color c = hi(colorDark, color, Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * ((i * 2) + 2.55) / 60);
-            font.drawString(m.getTagName(), sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - 5, y, c.getRGB(), shadow.get());
-            y += font.FONT_HEIGHT + 2;
+            Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar, y, sc.getScaledWidth(), y + increment, new Color(0,0,0,backgroundOpacity.get()).getRGB());
+            if(icame.get()){
+                Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar - 1, y, sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar, y + increment, c.getRGB());
+                Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(burgir.getTagName()) - mar - 1, y - 1, sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar, y, c.getRGB());
+                if(m == modules.get(modules.size() - 1)){
+                    Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar - 1, y + increment - 1, sc.getScaledWidth(), y + increment, c.getRGB());
+                }
+            }
+            font.drawString(m.getTagName(), sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - (mar / 2f), y + (increment / 2f - font.FONT_HEIGHT / 2f), c.getRGB(), shadow.get());
+            y += increment;
         }
     }
     public static Color hi(final Color color, final Color color2, double delay) {
