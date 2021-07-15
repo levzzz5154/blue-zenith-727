@@ -2,14 +2,15 @@ package cat.module;
 
 import cat.BlueZenith;
 import cat.module.value.Value;
-import cat.util.MinecraftInstance;
+import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Mouse;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Module extends MinecraftInstance {
+public class Module {
+    protected final Minecraft mc = Minecraft.getMinecraft();
     final String name;
     public String displayName;
     String tag;

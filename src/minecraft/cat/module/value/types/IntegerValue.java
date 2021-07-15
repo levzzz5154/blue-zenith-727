@@ -2,6 +2,8 @@ package cat.module.value.types;
 
 import cat.module.value.Value;
 import cat.module.value.ValueConsumer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 
 import java.util.function.Predicate;
 
@@ -41,5 +43,15 @@ public final class IntegerValue extends Value<Integer> {
     @Override
     public void previous() {
         set(Math.max(value - increment, min));
+    }
+
+    @Override
+    public JsonElement getPrimitive() {
+        return new JsonPrimitive(this.value);
+    }
+
+    @Override
+    public void fromPrimitive(JsonPrimitive primitive) {
+        set(primitive.getAsInt());
     }
 }

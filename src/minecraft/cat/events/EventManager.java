@@ -11,6 +11,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public final class EventManager {
     private final Map<Class, CopyOnWriteArrayList<Method>> listeners = new HashMap<>();
 
+    /**
+     * only use this when shutting down the client or ur fucked
+     */
+    public void shutdown() {
+        listeners.clear();
+    }
+
     public void registerListener(Object listener) {
          for (Method method : listener.getClass().getMethods()) {
             if(method.isAnnotationPresent(Subscriber.class) && method.getParameterTypes().length == 1 && method.getParameterTypes()[0].getSuperclass() == Event.class) {
@@ -38,7 +45,7 @@ public final class EventManager {
                     try {
                         m.invoke(BlueZenith.moduleManager.getModule(m.getDeclaringClass()), event);
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
+
                     }
                 }
             }

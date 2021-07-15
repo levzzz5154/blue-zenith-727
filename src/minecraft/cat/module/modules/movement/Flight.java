@@ -12,8 +12,6 @@ import cat.util.MovementUtil;
 import net.minecraft.network.EnumPacketDirection;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
 import org.lwjgl.input.Keyboard;
 
 @SuppressWarnings("unused")
@@ -66,6 +64,7 @@ public class Flight extends Module {
     }
     @Subscriber
     public void onBlockBB(BlockBBEvent e){
+        assert mc.thePlayer != null;
         if(!e.block.getMaterial().isSolid() && e.pos.getY() < mc.thePlayer.posY){
             if(mode.get().equals("OldVerus") && dmgProgress > f){
                 e.blockBB = AxisAlignedBB.fromBounds(-5, -1, -5, 5, 0.42, 5).offset(e.pos.getX(), e.pos.getY(), e.pos.getZ());

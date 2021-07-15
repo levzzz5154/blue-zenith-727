@@ -2,6 +2,8 @@ package cat.module.value.types;
 
 import cat.module.value.Value;
 import cat.module.value.ValueConsumer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,5 +50,15 @@ public final class ModeValue extends Value<String> {
             index = range.size() - 1;
         } else index -= 1;
         this.set(range.get(index));
+    }
+
+    @Override
+    public JsonElement getPrimitive() {
+        return new JsonPrimitive(this.value);
+    }
+
+    @Override
+    public void fromPrimitive(JsonPrimitive primitive) {
+        set(primitive.getAsString());
     }
 }

@@ -10,7 +10,6 @@ import cat.util.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
@@ -30,6 +29,7 @@ public class ClickGui extends GuiScreen {
         ArrayList<Module> misc = new ArrayList<>();
         ArrayList<Module> movement = new ArrayList<>();
         ArrayList<Module> render = new ArrayList<>();
+        ArrayList<Module> configs = new ArrayList<>();
         for (Module m : BlueZenith.moduleManager.getModules()) {
             switch (m.getCategory()){
                 case COMBAT:
@@ -54,6 +54,7 @@ public class ClickGui extends GuiScreen {
         this.movement = new Panel(x, 20, ModuleCategory.MOVEMENT, movement.toArray(new Module[0]));
         x += this.movement.width + 6;
         this.render = new Panel(x, 20,ModuleCategory.RENDER, render.toArray(new Module[0]));
+        x += this.render.width + 6;
         panels = new Panel[]{this.combat, this.misc, this.movement, this.render};
     }
     Panel selectedPanel = null;

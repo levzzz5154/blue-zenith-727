@@ -21,7 +21,7 @@ public class ClientUtils extends MinecraftInstance {
 
     public static void displayChatMessage(final String message) {
         if (mc.thePlayer == null) {
-            getLogger().info("(MCChat)" + message);
+            getLogger().info("(MCChat)" + message.replaceAll("§", ""));
             return;
         }
 
