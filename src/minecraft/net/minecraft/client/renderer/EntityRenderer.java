@@ -2,6 +2,7 @@ package net.minecraft.client.renderer;
 
 import cat.BlueZenith;
 import cat.events.impl.Render3DEvent;
+import cat.module.modules.render.NoHurtCam;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.gson.JsonSyntaxException;
@@ -622,6 +623,9 @@ public class EntityRenderer implements IResourceManagerReloadListener {
     }
 
     private void hurtCameraEffect(float partialTicks) {
+        if(BlueZenith.moduleManager.getModule(NoHurtCam.class).getState()){
+            return;
+        }
         if (this.mc.getRenderViewEntity() instanceof EntityLivingBase) {
             EntityLivingBase entitylivingbase = (EntityLivingBase) this.mc.getRenderViewEntity();
             float f = (float) entitylivingbase.hurtTime - partialTicks;
