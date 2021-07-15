@@ -6,7 +6,7 @@ import cat.util.config.ConfigManager;
 public final class ConfigCommand extends Command {
 
     public ConfigCommand() {
-        super("Config", "Manage your configs.", "cfg");
+        super("Config", "Manage your configs.","Usage: .config <load/save> <name> (binds) (norender)", "cfg");
     }
 
     @Override

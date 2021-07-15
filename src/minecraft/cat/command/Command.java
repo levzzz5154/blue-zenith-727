@@ -9,10 +9,12 @@ public class Command extends MinecraftInstance {
     public String name;
     public String[] pref;
     public String description;
-    public Command(String name, String description, String... pref){
+    public String syntax;
+    public Command(String name, String description, String syntax, String... pref){
         this.name = name;
         this.pref = pref;
         this.description = description;
+        this.syntax = syntax;
     }
     public void changedSound(){
         mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("mob.cat.purreow")));

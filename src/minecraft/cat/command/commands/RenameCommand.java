@@ -8,7 +8,7 @@ import cat.module.Module;
 public class RenameCommand extends Command {
 
     public RenameCommand() {
-        super("Rename", "Rename a module in the arraylist.","rn");
+        super("Rename", "Rename a module in the arraylist.",".rename <module> <new name>", "rn");
     }
 
     @Override

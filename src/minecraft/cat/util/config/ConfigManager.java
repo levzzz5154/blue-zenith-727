@@ -95,7 +95,6 @@ public final class ConfigManager {
                 BufferedWriter writer = FileUtil.getWriter(true, File.separator + "binds.json");
                 JsonObject binds = new JsonObject();
                 BlueZenith.moduleManager.getModules().forEach(mod -> binds.add(mod.getName(), new JsonPrimitive(mod.keyBind)));
-                System.out.println(gson.toJson(binds));
                 writer.write(gson.toJson(binds));
                 writer.close();
             } catch(Exception ex) {

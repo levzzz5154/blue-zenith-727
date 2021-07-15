@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class ModuleCommand extends Command {
     Module parent;
     public ModuleCommand(Module parent, String... pref) {
-        super(parent.getName(), "Auto-generated command.",pref);
+        super(parent.getName(), "Auto-generated command.", ".module valuename valueparameter", pref);
         this.parent = parent;
     }
     @Override
