@@ -2,15 +2,14 @@ package cat.module.modules.movement;
 
 import cat.events.Subscriber;
 import cat.events.impl.BlockBBEvent;
-import cat.events.impl.PacketEvent;
-import cat.events.impl.UpdateEvent;
+import cat.events.impl.MoveEvent;
+import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.FloatValue;
 import cat.module.value.types.ModeValue;
+import cat.util.MillisTimer;
 import cat.util.MovementUtil;
-import net.minecraft.network.EnumPacketDirection;
-import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
 
@@ -21,11 +20,11 @@ public class Flight extends Module {
     public Flight() {
         super("Flight", "", ModuleCategory.MOVEMENT, Keyboard.KEY_F);
     }
-    public int dmgProgress = 5;
-    private final float[] movementSpeed = new float[]{0, 0};
+    public final float[] movementSpeed = new float[]{0, 0, 0};
     private long st = System.currentTimeMillis();
+    private final MillisTimer i_hate_ticks = new MillisTimer();
     @Subscriber
-    public void onUpdate(UpdateEvent e) {
+    public void onUpdate(UpdatePlayerEvent e) {
         switch (mode.get()) {
             case "Vanilla":
                 if (MovementUtil.areMovementKeysPressed()) {
@@ -43,61 +42,62 @@ public class Flight extends Module {
                 }
                 break;
             case "OldVerus":
-                if(dmgProgress > f){
-                    if(MovementUtil.areMovementKeysPressed()){
-                        float mv = movementSpeed[0] / 0.1536f;
-                        if(mv <= 2.213541 && movementSpeed[1] != 1){
-                            movementSpeed[0] += 0.01f;
-                        }else if(mv >= 0.1536f){
-                            movementSpeed[1] = 1;
-                            movementSpeed[0] -= 0.03;
-                        }
-
-                        MovementUtil.setSpeed(mv);
-                    }else{
-                        mc.thePlayer.motionX = 0;
-                        mc.thePlayer.motionZ = 0;
+                if(MovementUtil.areMovementKeysPressed() && movementSpeed[2] > f){
+                    float mv = movementSpeed[0] / 0.1536f;
+                    if(mv <= 2.213541 && movementSpeed[1] != 1){
+                        movementSpeed[0] += 0.01f;
+                    }else if(mv >= 0.1536f){
+                        movementSpeed[1] = 1;
+                        movementSpeed[0] -= 0.03;
                     }
+
+                    MovementUtil.setSpeed(mv);
+                }else if(movementSpeed[2] <= f){
+                    if(movementSpeed[2] <= f - 1){
+                        e.onGround = false;
+                        if(i_hate_ticks.hasTicksPassed(12)){
+                            mc.thePlayer.jump();
+                            i_hate_ticks.reset();
+                            movementSpeed[2]++;
+                        }
+                    }else if(i_hate_ticks.hasTicksPassed(12)){
+                        e.onGround = true;
+                        movementSpeed[2]++;
+                        i_hate_ticks.reset();
+                    }
+                    if(mc.thePlayer.hurtTime == 9){
+                        movementSpeed[2] = f + 1;
+                    }
+                }else{
+                    mc.thePlayer.motionX = 0;
+                    mc.thePlayer.motionZ = 0;
                 }
                 break;
+        }
+    }
+    @Subscriber
+    public void onMove(MoveEvent e){
+        if(movementSpeed[2] <= f){
+            e.x = 0;
+            e.z = 0;
         }
     }
     @Subscriber
     public void onBlockBB(BlockBBEvent e){
         assert mc.thePlayer != null;
         if(!e.block.getMaterial().isSolid() && e.pos.getY() < mc.thePlayer.posY){
-            if(mode.get().equals("OldVerus") && dmgProgress > f){
+            if(mode.get().equals("OldVerus") && movementSpeed[2] > f){
                 e.blockBB = AxisAlignedBB.fromBounds(-5, -1, -5, 5, 0.42, 5).offset(e.pos.getX(), e.pos.getY(), e.pos.getZ());
             }
         }
     }
-    public int f = 2;
-    @Subscriber
-    public void onPacket(PacketEvent e){
-        if(e.packet instanceof C03PacketPlayer && e.direction == EnumPacketDirection.CLIENTBOUND && mode.get().equals("OldVerus")){
-            C03PacketPlayer p3 = (C03PacketPlayer) e.packet;
-            if(dmgProgress <= f){
-                switch (dmgProgress){
-                    case 0:
-                    case 2:
-                        p3.onGround = false;
-                        p3.y = mc.thePlayer.posY;
-                        break;
-                    case 1:
-                        p3.onGround = false;
-                        p3.y = mc.thePlayer.posY + 3.1;
-                        break;
-                }
-                dmgProgress++;
-            }
-        }
-    }
+    public int f = 3;
     @Override
     public void onEnable(){
         if (mode.get().equals("OldVerus")) {
-            dmgProgress = 0;
             movementSpeed[0] = 0.24f;
             movementSpeed[1] = 0;
+            movementSpeed[2] = 0;
         }
     }
     @Override

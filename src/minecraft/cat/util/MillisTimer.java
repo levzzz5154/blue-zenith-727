@@ -1,5 +1,7 @@
 package cat.util;
 
+import net.minecraft.client.Minecraft;
+
 public final class MillisTimer {
     public long millis = -1L;
 
@@ -13,5 +15,9 @@ public final class MillisTimer {
 
     public void reset() {
         millis = System.currentTimeMillis();
+    }
+
+    public boolean hasTicksPassed(final long ticks){
+        return System.currentTimeMillis() >= millis + (ticks * 50);
     }
 }

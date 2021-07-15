@@ -713,7 +713,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
             this.setSprinting(true);
         }
         Flight fly = (Flight) BlueZenith.moduleManager.getModule(Flight.class);
-        if (this.isSprinting() && (this.movementInput.moveForward < f || this.isCollidedHorizontally || !flag3 || (fly.getState() && fly.dmgProgress > fly.f))) {
+        if (this.isSprinting() && (this.movementInput.moveForward < f || this.isCollidedHorizontally || !flag3 || (fly.getState() && fly.movementSpeed[2] > fly.f))) {
             this.setSprinting(false);
         }
 

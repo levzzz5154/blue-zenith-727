@@ -26,7 +26,7 @@ public class CustomCape extends Module {
                 d = null;
                 return false;
             }
-            d = new ResourceLocation("wawawawawawawawawawawawawawawawawawawawa");
+            d = new ResourceLocation("lmao you can't get this resource location LLLLL");
             try {
                 mc.getTextureManager().deleteTexture(d);
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Files.readAllBytes(temp.toPath()));
