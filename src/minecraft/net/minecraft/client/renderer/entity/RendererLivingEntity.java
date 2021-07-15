@@ -1,9 +1,13 @@
 package net.minecraft.client.renderer.entity;
 
 import cat.BlueZenith;
+import cat.module.modules.render.NameTags;
 import cat.module.modules.render.Rotations;
+import cat.util.EntityManager;
+import cat.util.RenderUtil;
 import com.google.common.collect.Lists;
 
+import java.awt.*;
 import java.nio.FloatBuffer;
 import java.util.List;
 
@@ -35,6 +39,9 @@ import net.optifine.shaders.Shaders;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
+
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glScalef;
 
 public abstract class RendererLivingEntity<T extends EntityLivingBase> extends Render<T> {
     private static final Logger logger = LogManager.getLogger();
@@ -562,7 +569,59 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
     public void renderName(T entity, double x, double y, double z) {
         if (!Reflector.RenderLivingEvent_Specials_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Specials_Pre_Constructor, new Object[]{entity, this, Double.valueOf(x), Double.valueOf(y), Double.valueOf(z)})) {
-            if (this.canRenderName(entity)) {
+            if(BlueZenith.moduleManager.getModule(NameTags.class).getState() && EntityManager.isTarget(entity) && Minecraft.getMinecraft().theWorld.loadedEntityList.contains(entity)){
+                GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+                GL11.glPushMatrix();
+                Minecraft mc = Minecraft.getMinecraft();
+                GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+                GlStateManager.translate((float) x, (float) y + entity.height + 0.5F - (entity.isChild() ? entity.height / 2.0F : 0.0F), (float) z);
+
+                glRotatef(-mc.getRenderManager().playerViewY, 0F, 1F, 0F);
+                glRotatef(mc.getRenderManager().playerViewX, 1F, 0F, 0F);
+
+
+                // Scale
+                float distance = mc.thePlayer.getDistanceToEntity(entity) * 0.25f;
+
+                if (distance < 1F)
+                    distance = 1F;
+
+                float scale = distance / 100f;
+
+                glScalef(-scale, -scale, scale);
+
+                GL11.glDisable(GL11.GL_LIGHTING);
+                GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+                GL11.glEnable(GL11.GL_LINE_SMOOTH);
+                //TODO: Add custom font renderer
+                //FontRenderer fontRenderer = Fonts.fontSFLight55;
+                FontRenderer fontRenderer = mc.fontRendererObj;
+                //FontRenderer fontRenderer2 = Fonts.fontSFLight35;
+                FontRenderer fontRenderer2 = mc.fontRendererObj;
+
+                String name = entity.getDisplayName().getUnformattedText();
+
+                String healthText = "Health: " + NameTags.round(entity.getHealth());
+
+                if (fontRenderer2.getStringWidth(healthText) > fontRenderer.getStringWidth(entity.getDisplayName().getUnformattedText())) {
+                    healthText = "H: " + NameTags.round(entity.getHealth());
+                }
+
+                float margin = 8;
+                float m2 = margin / 2f;
+                float width = Math.max(fontRenderer.getStringWidth(name), fontRenderer2.getStringWidth(healthText)) + m2;
+                GlStateManager.translate(-width / 2f, 0f, 0f);
+
+                RenderUtil.rect(-m2, -m2, width + m2, fontRenderer.FONT_HEIGHT + fontRenderer2.FONT_HEIGHT + m2, new Color(0, 0, 0, 120));
+                float healthPercent = 1 - ((entity.getMaxHealth() - entity.getHealth()) / entity.getMaxHealth());
+                RenderUtil.rect(-m2, fontRenderer.FONT_HEIGHT + fontRenderer2.FONT_HEIGHT + m2 - 2, (width + m2) * healthPercent, fontRenderer.FONT_HEIGHT + fontRenderer2.FONT_HEIGHT + m2, Color.WHITE);
+                fontRenderer.drawString(name, 0, 0, 0xffffff);
+                fontRenderer2.drawString(healthText, 0, fontRenderer.FONT_HEIGHT + 2, 0xffffff);
+
+                GL11.glPopMatrix();
+                GL11.glPopAttrib();
+            }else if (this.canRenderName(entity)) {
                 double d0 = entity.getDistanceSqToEntity(this.renderManager.livingPlayer);
                 float f = entity.isSneaking() ? NAME_TAG_RANGE_SNEAK : NAME_TAG_RANGE;
 

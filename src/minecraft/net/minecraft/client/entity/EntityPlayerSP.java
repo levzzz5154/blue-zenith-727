@@ -4,6 +4,7 @@ import cat.BlueZenith;
 import cat.events.impl.UpdateEvent;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.modules.combat.Aura;
+import cat.module.modules.movement.Flight;
 import cat.module.modules.movement.NoSlowDown;
 import cat.module.modules.render.Rotations;
 import net.minecraft.client.Minecraft;
@@ -711,8 +712,8 @@ public class EntityPlayerSP extends AbstractClientPlayer {
         if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !(this.isUsingItem() && !ns.getState()) && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown()) {
             this.setSprinting(true);
         }
-
-        if (this.isSprinting() && (this.movementInput.moveForward < f || this.isCollidedHorizontally || !flag3)) {
+        Flight fly = (Flight) BlueZenith.moduleManager.getModule(Flight.class);
+        if (this.isSprinting() && (this.movementInput.moveForward < f || this.isCollidedHorizontally || !flag3 || (fly.getState() && fly.dmgProgress > fly.f))) {
             this.setSprinting(false);
         }
 

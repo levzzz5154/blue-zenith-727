@@ -57,6 +57,7 @@ public final class GuiAltLogin extends GuiScreen {
             this.drawString(this.fontRendererObj, "Username", this.width / 2 - 96, 86, -5592406);
        //     FontUtil.jelloFontAddAlt3.drawString("Username", this.width / 2 - 96, 86, -5592406);
         }
+        mc.fontRendererObj.drawString("Current Name: "+mc.session.getUsername(), 10, 10, Color.WHITE.getRGB());
         super.drawScreen(x, y, z);
     }
 
