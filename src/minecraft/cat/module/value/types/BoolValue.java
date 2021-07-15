@@ -5,12 +5,12 @@ import cat.module.value.ValueConsumer;
 
 import java.util.function.Predicate;
 
-public class BoolValue extends Value<Boolean> {
+public final class BoolValue extends Value<Boolean> {
     public BoolValue(String id, String valueName, Boolean value, boolean visible, Predicate<Boolean> modifier) {
-        super(id, valueName, value, visible, (p1, p2) -> null, modifier);
+        super(id, valueName, value, visible, null, modifier);
     }
 
-    public BoolValue(String id, String valueName, Boolean value, boolean visible, ValueConsumer<Boolean, Boolean> consumer, Predicate<Boolean> modifier) {
+    public BoolValue(String id, String valueName, Boolean value, boolean visible, ValueConsumer<Boolean> consumer, Predicate<Boolean> modifier) {
         super(id, valueName, value, visible, consumer, modifier);
     }
 
@@ -21,12 +21,9 @@ public class BoolValue extends Value<Boolean> {
 
     @Override
     public void set(Boolean newValue) {
-        Object result = valueConsumer.check(this.value, newValue);
-        if(result != null) {
-            this.value = (boolean) result;
-        } else{
-            this.value = newValue;
-        }
+        if(consumer != null) {
+            this.value = consumer.check(this.value, newValue);
+        } else this.value = newValue;
     }
 
     public void next() {

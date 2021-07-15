@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Module extends MinecraftInstance {
     final String name;
+    public String displayName;
     String tag;
     ModuleCategory category;
     private boolean state;
@@ -40,6 +41,7 @@ public class Module extends MinecraftInstance {
     public Module(String name, String tag, ModuleCategory cat, int keyBind, String... aliases){
         state = false;
         this.name = name;
+        this.displayName = name;
         this.tag = tag;
         this.category = cat;
         this.keyBind = keyBind;
@@ -64,7 +66,7 @@ public class Module extends MinecraftInstance {
     public void onEnable() {}
 
     public String getTagName(){
-        return getName() + "§7" + (getTag().isEmpty() ? "" : " " + getTag());
+        return displayName + "§7" + (getTag().isEmpty() ? "" : " " + getTag());
     }
 
     public final String getName() {

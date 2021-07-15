@@ -9,7 +9,7 @@ import java.util.Locale;
 
 public class BindCommand extends Command {
     public BindCommand() {
-        super("Bind", "bind");
+        super("Bind", "Bind a module.", "b");
     }
     @Override
     public void execute(String[] args){

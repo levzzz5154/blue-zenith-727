@@ -4,12 +4,12 @@ import cat.BlueZenith;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class EventManager {
-    private final Map<Class, CopyOnWriteArrayList<Method>> listeners = new LinkedHashMap<>();
+    private final Map<Class, CopyOnWriteArrayList<Method>> listeners = new HashMap<>();
 
     public void registerListener(Object listener) {
          for (Method method : listener.getClass().getMethods()) {
@@ -27,7 +27,7 @@ public final class EventManager {
     }
 
     public void unregisterListener(Object listener) {
-        listeners.values().stream().forEach(list -> list.stream().forEach(func -> list.removeIf(method -> method.getDeclaringClass() == listener.getClass())));
+        listeners.values().forEach(list -> list.forEach(func -> list.removeIf(method -> method.getDeclaringClass() == listener.getClass())));
     }
 
     public void call(Event event) {

@@ -9,13 +9,13 @@ import java.util.function.Predicate;
 
 public final class ModeValue extends Value<String> {
 
-    private ArrayList<String> range;
-    public ModeValue(String id, String valueName, String defaultValue, boolean visible, ValueConsumer<String, String> update, Predicate<String> visibility, String... range) {
+    private final ArrayList<String> range;
+    public ModeValue(String id, String valueName, String defaultValue, boolean visible, ValueConsumer<String> update, Predicate<String> visibility, String... range) {
         super(id, valueName, defaultValue, visible, update, visibility);
         this.range = new ArrayList<>(Arrays.asList(range));
     }
     public ModeValue(String id, String valueName, String defaultValue, boolean visible, Predicate<String> visibility, String... range) {
-        super(id, valueName, defaultValue, visible, (p, p1) -> null, visibility);
+        super(id, valueName, defaultValue, visible, null, visibility);
         this.range = new ArrayList<>(Arrays.asList(range));
     }
     @Override
@@ -25,9 +25,8 @@ public final class ModeValue extends Value<String> {
 
     @Override
     public void set(String newValue) {
-        String consumerResult = valueConsumer.check(this.value, newValue);
-        if(consumerResult != null) {
-            this.value = consumerResult;
+        if(consumer != null) {
+            this.value = consumer.check(this.value, newValue);
         } else this.value = newValue;
     }
 

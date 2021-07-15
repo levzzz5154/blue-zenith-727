@@ -5,19 +5,19 @@ import cat.module.value.ValueConsumer;
 
 import java.util.function.Predicate;
 
-public class FloatValue extends Value<Float> {
+public final class FloatValue extends Value<Float> {
     public Float max;
     public Float min;
     public final float increment;
 
     public FloatValue(String id, String valueName, float value, float min, float max, float increment, boolean visible, Predicate<Float> modifier) {
-        super(id, valueName, value, visible, (p1, p2) -> 69420F, modifier);
+        super(id, valueName, value, visible, null, modifier);
         this.max = max;
         this.min = min;
         this.increment = increment;
     }
 
-    public FloatValue(String id, String valueName, Float value, Float min, Float max, float increment, boolean visible, ValueConsumer<Float, Float> consumer, Predicate<Float> modifier) {
+    public FloatValue(String id, String valueName, Float value, Float min, Float max, float increment, boolean visible, ValueConsumer<Float> consumer, Predicate<Float> modifier) {
         super(id, valueName, value, visible, consumer, modifier);
         this.max = max;
         this.min = min;
@@ -32,12 +32,9 @@ public class FloatValue extends Value<Float> {
     @Override
     public void set(Float newValue) {
         //lmao
-        float consumerResult = valueConsumer.check(this.value, newValue);
-        if(consumerResult != 69420F) {
-            this.value = consumerResult;
-        } else{
-            this.value = newValue;
-        }
+        if(consumer != null) {
+            this.value = consumer.check(this.value, newValue);
+        } else this.value = newValue;
     }
     public void next() {
         set(Math.min(value + increment, max));

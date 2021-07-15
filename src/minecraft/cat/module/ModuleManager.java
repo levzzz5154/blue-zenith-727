@@ -20,7 +20,7 @@ public final class ModuleManager {
     public ArrayList<Module> getModules(){
         return modules;
     }
-    public Module getModule(String name){
+    public Module getModule(String name) {
         for (Module m : modules) {
             if(m.getName().equalsIgnoreCase(name)){
                 return m;
@@ -34,12 +34,7 @@ public final class ModuleManager {
         return null;
     }
     public Module getModule(Class<?> clazz){
-        for (Module m : modules) {
-            if(m.getClass() == clazz){
-                return m;
-            }
-        }
-        return null;
+       return modules.stream().filter(mod -> mod.getClass() == clazz).findFirst().orElse(null);
     }
     public void handleKey(int keyCode){
         for (Module m : modules) {

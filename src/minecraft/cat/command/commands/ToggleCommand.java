@@ -6,7 +6,7 @@ import cat.module.Module;
 
 public class ToggleCommand extends Command {
     public ToggleCommand() {
-        super("Toggle", "t", "enable");
+        super("Toggle", "Toggle a module.","t", "enable");
     }
     @Override
     public void execute(String[] args){

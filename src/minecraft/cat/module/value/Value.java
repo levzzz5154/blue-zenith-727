@@ -5,19 +5,19 @@ import com.sun.istack.internal.Nullable;
 import java.util.function.Predicate;
 
 public abstract class Value<T>{
-    public String id;
-    public String name;
+    public final String id;
+    public final String name;
     public T value;
     private boolean visible;
-    protected final ValueConsumer<T, T> valueConsumer;
-    public final Predicate<T> modifier;
+    protected final ValueConsumer<T> consumer;
+    protected final Predicate<T> modifier;
 
-    public Value(String id, String valueName, T value, boolean visible, ValueConsumer<T, T> consumer, @Nullable Predicate<T> modifier){
+    public Value(String id, String valueName, T value, boolean visible, @Nullable ValueConsumer<T> consumer, @Nullable Predicate<T> modifier){
         this.id = id;
         this.name = valueName;
         this.value = value;
         this.visible = visible;
-        this.valueConsumer = consumer;
+        this.consumer = consumer;
         this.modifier = modifier;
     }
 

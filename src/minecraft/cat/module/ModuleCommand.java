@@ -1,22 +1,18 @@
 package cat.module;
 
-import cat.BlueZenith;
 import cat.command.Command;
-import cat.module.Module;
 import cat.module.value.Value;
 import cat.module.value.types.BoolValue;
 import cat.module.value.types.FloatValue;
 import cat.module.value.types.IntegerValue;
 import cat.module.value.types.ModeValue;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.regex.Pattern;
 
 public class ModuleCommand extends Command {
     Module parent;
     public ModuleCommand(Module parent, String... pref) {
-        super(parent.getName(), pref);
+        super(parent.getName(), "Auto-generated command.",pref);
         this.parent = parent;
     }
     @Override
