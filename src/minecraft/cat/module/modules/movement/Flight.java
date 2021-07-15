@@ -98,7 +98,6 @@ public class Flight extends Module {
             dmgProgress = 0;
             movementSpeed[0] = 0.24f;
             movementSpeed[1] = 0;
-            System.out.println(dmgProgress);
         }
     }
     @Override
