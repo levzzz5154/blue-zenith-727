@@ -12,7 +12,6 @@ import cat.util.MovementUtil;
 public class Sprint extends Module {
     public Sprint() {
         super("Sprint", "", ModuleCategory.MOVEMENT, "Sprint");
-        this.setState(true);
     }
 
     @Subscriber
