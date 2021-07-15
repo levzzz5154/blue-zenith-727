@@ -21,6 +21,7 @@ import static cat.util.EntityManager.Targets.*;
 public class ClickGui extends GuiScreen {
     Panel combat;
     Panel misc;
+    Panel world;
     Panel movement;
     Panel player;
     Panel render;
@@ -29,6 +30,7 @@ public class ClickGui extends GuiScreen {
         ArrayList<Module> combat = new ArrayList<>();
         ArrayList<Module> misc = new ArrayList<>();
         ArrayList<Module> movement = new ArrayList<>();
+        ArrayList<Module> world = new ArrayList<>();
         ArrayList<Module> player = new ArrayList<>();
         ArrayList<Module> render = new ArrayList<>();
         ArrayList<Module> configs = new ArrayList<>();
@@ -39,6 +41,9 @@ public class ClickGui extends GuiScreen {
                     break;
                 case MISC:
                     misc.add(m);
+                    break;
+                case WORLD:
+                    world.add(m);
                     break;
                 case PLAYER:
                     player.add(m);
@@ -58,10 +63,13 @@ public class ClickGui extends GuiScreen {
         x += this.misc.width + 6;
         this.movement = new Panel(x, 20, ModuleCategory.MOVEMENT, movement.toArray(new Module[0]));
         x += this.movement.width + 6;
-        this.player = new Panel(x, 20, ModuleCategory.RENDER, player.toArray(new Module[0]));
+        this.render = new Panel(x, 20, ModuleCategory.RENDER, render.toArray(new Module[0]));
+        x += this.render.width + 6;
+        this.player = new Panel(x, 20,ModuleCategory.PLAYER, player.toArray(new Module[0]));
         x += this.player.width + 6;
-        this.render = new Panel(x, 20,ModuleCategory.RENDER, render.toArray(new Module[0]));
-        panels = new Panel[]{this.combat, this.misc, this.movement, this.player, this.render};
+        this.world = new Panel(x, 20,ModuleCategory.WORLD, world.toArray(new Module[0]));
+        x += this.world.width + 6;
+        panels = new Panel[]{this.combat, this.misc, this.movement, this.player, this.render, this.world};
     }
     Panel selectedPanel = null;
     public boolean mousePressed = false;
