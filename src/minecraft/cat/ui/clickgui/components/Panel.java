@@ -19,31 +19,37 @@ import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Panel extends MinecraftInstance {
     ModuleCategory category;
-    Module[] modules;
+    ArrayList<Module> modules;
     public float width;
     float mHeight;
     public float x,y;
     public float prevX,prevY;
     FontRenderer f = mc.fontRendererObj;
     ClickGUI click = (ClickGUI) BlueZenith.moduleManager.getModule(ClickGUI.class);
-    public Panel(float x, float y, ModuleCategory category, Module... modules){
+    public Panel(float x, float y, ModuleCategory category){
         this.category = category;
-        this.modules = modules;
+        this.modules = new ArrayList<>();
         this.x = x;
         this.y = y;
-
-        width = f.getStringWidth(category.displayName) + 12;
         mHeight = f.FONT_HEIGHT + 16;
+    }
+    public Panel calculateWidth(){
+        width = f.getStringWidth(category.displayName) + 12;
         for (Module m : modules) {
             if(f.getStringWidth(m.getName()) + 12 > width){
                 width = f.getStringWidth(m.getName()) + 12;
             }
         }
         width = Math.max(width, 150);
+        return this;
+    }
+    public void addModule(Module mod){
+        this.modules.add(mod);
     }
     Value<?> sliderVal = null;
     public void drawPanel(int mouseX, int mouseY){

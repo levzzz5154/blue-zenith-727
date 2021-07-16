@@ -196,10 +196,10 @@ public class Gui {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
-        worldrenderer.pos((double) x, (double) (y + height), 0.0D).func_181673_a((double) (u * f), (double) ((v + (float) height) * f1)).func_181675_d();
-        worldrenderer.pos((double) (x + width), (double) (y + height), 0.0D).func_181673_a((double) ((u + (float) width) * f), (double) ((v + (float) height) * f1)).func_181675_d();
-        worldrenderer.pos((double) (x + width), (double) y, 0.0D).func_181673_a((double) ((u + (float) width) * f), (double) (v * f1)).func_181675_d();
-        worldrenderer.pos((double) x, (double) y, 0.0D).func_181673_a((double) (u * f), (double) (v * f1)).func_181675_d();
+        worldrenderer.pos(x, y + height, 0.0D).func_181673_a(u * f, (v + (float) height) * f1).func_181675_d();
+        worldrenderer.pos(x + width, y + height, 0.0D).func_181673_a((u + (float) width) * f, (v + (float) height) * f1).func_181675_d();
+        worldrenderer.pos(x + width, y, 0.0D).func_181673_a((u + (float) width) * f, v * f1).func_181675_d();
+        worldrenderer.pos(x, y, 0.0D).func_181673_a(u * f, v * f1).func_181675_d();
         tessellator.draw();
     }
 
@@ -209,10 +209,10 @@ public class Gui {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
-        worldrenderer.pos((double) x, (double) (y + height), 0.0D).func_181673_a((double) (u * f), (double) ((v + (float) height) * f1)).func_181675_d();
-        worldrenderer.pos((double) (x + width), (double) (y + height), 0.0D).func_181673_a((double) ((u + (float) width) * f), (double) ((v + (float) height) * f1)).func_181675_d();
-        worldrenderer.pos((double) (x + width), (double) y, 0.0D).func_181673_a((double) ((u + (float) width) * f), (double) (v * f1)).func_181675_d();
-        worldrenderer.pos((double) x, (double) y, 0.0D).func_181673_a((double) (u * f), (double) (v * f1)).func_181675_d();
+        worldrenderer.pos(x, y + height, 0.0D).func_181673_a(u * f, (v + height) * f1).func_181675_d();
+        worldrenderer.pos(x + width, y + height, 0.0D).func_181673_a((u + width) * f, (v + height) * f1).func_181675_d();
+        worldrenderer.pos(x + width, y, 0.0D).func_181673_a((u + width) * f, v * f1).func_181675_d();
+        worldrenderer.pos(x, y, 0.0D).func_181673_a(u * f, v * f1).func_181675_d();
         tessellator.draw();
     }
 

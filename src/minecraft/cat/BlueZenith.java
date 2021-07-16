@@ -3,7 +3,9 @@ package cat;
 import cat.command.CommandManager;
 import cat.events.EventManager;
 import cat.module.ModuleManager;
+import cat.module.modules.render.ClickGUI;
 import cat.ui.GuiMain;
+import cat.ui.clickgui.ClickGui;
 import cat.util.ClientUtils;
 import cat.util.config.ConfigManager;
 import net.arikia.dev.drpc.DiscordEventHandlers;
@@ -37,6 +39,8 @@ public class BlueZenith {
         guiMain = new GuiMain();
         initRPC();
         //startup();
+        ClickGUI.clickGui = new ClickGui();
+        ClientUtils.getLogger().info("Creating ClickGui...");
         ClientUtils.getLogger().info("Finished Starting!");
     }
 
