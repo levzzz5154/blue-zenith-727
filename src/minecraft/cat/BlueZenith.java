@@ -13,6 +13,7 @@ import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
 
 public class BlueZenith {
+    //test commit
     public static String name = "BlueZenith";
     //no men its 1.5 lmao :rofl:
     public static String version = "1.5";
