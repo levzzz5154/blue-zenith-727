@@ -33,9 +33,9 @@ public class ClickGUI extends Module {
     }
     @Override
     public void onEnable(){
-        if(clickGui == null){
-            clickGui = new ClickGui();
+        if(mc.thePlayer != null){
+            mc.displayGuiScreen(clickGui);
         }
-        mc.displayGuiScreen(clickGui);
+        super.setState(false);
     }
 }

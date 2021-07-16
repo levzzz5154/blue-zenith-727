@@ -41,6 +41,7 @@ public class RenderUtil extends MinecraftInstance {
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_BLEND);
         glDisable(GL_LINE_SMOOTH);
+        GlStateManager.resetColor();
     }
     public static void glColor(final Color color) {
         final float red = color.getRed() / 255F;

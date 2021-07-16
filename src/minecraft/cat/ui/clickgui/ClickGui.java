@@ -19,57 +19,19 @@ import java.util.ArrayList;
 import static cat.util.EntityManager.Targets.*;
 
 public class ClickGui extends GuiScreen {
-    Panel combat;
-    Panel misc;
-    Panel world;
-    Panel movement;
-    Panel player;
-    Panel render;
-    Panel[] panels;
+    ArrayList<Panel> panels = new ArrayList<>();
     public ClickGui(){
-        ArrayList<Module> combat = new ArrayList<>();
-        ArrayList<Module> misc = new ArrayList<>();
-        ArrayList<Module> movement = new ArrayList<>();
-        ArrayList<Module> world = new ArrayList<>();
-        ArrayList<Module> player = new ArrayList<>();
-        ArrayList<Module> render = new ArrayList<>();
-        ArrayList<Module> configs = new ArrayList<>();
-        for (Module m : BlueZenith.moduleManager.getModules()) {
-            switch (m.getCategory()){
-                case COMBAT:
-                    combat.add(m);
-                    break;
-                case MISC:
-                    misc.add(m);
-                    break;
-                case WORLD:
-                    world.add(m);
-                    break;
-                case PLAYER:
-                    player.add(m);
-                    break;
-                case RENDER:
-                    render.add(m);
-                    break;
-                case MOVEMENT:
-                    movement.add(m);
-                    break;
-            }
-        }
         float x = 20;
-        this.combat = new Panel(x, 20, ModuleCategory.COMBAT, combat.toArray(new Module[0]));
-        x += this.combat.width + 6;
-        this.misc = new Panel(x, 20, ModuleCategory.MISC, misc.toArray(new Module[0]));
-        x += this.misc.width + 6;
-        this.movement = new Panel(x, 20, ModuleCategory.MOVEMENT, movement.toArray(new Module[0]));
-        x += this.movement.width + 6;
-        this.render = new Panel(x, 20, ModuleCategory.RENDER, render.toArray(new Module[0]));
-        x += this.render.width + 6;
-        this.player = new Panel(x, 20,ModuleCategory.PLAYER, player.toArray(new Module[0]));
-        x += this.player.width + 6;
-        this.world = new Panel(x, 20,ModuleCategory.WORLD, world.toArray(new Module[0]));
-        x += this.world.width + 6;
-        panels = new Panel[]{this.combat, this.misc, this.movement, this.player, this.render, this.world};
+        for (ModuleCategory v : ModuleCategory.values()) {
+            Panel panel = new Panel(x, 20, v);
+            for (Module m : BlueZenith.moduleManager.getModules()) {
+                if(m.getCategory() == v){
+                    panel.addModule(m);
+                }
+            }
+            panels.add(panel.calculateWidth());
+            x += panel.width + 6;
+        }
     }
     Panel selectedPanel = null;
     public boolean mousePressed = false;
@@ -96,14 +58,8 @@ public class ClickGui extends GuiScreen {
         float i = f.FONT_HEIGHT + 16;
         RenderUtil.rect(this.width - w - 2, this.height - h - i, this.width, this.height - h, click.main_color);
         f.drawString("Targets", this.width - (w / 2f) + f.getStringWidth("Targets"), this.height - (i / 2f - f.FONT_HEIGHT / 2f), Color.WHITE.getRGB());
-        EntityManager.Targets[] sex = new EntityManager.Targets[]{
-                MOBS,
-                PLAYERS,
-                ANIMALS,
-                INVISIBLE,
-                DEAD};
         float y = this.height - h;
-        for (EntityManager.Targets c : sex) {
+        for (EntityManager.Targets c : EntityManager.Targets.values()) {
             RenderUtil.rect(this.width - w, y, this.width - 2, y + i, click.backgroundColor);
             f.drawString(c.displayName, this.width - w + 6, (y + i / 2f - f.FONT_HEIGHT / 2f), c.on ? Color.WHITE.getRGB() : Color.WHITE.darker().darker().getRGB());
             if(i(mouseX, mouseY, this.width - w, y, this.width - 2, y + i) && !mousePressed && Mouse.isButtonDown(0)){

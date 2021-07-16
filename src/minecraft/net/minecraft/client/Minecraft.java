@@ -2,6 +2,7 @@ package net.minecraft.client;
 
 import cat.BlueZenith;
 import cat.ui.GuiMain;
+import cat.util.RenderUtil;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -971,11 +972,20 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
         System.gc();
     }
-
+    private long lf = gt();
+    public long gt() {
+        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+    }
     /**
      * Called repeatedly from run()
      */
     private void runGameLoop() throws IOException {
+        final long ct = gt();
+        final int dt = (int) (ct - lf);
+        lf = ct;
+
+        RenderUtil.delta = dt;
+
         long i = System.nanoTime();
         this.mcProfiler.startSection("root");
 
