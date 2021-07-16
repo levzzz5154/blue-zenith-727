@@ -1212,7 +1212,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             int j = this.displayWidth - i - 10;
             int k = this.displayHeight - i * 2;
             GlStateManager.enableBlend();
-            worldrenderer.begin(7, DefaultVertexFormats.field_181706_f);
+            worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
             worldrenderer.pos((double) ((float) j - (float) i * 1.1F), (double) ((float) k - (float) i * 0.6F - 16.0F), 0.0D).func_181669_b(200, 0, 0, 0).func_181675_d();
             worldrenderer.pos((double) ((float) j - (float) i * 1.1F), (double) (k + i * 2), 0.0D).func_181669_b(200, 0, 0, 0).func_181675_d();
             worldrenderer.pos((double) ((float) j + (float) i * 1.1F), (double) (k + i * 2), 0.0D).func_181669_b(200, 0, 0, 0).func_181675_d();
@@ -1224,7 +1224,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             for (int l = 0; l < list.size(); ++l) {
                 Profiler.Result profiler$result1 = (Profiler.Result) list.get(l);
                 int i1 = MathHelper.floor_double(profiler$result1.field_76332_a / 4.0D) + 1;
-                worldrenderer.begin(6, DefaultVertexFormats.field_181706_f);
+                worldrenderer.begin(6, DefaultVertexFormats.POSITION_COLOR);
                 int j1 = profiler$result1.func_76329_a();
                 int k1 = j1 >> 16 & 255;
                 int l1 = j1 >> 8 & 255;
@@ -1239,7 +1239,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 }
 
                 tessellator.draw();
-                worldrenderer.begin(5, DefaultVertexFormats.field_181706_f);
+                worldrenderer.begin(5, DefaultVertexFormats.POSITION_COLOR);
 
                 for (int i3 = i1; i3 >= 0; --i3) {
                     float f3 = (float) ((d0 + profiler$result1.field_76332_a * (double) i3 / (double) i1) * Math.PI * 2.0D / 100.0D);

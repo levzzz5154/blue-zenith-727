@@ -38,7 +38,7 @@ public class GuiStreamIndicator
                 Tessellator tessellator = Tessellator.getInstance();
                 WorldRenderer worldrenderer = tessellator.getWorldRenderer();
                 GlStateManager.color(0.0F, 0.0F, 0.0F, (0.65F + 0.35000002F * this.field_152443_c) / 2.0F);
-                worldrenderer.begin(7, DefaultVertexFormats.field_181705_e);
+                worldrenderer.begin(7, DefaultVertexFormats.POSITION);
                 worldrenderer.pos((double)l, (double)j1, 0.0D).func_181675_d();
                 worldrenderer.pos((double)p_152437_1_, (double)j1, 0.0D).func_181675_d();
                 worldrenderer.pos((double)p_152437_1_, (double)i1, 0.0D).func_181675_d();
@@ -64,7 +64,7 @@ public class GuiStreamIndicator
         float f4 = (float)(p_152436_3_ + 16) * 0.015625F;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         worldrenderer.pos((double)(p_152436_1_ - 16 - p_152436_4_), (double)(p_152436_2_ + 16), (double)f).func_181673_a((double)f1, (double)f4).func_181675_d();
         worldrenderer.pos((double)(p_152436_1_ - p_152436_4_), (double)(p_152436_2_ + 16), (double)f).func_181673_a((double)f3, (double)f4).func_181675_d();
         worldrenderer.pos((double)(p_152436_1_ - p_152436_4_), (double)(p_152436_2_ + 0), (double)f).func_181673_a((double)f3, (double)f2).func_181675_d();

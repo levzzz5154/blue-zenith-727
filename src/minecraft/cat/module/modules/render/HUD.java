@@ -9,6 +9,7 @@ import cat.module.value.types.BoolValue;
 import cat.module.value.types.FloatValue;
 import cat.module.value.types.IntegerValue;
 import cat.util.RenderUtil;
+import cat.util.lmao.FontUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -40,7 +41,7 @@ public class HUD extends Module {
         Color colorDark = new Color(0,40,40);
         Color color = new Color(0, 140, 160);
         ScaledResolution sc = e.resolution;
-        FontRenderer font = mc.fontRendererObj;
+        FontRenderer font = FontUtil.fontSFLight42;
         modules.sort((m, m1) -> Float.compare(font.getStringWidth(m1.getTagName()), font.getStringWidth(m.getTagName())));
         String str = BlueZenith.name+" b"+BlueZenith.version;
         char[] strArr = str.toCharArray();

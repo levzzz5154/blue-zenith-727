@@ -147,7 +147,7 @@ public abstract class Render<T extends Entity> implements IEntityRenderer
             worldrenderer.setBlockLayer(EnumWorldBlockLayer.SOLID);
         }
 
-        worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
 
         while (f3 > 0.0F)
         {
@@ -298,7 +298,7 @@ public abstract class Render<T extends Entity> implements IEntityRenderer
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         worldrenderer.setTranslation(x, y, z);
-        worldrenderer.begin(7, DefaultVertexFormats.field_181708_h);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_NORMAL);
         worldrenderer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).func_181663_c(0.0F, 0.0F, -1.0F).func_181675_d();
         worldrenderer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).func_181663_c(0.0F, 0.0F, -1.0F).func_181675_d();
         worldrenderer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).func_181663_c(0.0F, 0.0F, -1.0F).func_181675_d();
@@ -395,7 +395,7 @@ public abstract class Render<T extends Entity> implements IEntityRenderer
 
             int j = fontrenderer.getStringWidth(str) / 2;
             GlStateManager.disableTexture2D();
-            worldrenderer.begin(7, DefaultVertexFormats.field_181706_f);
+            worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
             worldrenderer.pos((double)(-j - 1), (double)(-1 + i), 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
             worldrenderer.pos((double)(-j - 1), (double)(8 + i), 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
             worldrenderer.pos((double)(j + 1), (double)(8 + i), 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();

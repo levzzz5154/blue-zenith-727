@@ -43,9 +43,12 @@ public class Aura extends Module {
     @Subscriber
     public void onUpdate(UpdatePlayerEvent e){
         for (Entity ent : mc.theWorld.loadedEntityList) {
-            if(ent != null && mc.thePlayer.getDistanceToEntity(ent) <= range.get() && EntityManager.isTarget(ent)){
+            if(ent != null && mc.thePlayer.getDistanceToEntity(ent) <= range.get()){
                 target = (EntityLivingBase) ent;
             }
+        }
+        if(!EntityManager.isTarget(target)){
+            target = null;
         }
         if(target == null && blockStatus){
             unBlock();

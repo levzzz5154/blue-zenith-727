@@ -91,7 +91,7 @@ public class RenderFish extends Render<EntityFishHook>
             double d12 = (double)((float)(d2 - d7));
             GlStateManager.disableTexture2D();
             GlStateManager.disableLighting();
-            worldrenderer.begin(3, DefaultVertexFormats.field_181706_f);
+            worldrenderer.begin(3, DefaultVertexFormats.POSITION_COLOR);
             int k = 16;
 
             for (int l = 0; l <= 16; ++l)

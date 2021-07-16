@@ -64,6 +64,7 @@ public class Flight extends Module {
                         e.onGround = true;
                         movementSpeed[2]++;
                         i_hate_ticks.reset();
+                        mc.thePlayer.setPosition(mc.thePlayer.posX, Math.round(mc.thePlayer.posY) + 0.42, mc.thePlayer.posZ);
                     }
                     if(mc.thePlayer.hurtTime == 9){
                         movementSpeed[2] = f + 1;

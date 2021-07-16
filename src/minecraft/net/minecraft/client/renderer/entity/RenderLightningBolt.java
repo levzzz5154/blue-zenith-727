@@ -83,7 +83,7 @@ public class RenderLightningBolt extends Render<EntityLightningBolt>
                         d3 += (double)(random1.nextInt(31) - 15);
                     }
 
-                    worldrenderer.begin(5, DefaultVertexFormats.field_181706_f);
+                    worldrenderer.begin(5, DefaultVertexFormats.POSITION_COLOR);
                     float f = 0.5F;
                     float f1 = 0.45F;
                     float f2 = 0.45F;

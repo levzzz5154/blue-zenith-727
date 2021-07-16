@@ -648,7 +648,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                         int i = fontrenderer.getStringWidth(s) / 2;
                         Tessellator tessellator = Tessellator.getInstance();
                         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-                        worldrenderer.begin(7, DefaultVertexFormats.field_181706_f);
+                        worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
                         worldrenderer.pos((double) (-i - 1), -1.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
                         worldrenderer.pos((double) (-i - 1), 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
                         worldrenderer.pos((double) (i + 1), 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();

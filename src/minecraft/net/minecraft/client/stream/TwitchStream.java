@@ -241,7 +241,7 @@ public class TwitchStream implements BroadcastController.BroadcastListener, Chat
                 GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, 9729.0F);
                 Tessellator tessellator = Tessellator.getInstance();
                 WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-                worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+                worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
                 worldrenderer.pos(0.0D, (double)f1, 0.0D).func_181673_a(0.0D, (double)f3).func_181675_d();
                 worldrenderer.pos((double)f, (double)f1, 0.0D).func_181673_a((double)f2, (double)f3).func_181675_d();
                 worldrenderer.pos((double)f, 0.0D, 0.0D).func_181673_a((double)f2, 0.0D).func_181675_d();

@@ -122,7 +122,7 @@ public abstract class RenderLiving<T extends EntityLiving> extends RendererLivin
 
                 int i = 24;
                 double d16 = 0.025D;
-                worldrenderer.begin(5, DefaultVertexFormats.field_181706_f);
+                worldrenderer.begin(5, DefaultVertexFormats.POSITION_COLOR);
 
                 for (int j = 0; j <= 24; ++j)
                 {
@@ -143,7 +143,7 @@ public abstract class RenderLiving<T extends EntityLiving> extends RendererLivin
                 }
 
                 tessellator.draw();
-                worldrenderer.begin(5, DefaultVertexFormats.field_181706_f);
+                worldrenderer.begin(5, DefaultVertexFormats.POSITION_COLOR);
 
                 for (int k = 0; k <= 24; ++k)
                 {

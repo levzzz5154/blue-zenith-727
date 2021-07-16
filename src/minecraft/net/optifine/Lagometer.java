@@ -155,7 +155,7 @@ public class Lagometer
                 GlStateManager.disableTexture2D();
                 Tessellator tessellator = Tessellator.getInstance();
                 WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-                worldrenderer.begin(1, DefaultVertexFormats.field_181706_f);
+                worldrenderer.begin(1, DefaultVertexFormats.POSITION_COLOR);
 
                 for (int j = 0; j < timesFrame.length; ++j)
                 {

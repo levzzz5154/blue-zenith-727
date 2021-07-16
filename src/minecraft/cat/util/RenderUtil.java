@@ -24,24 +24,8 @@ public class RenderUtil extends MinecraftInstance {
         glEnable(GL_DEPTH_TEST);
     }
     public static void rect(final float x, final float y, final float x2, final float y2, final Color color) {
-        glEnable(GL_BLEND);
-        glDisable(GL_TEXTURE_2D);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_LINE_SMOOTH);
-
-        glColor(color);
-        glBegin(GL_QUADS);
-
-        glVertex2d(x2, y);
-        glVertex2d(x, y);
-        glVertex2d(x, y2);
-        glVertex2d(x2, y2);
-        glEnd();
-
-        glEnable(GL_TEXTURE_2D);
-        glDisable(GL_BLEND);
-        glDisable(GL_LINE_SMOOTH);
-        GlStateManager.resetColor();
+        // fuck open gl
+        Gui.drawRect(x,y,x2,y2,color.getRGB());
     }
     public static void glColor(final Color color) {
         final float red = color.getRed() / 255F;

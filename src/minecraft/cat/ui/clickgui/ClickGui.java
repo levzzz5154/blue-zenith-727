@@ -16,8 +16,6 @@ import org.lwjgl.input.Mouse;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static cat.util.EntityManager.Targets.*;
-
 public class ClickGui extends GuiScreen {
     ArrayList<Panel> panels = new ArrayList<>();
     public ClickGui(){
