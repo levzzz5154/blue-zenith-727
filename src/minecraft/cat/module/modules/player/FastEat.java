@@ -29,9 +29,12 @@ public class FastEat extends Module {
             case "Timer":
                 if (mc.thePlayer.isEating()) {
                     mc.timer.timerSpeed = timer.get();
-                }else{
+                } else {
                     mc.timer.timerSpeed = 1;
                 }
         }
     }
 }
+
+
+
