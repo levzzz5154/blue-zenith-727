@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
+import java.awt.*;
+
 public class Gui {
     public static final ResourceLocation optionsBackground = new ResourceLocation("textures/gui/options_background.png");
     public static final ResourceLocation statIcons = new ResourceLocation("textures/gui/container/stats_icons.png");
@@ -65,7 +67,7 @@ public class Gui {
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(f, f1, f2, f3);
-        worldrenderer.begin(7, DefaultVertexFormats.field_181705_e);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
         worldrenderer.pos((double) left, (double) bottom, 0.0D).func_181675_d();
         worldrenderer.pos((double) right, (double) bottom, 0.0D).func_181675_d();
         worldrenderer.pos((double) right, (double) top, 0.0D).func_181675_d();
@@ -85,7 +87,23 @@ public class Gui {
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(f, f1, f2, f3);
-        worldrenderer.begin(7, DefaultVertexFormats.field_181705_e);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(x2, y, 0.0D).func_181675_d();
+        worldrenderer.pos(x, y, 0.0D).func_181675_d();
+        worldrenderer.pos(x, y2, 0.0D).func_181675_d();
+        worldrenderer.pos(x2, y2, 0.0D).func_181675_d();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+    public static void drawRect(float x, float y, float x2, float y2, Color color) {
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
         worldrenderer.pos(x2, y, 0.0D).func_181675_d();
         worldrenderer.pos(x, y, 0.0D).func_181675_d();
         worldrenderer.pos(x, y2, 0.0D).func_181675_d();
@@ -115,7 +133,7 @@ public class Gui {
         GlStateManager.shadeModel(7425);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.field_181706_f);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
         worldrenderer.pos((double) right, (double) top, (double) this.zLevel).func_181666_a(f1, f2, f3, f).func_181675_d();
         worldrenderer.pos((double) left, (double) top, (double) this.zLevel).func_181666_a(f1, f2, f3, f).func_181675_d();
         worldrenderer.pos((double) left, (double) bottom, (double) this.zLevel).func_181666_a(f5, f6, f7, f4).func_181675_d();
@@ -149,7 +167,7 @@ public class Gui {
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         worldrenderer.pos((double) (x + 0), (double) (y + height), (double) this.zLevel).func_181673_a((double) ((float) (textureX + 0) * f), (double) ((float) (textureY + height) * f1)).func_181675_d();
         worldrenderer.pos((double) (x + width), (double) (y + height), (double) this.zLevel).func_181673_a((double) ((float) (textureX + width) * f), (double) ((float) (textureY + height) * f1)).func_181675_d();
         worldrenderer.pos((double) (x + width), (double) (y + 0), (double) this.zLevel).func_181673_a((double) ((float) (textureX + width) * f), (double) ((float) (textureY + 0) * f1)).func_181675_d();
@@ -165,7 +183,7 @@ public class Gui {
         float f1 = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         worldrenderer.pos((double) (xCoord + 0.0F), (double) (yCoord + (float) maxV), (double) this.zLevel).func_181673_a((double) ((float) (minU + 0) * f), (double) ((float) (minV + maxV) * f1)).func_181675_d();
         worldrenderer.pos((double) (xCoord + (float) maxU), (double) (yCoord + (float) maxV), (double) this.zLevel).func_181673_a((double) ((float) (minU + maxU) * f), (double) ((float) (minV + maxV) * f1)).func_181675_d();
         worldrenderer.pos((double) (xCoord + (float) maxU), (double) (yCoord + 0.0F), (double) this.zLevel).func_181673_a((double) ((float) (minU + maxU) * f), (double) ((float) (minV + 0) * f1)).func_181675_d();
@@ -179,7 +197,7 @@ public class Gui {
     public void drawTexturedModalRect(int xCoord, int yCoord, TextureAtlasSprite textureSprite, int widthIn, int heightIn) {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         worldrenderer.pos((double) (xCoord + 0), (double) (yCoord + heightIn), (double) this.zLevel).func_181673_a((double) textureSprite.getMinU(), (double) textureSprite.getMaxV()).func_181675_d();
         worldrenderer.pos((double) (xCoord + widthIn), (double) (yCoord + heightIn), (double) this.zLevel).func_181673_a((double) textureSprite.getMaxU(), (double) textureSprite.getMaxV()).func_181675_d();
         worldrenderer.pos((double) (xCoord + widthIn), (double) (yCoord + 0), (double) this.zLevel).func_181673_a((double) textureSprite.getMaxU(), (double) textureSprite.getMinV()).func_181675_d();
@@ -195,11 +213,11 @@ public class Gui {
         float f1 = 1.0F / textureHeight;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
-        worldrenderer.pos((double) x, (double) (y + height), 0.0D).func_181673_a((double) (u * f), (double) ((v + (float) height) * f1)).func_181675_d();
-        worldrenderer.pos((double) (x + width), (double) (y + height), 0.0D).func_181673_a((double) ((u + (float) width) * f), (double) ((v + (float) height) * f1)).func_181675_d();
-        worldrenderer.pos((double) (x + width), (double) y, 0.0D).func_181673_a((double) ((u + (float) width) * f), (double) (v * f1)).func_181675_d();
-        worldrenderer.pos((double) x, (double) y, 0.0D).func_181673_a((double) (u * f), (double) (v * f1)).func_181675_d();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos(x, y + height, 0.0D).func_181673_a(u * f, (v + (float) height) * f1).func_181675_d();
+        worldrenderer.pos(x + width, y + height, 0.0D).func_181673_a((u + (float) width) * f, (v + (float) height) * f1).func_181675_d();
+        worldrenderer.pos(x + width, y, 0.0D).func_181673_a((u + (float) width) * f, v * f1).func_181675_d();
+        worldrenderer.pos(x, y, 0.0D).func_181673_a(u * f, v * f1).func_181675_d();
         tessellator.draw();
     }
 
@@ -208,11 +226,11 @@ public class Gui {
         float f1 = 1.0F / textureHeight;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
-        worldrenderer.pos((double) x, (double) (y + height), 0.0D).func_181673_a((double) (u * f), (double) ((v + (float) height) * f1)).func_181675_d();
-        worldrenderer.pos((double) (x + width), (double) (y + height), 0.0D).func_181673_a((double) ((u + (float) width) * f), (double) ((v + (float) height) * f1)).func_181675_d();
-        worldrenderer.pos((double) (x + width), (double) y, 0.0D).func_181673_a((double) ((u + (float) width) * f), (double) (v * f1)).func_181675_d();
-        worldrenderer.pos((double) x, (double) y, 0.0D).func_181673_a((double) (u * f), (double) (v * f1)).func_181675_d();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos(x, y + height, 0.0D).func_181673_a(u * f, (v + height) * f1).func_181675_d();
+        worldrenderer.pos(x + width, y + height, 0.0D).func_181673_a((u + width) * f, (v + height) * f1).func_181675_d();
+        worldrenderer.pos(x + width, y, 0.0D).func_181673_a((u + width) * f, v * f1).func_181675_d();
+        worldrenderer.pos(x, y, 0.0D).func_181673_a(u * f, v * f1).func_181675_d();
         tessellator.draw();
     }
 
@@ -224,7 +242,7 @@ public class Gui {
         float f1 = 1.0F / tileHeight;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         worldrenderer.pos((double) x, (double) (y + height), 0.0D).func_181673_a((double) (u * f), (double) ((v + (float) vHeight) * f1)).func_181675_d();
         worldrenderer.pos((double) (x + width), (double) (y + height), 0.0D).func_181673_a((double) ((u + (float) uWidth) * f), (double) ((v + (float) vHeight) * f1)).func_181675_d();
         worldrenderer.pos((double) (x + width), (double) y, 0.0D).func_181673_a((double) ((u + (float) uWidth) * f), (double) (v * f1)).func_181675_d();

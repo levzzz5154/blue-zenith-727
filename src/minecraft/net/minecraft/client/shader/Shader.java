@@ -89,7 +89,7 @@ public class Shader
         GlStateManager.colorMask(true, true, true, true);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.field_181706_f);
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
         worldrenderer.pos(0.0D, (double)f1, 500.0D).func_181669_b(255, 255, 255, 255).func_181675_d();
         worldrenderer.pos((double)f, (double)f1, 500.0D).func_181669_b(255, 255, 255, 255).func_181675_d();
         worldrenderer.pos((double)f, 0.0D, 500.0D).func_181669_b(255, 255, 255, 255).func_181675_d();

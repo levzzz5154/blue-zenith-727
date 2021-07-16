@@ -541,7 +541,7 @@ public class FontRenderer implements IResourceManagerReloadListener {
             Tessellator tessellator = Tessellator.getInstance();
             WorldRenderer worldrenderer = tessellator.getWorldRenderer();
             GlStateManager.disableTexture2D();
-            worldrenderer.begin(7, DefaultVertexFormats.field_181705_e);
+            worldrenderer.begin(7, DefaultVertexFormats.POSITION);
             worldrenderer.pos((double) this.posX, (double) (this.posY + (float) (this.FONT_HEIGHT / 2)), 0.0D).func_181675_d();
             worldrenderer.pos((double) (this.posX + p_doDraw_1_), (double) (this.posY + (float) (this.FONT_HEIGHT / 2)), 0.0D).func_181675_d();
             worldrenderer.pos((double) (this.posX + p_doDraw_1_), (double) (this.posY + (float) (this.FONT_HEIGHT / 2) - 1.0F), 0.0D).func_181675_d();
@@ -554,7 +554,7 @@ public class FontRenderer implements IResourceManagerReloadListener {
             Tessellator tessellator1 = Tessellator.getInstance();
             WorldRenderer worldrenderer1 = tessellator1.getWorldRenderer();
             GlStateManager.disableTexture2D();
-            worldrenderer1.begin(7, DefaultVertexFormats.field_181705_e);
+            worldrenderer1.begin(7, DefaultVertexFormats.POSITION);
             int i = this.underlineStyle ? -1 : 0;
             worldrenderer1.pos((double) (this.posX + (float) i), (double) (this.posY + (float) this.FONT_HEIGHT), 0.0D).func_181675_d();
             worldrenderer1.pos((double) (this.posX + p_doDraw_1_), (double) (this.posY + (float) this.FONT_HEIGHT), 0.0D).func_181675_d();

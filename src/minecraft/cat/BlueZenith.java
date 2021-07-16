@@ -1,35 +1,36 @@
 package cat;
 
-import cat.client.ConfigManager;
-import cat.client.Connection;
 import cat.command.CommandManager;
 import cat.events.EventManager;
 import cat.module.ModuleManager;
+import cat.module.modules.render.ClickGUI;
 import cat.ui.GuiMain;
+import cat.ui.clickgui.ClickGui;
 import cat.util.ClientUtils;
+import cat.util.config.ConfigManager;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.Minecraft;
+import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.security.MessageDigest;
 
 public class BlueZenith {
+    //test commit
     public static String name = "BlueZenith";
-    //da real version //the real version is 7.27 smh
-    public static String version = "1.1";
+    //no men its 1.5 lmao :rofl:
+    public static String version = "1.5";
     public static EventManager eventManager;
     public static ModuleManager moduleManager;
     public static CommandManager commandManager;
-    public static GuiScreen guiMain;
+    public static GuiMain guiMain;
     private static final String applicationID = "865299936043073547";
-    public static ExecutorService executorService;
     private static DiscordRichPresence rpc;
-    public static Connection connection;
 
     public static void start(){
-        executorService = Executors.newSingleThreadExecutor();
         ClientUtils.getLogger().info("Starting BlueZenith b"+version);
         eventManager = new EventManager();
         ClientUtils.getLogger().info("Started event manager.");
@@ -39,17 +40,16 @@ public class BlueZenith {
         ClientUtils.getLogger().info("Loaded "+commandManager.commands.size()+" commands.");
         hook();
         ClientUtils.getLogger().info("Added a shutdown hook.");
-        ConfigManager.load("default", false, false);
-        ConfigManager.loadBinds();
+        // why load binds separately?
+        ConfigManager.load("default", true, false);
+        //ConfigManager.loadBinds();
         ClientUtils.getLogger().info("Loaded the default config and binds.");
-        initRPC();
-        ClientUtils.getLogger().info("Initialized Discord RPC!");
-        connection = new Connection();
-        connection.authenticate();
-        ClientUtils.getLogger().info("Attempted connecting to the server.");
         guiMain = new GuiMain();
+        initRPC();
+        //startup();
+        ClickGUI.clickGui = new ClickGui();
+        ClientUtils.getLogger().info("Creating ClickGui...");
         ClientUtils.getLogger().info("Finished Starting!");
-
     }
 
     private static void hook() {
@@ -57,6 +57,7 @@ public class BlueZenith {
             eventManager.shutdown();
             ConfigManager.save("default");
             ConfigManager.saveBinds();
+            DiscordRPC.discordShutdown();
         }));
     }
 

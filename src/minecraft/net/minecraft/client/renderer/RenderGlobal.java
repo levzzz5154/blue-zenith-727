@@ -395,7 +395,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
     {
         int i = 64;
         int j = 6;
-        worldRendererIn.begin(7, DefaultVertexFormats.field_181705_e);
+        worldRendererIn.begin(7, DefaultVertexFormats.POSITION);
         int k = (this.renderDistance / 64 + 1) * 64 + 64;
 
         for (int l = -k; l <= k; l += 64)
@@ -458,7 +458,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
     private void renderStars(WorldRenderer worldRendererIn)
     {
         Random random = new Random(10842L);
-        worldRendererIn.begin(7, DefaultVertexFormats.field_181705_e);
+        worldRendererIn.begin(7, DefaultVertexFormats.POSITION);
 
         for (int i = 0; i < 1500; ++i)
         {
@@ -1774,7 +1774,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
                     f8 = f11;
                 }
 
-                worldrenderer.begin(6, DefaultVertexFormats.field_181706_f);
+                worldrenderer.begin(6, DefaultVertexFormats.POSITION_COLOR);
                 worldrenderer.pos(0.0D, 100.0D, 0.0D).func_181666_a(f6, f7, f8, afloat[3]).func_181675_d();
                 int j = 16;
 
@@ -1822,7 +1822,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
             if (Config.isSunTexture())
             {
                 this.renderEngine.bindTexture(locationSunPng);
-                worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+                worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
                 worldrenderer.pos((double)(-f16), 100.0D, (double)(-f16)).func_181673_a(0.0D, 0.0D).func_181675_d();
                 worldrenderer.pos((double)f16, 100.0D, (double)(-f16)).func_181673_a(1.0D, 0.0D).func_181675_d();
                 worldrenderer.pos((double)f16, 100.0D, (double)f16).func_181673_a(1.0D, 1.0D).func_181675_d();
@@ -1842,7 +1842,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
                 float f21 = (float)(i1 + 0) / 2.0F;
                 float f23 = (float)(k + 1) / 4.0F;
                 float f14 = (float)(i1 + 1) / 2.0F;
-                worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+                worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
                 worldrenderer.pos((double)(-f16), -100.0D, (double)f16).func_181673_a((double)f23, (double)f14).func_181675_d();
                 worldrenderer.pos((double)f16, -100.0D, (double)f16).func_181673_a((double)f19, (double)f14).func_181675_d();
                 worldrenderer.pos((double)f16, -100.0D, (double)(-f16)).func_181673_a((double)f19, (double)f21).func_181675_d();
@@ -1922,7 +1922,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
                 float f20 = 1.0F;
                 float f22 = -((float)(d0 + 65.0D));
                 float f24 = -1.0F;
-                worldrenderer.begin(7, DefaultVertexFormats.field_181706_f);
+                worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
                 worldrenderer.pos(-1.0D, (double)f22, 1.0D).func_181669_b(0, 0, 0, 255).func_181675_d();
                 worldrenderer.pos(1.0D, (double)f22, 1.0D).func_181669_b(0, 0, 0, 255).func_181675_d();
                 worldrenderer.pos(1.0D, -1.0D, 1.0D).func_181669_b(0, 0, 0, 255).func_181675_d();
@@ -2388,7 +2388,7 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
             float f4 = 0.0F;
             float f5 = 0.0F;
             float f6 = 128.0F;
-            worldrenderer.begin(7, DefaultVertexFormats.field_181707_g);
+            worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
             worldrenderer.setTranslation(-d2, -d3, -d4);
             double d5 = Math.max((double)MathHelper.floor_double(d4 - d0), worldborder.minZ());
             double d6 = Math.min((double)MathHelper.ceiling_double_int(d4 + d0), worldborder.maxZ());
@@ -2635,21 +2635,21 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
     {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(3, DefaultVertexFormats.field_181705_e);
+        worldrenderer.begin(3, DefaultVertexFormats.POSITION);
         worldrenderer.pos(p_181561_0_.minX, p_181561_0_.minY, p_181561_0_.minZ).func_181675_d();
         worldrenderer.pos(p_181561_0_.maxX, p_181561_0_.minY, p_181561_0_.minZ).func_181675_d();
         worldrenderer.pos(p_181561_0_.maxX, p_181561_0_.minY, p_181561_0_.maxZ).func_181675_d();
         worldrenderer.pos(p_181561_0_.minX, p_181561_0_.minY, p_181561_0_.maxZ).func_181675_d();
         worldrenderer.pos(p_181561_0_.minX, p_181561_0_.minY, p_181561_0_.minZ).func_181675_d();
         tessellator.draw();
-        worldrenderer.begin(3, DefaultVertexFormats.field_181705_e);
+        worldrenderer.begin(3, DefaultVertexFormats.POSITION);
         worldrenderer.pos(p_181561_0_.minX, p_181561_0_.maxY, p_181561_0_.minZ).func_181675_d();
         worldrenderer.pos(p_181561_0_.maxX, p_181561_0_.maxY, p_181561_0_.minZ).func_181675_d();
         worldrenderer.pos(p_181561_0_.maxX, p_181561_0_.maxY, p_181561_0_.maxZ).func_181675_d();
         worldrenderer.pos(p_181561_0_.minX, p_181561_0_.maxY, p_181561_0_.maxZ).func_181675_d();
         worldrenderer.pos(p_181561_0_.minX, p_181561_0_.maxY, p_181561_0_.minZ).func_181675_d();
         tessellator.draw();
-        worldrenderer.begin(1, DefaultVertexFormats.field_181705_e);
+        worldrenderer.begin(1, DefaultVertexFormats.POSITION);
         worldrenderer.pos(p_181561_0_.minX, p_181561_0_.minY, p_181561_0_.minZ).func_181675_d();
         worldrenderer.pos(p_181561_0_.minX, p_181561_0_.maxY, p_181561_0_.minZ).func_181675_d();
         worldrenderer.pos(p_181561_0_.maxX, p_181561_0_.minY, p_181561_0_.minZ).func_181675_d();
@@ -2665,21 +2665,21 @@ public class RenderGlobal implements IWorldAccess, IResourceManagerReloadListene
     {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(3, DefaultVertexFormats.field_181706_f);
+        worldrenderer.begin(3, DefaultVertexFormats.POSITION_COLOR);
         worldrenderer.pos(p_181563_0_.minX, p_181563_0_.minY, p_181563_0_.minZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.minY, p_181563_0_.minZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.minY, p_181563_0_.maxZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         worldrenderer.pos(p_181563_0_.minX, p_181563_0_.minY, p_181563_0_.maxZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         worldrenderer.pos(p_181563_0_.minX, p_181563_0_.minY, p_181563_0_.minZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         tessellator.draw();
-        worldrenderer.begin(3, DefaultVertexFormats.field_181706_f);
+        worldrenderer.begin(3, DefaultVertexFormats.POSITION_COLOR);
         worldrenderer.pos(p_181563_0_.minX, p_181563_0_.maxY, p_181563_0_.minZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.maxY, p_181563_0_.minZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.maxY, p_181563_0_.maxZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         worldrenderer.pos(p_181563_0_.minX, p_181563_0_.maxY, p_181563_0_.maxZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         worldrenderer.pos(p_181563_0_.minX, p_181563_0_.maxY, p_181563_0_.minZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         tessellator.draw();
-        worldrenderer.begin(1, DefaultVertexFormats.field_181706_f);
+        worldrenderer.begin(1, DefaultVertexFormats.POSITION_COLOR);
         worldrenderer.pos(p_181563_0_.minX, p_181563_0_.minY, p_181563_0_.minZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         worldrenderer.pos(p_181563_0_.minX, p_181563_0_.maxY, p_181563_0_.minZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();
         worldrenderer.pos(p_181563_0_.maxX, p_181563_0_.minY, p_181563_0_.minZ).func_181669_b(p_181563_1_, p_181563_2_, p_181563_3_, p_181563_4_).func_181675_d();

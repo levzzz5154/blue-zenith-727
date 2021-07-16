@@ -2,6 +2,7 @@ package cat.module;
 
 public enum ModuleCategory {
     COMBAT("Combat"),
+    FUN("Fun"),
     MOVEMENT("Movement"),
     MISC("Misc"),
     PLAYER("Player"),

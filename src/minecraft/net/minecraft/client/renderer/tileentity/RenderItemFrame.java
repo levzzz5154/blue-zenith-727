@@ -234,7 +234,7 @@ public class RenderItemFrame extends Render<EntityItemFrame>
                     WorldRenderer worldrenderer = tessellator.getWorldRenderer();
                     int i = fontrenderer.getStringWidth(s) / 2;
                     GlStateManager.disableTexture2D();
-                    worldrenderer.begin(7, DefaultVertexFormats.field_181706_f);
+                    worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
                     worldrenderer.pos((double)(-i - 1), -1.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
                     worldrenderer.pos((double)(-i - 1), 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
                     worldrenderer.pos((double)(i + 1), 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
