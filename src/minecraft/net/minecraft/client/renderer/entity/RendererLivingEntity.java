@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.scoreboard.ScorePlayerTeam;
@@ -569,7 +570,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
     public void renderName(T entity, double x, double y, double z) {
         if (!Reflector.RenderLivingEvent_Specials_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Specials_Pre_Constructor, new Object[]{entity, this, Double.valueOf(x), Double.valueOf(y), Double.valueOf(z)})) {
-            if(BlueZenith.moduleManager.getModule(NameTags.class).getState() && EntityManager.isTarget(entity) && Minecraft.getMinecraft().theWorld.loadedEntityList.contains(entity)){
+            if(BlueZenith.moduleManager.getModule(NameTags.class).getState() && EntityManager.isTarget(entity) && Minecraft.getMinecraft().theWorld.loadedEntityList.contains(entity) && !(entity instanceof EntityArmorStand)){
                 GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
                 GL11.glPushMatrix();
                 Minecraft mc = Minecraft.getMinecraft();

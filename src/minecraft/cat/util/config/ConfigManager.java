@@ -99,6 +99,7 @@ public final class ConfigManager {
                 writer.close();
             } catch(Exception ex) {
                 ClientUtils.getLogger().error("Failed to save keybinds!");
+                ex.printStackTrace();
             }
         }
 

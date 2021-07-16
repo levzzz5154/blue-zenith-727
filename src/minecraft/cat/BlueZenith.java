@@ -14,8 +14,8 @@ import net.arikia.dev.drpc.DiscordRichPresence;
 
 public class BlueZenith {
     public static String name = "BlueZenith";
-    //da real version //the real version is 7.27 smh
-    public static String version = "1.1";
+    //no men its 1.5 lmao :rofl:
+    public static String version = "1.5";
     public static EventManager eventManager;
     public static ModuleManager moduleManager;
     public static CommandManager commandManager;
@@ -33,8 +33,9 @@ public class BlueZenith {
         ClientUtils.getLogger().info("Loaded "+commandManager.commands.size()+" commands.");
         hook();
         ClientUtils.getLogger().info("Added a shutdown hook.");
-        ConfigManager.load("default", false, false);
-        ConfigManager.loadBinds();
+        // why load binds separately?
+        ConfigManager.load("default", true, false);
+        //ConfigManager.loadBinds();
         ClientUtils.getLogger().info("Loaded the default config and binds.");
         guiMain = new GuiMain();
         initRPC();

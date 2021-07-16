@@ -27,7 +27,7 @@ public class Aura extends Module {
     public boolean blockStatus = false;
     private final IntegerValue minCPS = new IntegerValue("1", "MinCPS", 15, 0, 20, 1, true, null);
     private final IntegerValue maxCPS = new IntegerValue("2", "MaxCPS", 7, 0, 20, 1, true, null);
-    private final FloatValue range = new FloatValue("3", "Range", 3f, 1f, 0.1f, 6f, true, null);
+    private final FloatValue range = new FloatValue("3", "Range", 3f, 1f, 8f, 1f, true, null);
     private final IntegerValue hurtTime = new IntegerValue("4", "HurtTime", 10, 1, 10, 1, true, null);
     private final BoolValue swing = new BoolValue("5", "SwingItem",true, true, null);
     private final BoolValue silent = new BoolValue("6", "SilentRotations",true, true, null);

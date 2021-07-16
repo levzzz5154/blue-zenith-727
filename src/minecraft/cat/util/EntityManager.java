@@ -22,7 +22,7 @@ public class EntityManager extends MinecraftInstance{
         }
     }
     public static boolean isTarget(Entity ent){
-        return ent != mc.thePlayer && ((Targets.INVISIBLE.on && ent.isInvisible()) || (Targets.DEAD.on && !ent.isEntityAlive()) || ((Targets.MOBS.on && isMob(ent)) || (Targets.PLAYERS.on && ent instanceof EntityPlayer) || (Targets.ANIMALS.on && isAnimal(ent))));
+        return ent != mc.thePlayer && ((Targets.INVISIBLE.on && ent.isInvisible()) || (Targets.DEAD.on || ent.isEntityAlive()) || ((Targets.MOBS.on && isMob(ent)) || (Targets.PLAYERS.on && ent instanceof EntityPlayer) || (Targets.ANIMALS.on && isAnimal(ent))));
     }
     public static boolean isAnimal(Entity ent){
         return ent instanceof EntitySheep || ent instanceof EntityCow || ent instanceof EntityPig

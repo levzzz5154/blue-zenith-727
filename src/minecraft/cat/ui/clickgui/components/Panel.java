@@ -102,7 +102,7 @@ public class Panel extends MinecraftInstance {
                         float w = width - 4;
                         final float a = x + w * (Math.max(value.min, Math.min(value.get(), value.max)) - value.min) / (value.max - value.min);
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        mc.fontRendererObj.drawString(value.name + ": " + value.get(), x + 4, y1 + h / 2f - 8f, Color.WHITE.getRGB());
+                        mc.fontRendererObj.drawString(value.name + ": " + value.get(), x + 4, y1 + h / 2f - 8f, main_color.getRGB());
                         RenderUtil.rect(x + 4, y1 + h / 2f + 4f, x + w, y1 + h / 2f + 6f, new Color(63, 65, 68));
                         RenderUtil.rect(x + 4, y1 + h / 2f + 4f, a, y1 + h / 2f + 6f, main_color);
 
