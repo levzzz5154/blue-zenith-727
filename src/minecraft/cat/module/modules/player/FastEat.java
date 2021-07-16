@@ -6,6 +6,8 @@ import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.FloatValue;
 import cat.module.value.types.ModeValue;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemFood;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class FastEat extends Module {
@@ -21,13 +23,13 @@ public class FastEat extends Module {
     public void onUpdate(UpdateEvent e) {
         switch (mode.get()) {
             case "Packet":
-                if (mc.thePlayer.isEating()) {
+                if (mc.thePlayer.isEating() && (mc.thePlayer.getItemInUse().getItem()instanceof ItemFood)) {
                     for (int i = 0; i < packet.get(); i++) {
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer());
                     }
                 }
             case "Timer":
-                if (mc.thePlayer.isEating()) {
+                if (mc.thePlayer.isEating() && (mc.thePlayer.getItemInUse().getItem()instanceof ItemFood))  {
                     mc.timer.timerSpeed = timer.get();
                 } else {
                     mc.timer.timerSpeed = 1;
