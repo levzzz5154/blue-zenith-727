@@ -28,12 +28,14 @@ public class FastEat extends Module {
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer());
                     }
                 }
+            break;
             case "Timer":
                 if (mc.thePlayer.isEating() && (mc.thePlayer.getItemInUse().getItem()instanceof ItemFood))  {
                     mc.timer.timerSpeed = timer.get();
                 } else {
                     mc.timer.timerSpeed = 1;
                 }
+            break;
         }
     }
 }
