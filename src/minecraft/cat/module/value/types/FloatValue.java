@@ -12,15 +12,15 @@ public final class FloatValue extends Value<Float> {
     public Float min;
     public final float increment;
 
-    public FloatValue(String id, String valueName, float value, float min, float max, float increment, boolean visible, Predicate<Float> modifier) {
-        super(id, valueName, value, visible, null, modifier);
+    public FloatValue(String valueName, float value, float min, float max, float increment, boolean visible, Predicate<Float> modifier) {
+        super(valueName, value, visible, null, modifier);
         this.max = max;
         this.min = min;
         this.increment = increment;
     }
 
-    public FloatValue(String id, String valueName, Float value, Float min, Float max, float increment, boolean visible, ValueConsumer<Float> consumer, Predicate<Float> modifier) {
-        super(id, valueName, value, visible, consumer, modifier);
+    public FloatValue(String valueName, Float value, Float min, Float max, float increment, boolean visible, ValueConsumer<Float> consumer, Predicate<Float> modifier) {
+        super(valueName, value, visible, consumer, modifier);
         this.max = max;
         this.min = min;
         this.increment = increment;

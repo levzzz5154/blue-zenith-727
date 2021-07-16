@@ -6,9 +6,7 @@ import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.BoolValue;
-import cat.module.value.types.FloatValue;
 import cat.module.value.types.IntegerValue;
-import cat.util.RenderUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -17,10 +15,10 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class HUD extends Module {
-    BoolValue shadow = new BoolValue("1", "FontShadow", true, true, null);
-    BoolValue icame = new BoolValue("1", "Border", true, true, null);
-    IntegerValue backgroundOpacity = new IntegerValue("3", "BackgroundOpacity", 50, 0, 255, 1, true, null);
-    IntegerValue margin = new IntegerValue("4", "Margin", 10, 0, 15, 1, true, null);
+    BoolValue shadow = new BoolValue("FontShadow", true, true, null);
+    BoolValue icame = new BoolValue("Border", true, true, null);
+    IntegerValue backgroundOpacity = new IntegerValue("BackgroundOpacity", 50, 0, 255, 1, true, null);
+    IntegerValue margin = new IntegerValue("Margin", 10, 0, 15, 1, true, null);
     ArrayList<Module> modules = new ArrayList<>();
     public HUD() {
         super("HUD", "", ModuleCategory.RENDER);

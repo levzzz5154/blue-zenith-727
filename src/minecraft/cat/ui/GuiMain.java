@@ -33,6 +33,7 @@ public class GuiMain extends GuiScreen {
         FontRenderer font = mc.fontRendererObj;
         float scale = 5;
         float j = this.height / 3.5f + 48;
+        font.drawString(BlueZenith.connection.username + " - " + BlueZenith.connection.status, 10, 10, -1, true);
         GlStateManager.translate(sc.getScaledWidth() / 2f - (font.getStringWidth("BlueZenith") * scale / 2f), j - 48 - font.FONT_HEIGHT, 1);
         GlStateManager.scale(scale,scale,1);
         char[] gd = BlueZenith.name.toCharArray();

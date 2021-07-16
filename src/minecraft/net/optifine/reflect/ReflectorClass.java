@@ -1,7 +1,5 @@
 package net.optifine.reflect;
 
-import net.minecraft.src.Config;
-
 public class ReflectorClass
 {
     private String targetClassName;
@@ -45,19 +43,6 @@ public class ReflectorClass
         else
         {
             this.checked = true;
-
-            try
-            {
-                this.targetClass = Class.forName(this.targetClassName);
-            }
-            catch (ClassNotFoundException var2)
-            {
-                Config.log("(Reflector) Class not present: " + this.targetClassName);
-            }
-            catch (Throwable throwable)
-            {
-                throwable.printStackTrace();
-            }
 
             return this.targetClass;
         }

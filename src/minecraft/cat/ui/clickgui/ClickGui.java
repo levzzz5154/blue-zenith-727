@@ -58,7 +58,7 @@ public class ClickGui extends GuiScreen {
         x += this.misc.width + 6;
         this.movement = new Panel(x, 20, ModuleCategory.MOVEMENT, movement.toArray(new Module[0]));
         x += this.movement.width + 6;
-        this.player = new Panel(x, 20, ModuleCategory.RENDER, player.toArray(new Module[0]));
+        this.player = new Panel(x, 20, ModuleCategory.PLAYER, player.toArray(new Module[0]));
         x += this.player.width + 6;
         this.render = new Panel(x, 20,ModuleCategory.RENDER, render.toArray(new Module[0]));
         panels = new Panel[]{this.combat, this.misc, this.movement, this.player, this.render};

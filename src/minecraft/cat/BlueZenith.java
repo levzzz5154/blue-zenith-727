@@ -1,14 +1,19 @@
 package cat;
 
+import cat.client.ConfigManager;
+import cat.client.Connection;
 import cat.command.CommandManager;
 import cat.events.EventManager;
 import cat.module.ModuleManager;
 import cat.ui.GuiMain;
 import cat.util.ClientUtils;
-import cat.util.config.ConfigManager;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
+import net.minecraft.client.gui.GuiScreen;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BlueZenith {
     public static String name = "BlueZenith";
@@ -17,11 +22,14 @@ public class BlueZenith {
     public static EventManager eventManager;
     public static ModuleManager moduleManager;
     public static CommandManager commandManager;
-    public static GuiMain guiMain;
+    public static GuiScreen guiMain;
     private static final String applicationID = "865299936043073547";
+    public static ExecutorService executorService;
     private static DiscordRichPresence rpc;
+    public static Connection connection;
 
     public static void start(){
+        executorService = Executors.newSingleThreadExecutor();
         ClientUtils.getLogger().info("Starting BlueZenith b"+version);
         eventManager = new EventManager();
         ClientUtils.getLogger().info("Started event manager.");
@@ -34,10 +42,14 @@ public class BlueZenith {
         ConfigManager.load("default", false, false);
         ConfigManager.loadBinds();
         ClientUtils.getLogger().info("Loaded the default config and binds.");
-        guiMain = new GuiMain();
         initRPC();
-        //startup();
+        ClientUtils.getLogger().info("Initialized Discord RPC!");
+        connection = new Connection();
+        connection.authenticate();
+        ClientUtils.getLogger().info("Attempted connecting to the server.");
+        guiMain = new GuiMain();
         ClientUtils.getLogger().info("Finished Starting!");
+
     }
 
     private static void hook() {
@@ -45,7 +57,6 @@ public class BlueZenith {
             eventManager.shutdown();
             ConfigManager.save("default");
             ConfigManager.saveBinds();
-            DiscordRPC.discordShutdown();
         }));
     }
 
