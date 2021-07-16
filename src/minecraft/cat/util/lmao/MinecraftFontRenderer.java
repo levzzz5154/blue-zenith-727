@@ -19,7 +19,7 @@ public class MinecraftFontRenderer extends CFont {
 
     public static MinecraftFontRenderer createFontRenderer(Font font) {
         MinecraftFontRenderer c = new MinecraftFontRenderer(font, true, true);
-        c.FONT_HEIGHT = (int) (c.getHeight() * 1.3f);
+        c.FONT_HEIGHT = (int) (c.getHeight());
         return c;
     }
 

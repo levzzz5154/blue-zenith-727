@@ -34,7 +34,7 @@ public class Panel extends MinecraftInstance {
     boolean showModules;
     ClickGUI click = (ClickGUI) BlueZenith.moduleManager.getModule(ClickGUI.class);
     public Panel(float x, float y, ModuleCategory category){
-        f = FontUtil.fontSFLight42;
+        f = FontUtil.fontSFLight35;
         this.category = category;
         this.modules = new ArrayList<>();
         this.x = x;
@@ -85,6 +85,8 @@ public class Panel extends MinecraftInstance {
                     float w = width;
                     Color settingsColor = backgroundColor.brighter();
                     float h = f.FONT_HEIGHT + 8;
+                    float y1r = y1;
+                    float y2r = y1 + h;
                     if(v instanceof ModeValue) {
                         ModeValue val = (ModeValue) v;
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
@@ -104,11 +106,11 @@ public class Panel extends MinecraftInstance {
                         FloatValue value = (FloatValue) v;
                         final float a = x + w * (Math.max(value.min, Math.min(value.get(), value.max)) - value.min) / (value.max - value.min);
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        RenderUtil.rect(x, y1 + 1f, x + w, y1 + h - 1f, new Color(63, 65, 68));
-                        RenderUtil.rect(x, y1 + 1f, a, y1 + h - 1f, main_color.darker().darker());
+                        RenderUtil.rect(x, y1r, x + w, y2r, new Color(63, 65, 68));
+                        RenderUtil.rect(x, y1r, a, y2r, main_color.darker().darker());
                         f.drawString(value.name + ": " + value.get(), x + 4, y1 + (h / 2f - f.FONT_HEIGHT / 2f), main_color.getRGB());
 
-                        if (Mouse.isButtonDown(0) && ((i(mouseX, mouseY, x, y1 + h / 2f + 5f, x + w, y1 + h / 2f + 6f) && sliderVal == null) || sliderVal == v)) {
+                        if (Mouse.isButtonDown(0) && ((i(mouseX, mouseY, x, y1r, x + w, y2r) && sliderVal == null) || sliderVal == v)) {
                             sliderVal = v;
                             double i = MathHelper.clamp_double(((double) mouseX - (double) x) / ((double) w - 3), 0, 1);
 
@@ -124,11 +126,11 @@ public class Panel extends MinecraftInstance {
                         IntegerValue value = (IntegerValue) v;
                         final float a = x + w * (Math.max(value.min, Math.min(value.get(), value.max)) - value.min) / (value.max - value.min);
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        RenderUtil.rect(x, y1 + 0.75f, x + w, y1 + h - 0.75f, new Color(63, 65, 68));
-                        RenderUtil.rect(x, y1 + 0.75f, a, y1 + h - 0.75f, main_color.darker().darker());
+                        RenderUtil.rect(x, y1r, x + w, y2r, new Color(63, 65, 68));
+                        RenderUtil.rect(x, y1r, a, y2r, main_color.darker().darker());
                         f.drawString(value.name + ": " + value.get(), x + 4, y1 + h / 2f - f.FONT_HEIGHT / 2f, main_color.getRGB());
 
-                        if (Mouse.isButtonDown(0) && ((i(mouseX, mouseY, x, y1 + h / 2f + 5f, x + w, y1 + h / 2f + 6f) && sliderVal == null) || sliderVal == v)) {
+                        if (Mouse.isButtonDown(0) && ((i(mouseX, mouseY, x, y1r, x + w, y2r) && sliderVal == null) || sliderVal == v)) {
                             sliderVal = v;
                             double i = MathHelper.clamp_double(((double) mouseX - (double) x) / ((double) w - 3), 0, 1);
 

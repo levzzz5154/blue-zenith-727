@@ -29,13 +29,14 @@ public class GuiMain extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks){
         ScaledResolution sc = new ScaledResolution(mc);
         RenderUtil.drawImage(bg, 0, 0, this.width, this.height, 1);
+        drawGradientRect(0,0, this.width, this.height, new Color(0,0,0, 50).getRGB(), new Color(0,0,255,50).getRGB());
         GlStateManager.pushMatrix();
         FontRenderer font = mc.fontRendererObj;
         float scale = 5;
         float j = this.height / 3.5f + 48;
-        GlStateManager.translate(sc.getScaledWidth() / 2f - (font.getStringWidth("BlueZenith") * scale / 2f), j - 48 - font.FONT_HEIGHT, 1);
+        GlStateManager.translate(sc.getScaledWidth() / 2f - (font.getStringWidth("hamburger") * scale / 2f), j - 48 - font.FONT_HEIGHT, 1);
         GlStateManager.scale(scale,scale,1);
-        char[] gd = BlueZenith.name.toCharArray();
+        char[] gd = "hamburger".toCharArray();
         float v = 0;
         int n = 0;
         for (char c : gd) {

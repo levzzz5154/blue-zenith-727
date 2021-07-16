@@ -25,6 +25,6 @@ public class FontUtil {
 
 	public static FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
 	public static FontRenderer fontSFLight50 = MinecraftFontRenderer.createFontRenderer(getJelloFont(25,false));
-	//public static FontRenderer fontSFLight42 = MinecraftFontRenderer.createFontRenderer(getJelloFont(20.5f,false));
-	public static FontRenderer fontSFLight42 = MinecraftFontRenderer.createFontRenderer(getJelloFont(18,false));
+	public static FontRenderer fontSFLight42 = MinecraftFontRenderer.createFontRenderer(getJelloFont(20.5f,false));
+	public static FontRenderer fontSFLight35 = MinecraftFontRenderer.createFontRenderer(getJelloFont(18,false));
 }

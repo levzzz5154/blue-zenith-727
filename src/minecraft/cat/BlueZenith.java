@@ -11,6 +11,12 @@ import cat.util.config.ConfigManager;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
+import net.minecraft.client.Minecraft;
+import org.apache.commons.codec.digest.DigestUtils;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.security.MessageDigest;
 
 public class BlueZenith {
     //test commit

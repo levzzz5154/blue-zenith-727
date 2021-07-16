@@ -6,13 +6,12 @@ import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.BoolValue;
-import cat.module.value.types.FloatValue;
 import cat.module.value.types.IntegerValue;
-import cat.util.RenderUtil;
 import cat.util.lmao.FontUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -69,6 +68,7 @@ public class HUD extends Module {
             font.drawString(m.getTagName(), sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - (mar / 2f), y + (increment / 2f - font.FONT_HEIGHT / 2f), c.getRGB(), shadow.get());
             y += increment;
         }
+        GlStateManager.resetColor();
     }
     public static Color hi(final Color color, final Color color2, double delay) {
         if (delay > 1.0) {

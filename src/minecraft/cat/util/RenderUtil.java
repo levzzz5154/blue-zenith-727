@@ -24,8 +24,8 @@ public class RenderUtil extends MinecraftInstance {
         glEnable(GL_DEPTH_TEST);
     }
     public static void rect(final float x, final float y, final float x2, final float y2, final Color color) {
-        // fuck open gl
         Gui.drawRect(x,y,x2,y2,color.getRGB());
+        GlStateManager.resetColor();
     }
     public static void glColor(final Color color) {
         final float red = color.getRed() / 255F;
