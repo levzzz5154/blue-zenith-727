@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 
 public abstract class Value<T> {
     public final String name;
-    public T value;
+    protected T value;
     private boolean visible;
     protected final ValueConsumer<T> consumer;
     protected final Predicate<T> modifier;

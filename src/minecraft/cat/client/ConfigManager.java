@@ -4,10 +4,6 @@ import cat.BlueZenith;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.Value;
-import cat.module.value.types.BoolValue;
-import cat.module.value.types.FloatValue;
-import cat.module.value.types.IntegerValue;
-import cat.module.value.types.ModeValue;
 import cat.util.ClientUtils;
 import cat.util.FileUtil;
 import com.google.gson.*;
@@ -60,25 +56,24 @@ public final class ConfigManager {
                     if(ignoreRender && module.getCategory().equals(ModuleCategory.RENDER)) {
                         return;
                     }
-                    if(settings.getKey().equals("toggled")) {
-                        module.setState(settings.getValue().getAsBoolean());
-                    } else if(settings.getKey().equals("displayName")) {
-                        module.displayName = settings.getValue().getAsString();
-                    } else if(changeBinds && settings.getKey().equals("keybind")) {
-                        module.keyBind = settings.getValue().getAsInt();
-                    }
-                    else {
-                        Value val = module.getValue(settings.getKey());
-                        if(val == null) return;
-                        if(val instanceof BoolValue) {
-                            val.set(settings.getValue().getAsBoolean());
-                        } else if(val instanceof FloatValue) {
-                            val.set(settings.getValue().getAsFloat());
-                        } else if(val instanceof IntegerValue) {
-                            val.set(settings.getValue().getAsInt());
-                        } else if(val instanceof ModeValue) {
-                            val.set(settings.getValue().getAsString());
-                        }
+                    switch(settings.getKey()) {
+                        case "toggled":
+                            module.setState(settings.getValue().getAsBoolean());
+                        break;
+
+                        case "displayName":
+                            module.displayName = settings.getValue().getAsString();
+                        break;
+
+                        case "keybind":
+                            module.keyBind = settings.getValue().getAsInt();
+                        break;
+
+                        default:
+                            Value<?> val = module.getValue(settings.getKey());
+                            if(val == null) return;
+                            val.fromPrimitive(settings.getValue().getAsJsonPrimitive());
+                        break;
                     }
                 });
             });

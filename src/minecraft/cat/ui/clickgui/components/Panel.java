@@ -91,7 +91,7 @@ public class Panel extends MinecraftInstance {
                         ModeValue val = (ModeValue) v;
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
                         f.drawString(val.name, x + 5, y1 + h / 2f - f.FONT_HEIGHT / 2f, main_color.getRGB());
-                        f.drawString(val.value, x + 10 + f.getStringWidth(val.name), y1 + (h / 2f - f.FONT_HEIGHT / 2f), Color.GRAY.getRGB());
+                        f.drawString(val.get(), x + 10 + f.getStringWidth(val.name), y1 + (h / 2f - f.FONT_HEIGHT / 2f), Color.GRAY.getRGB());
                         if(i(mouseX, mouseY, x, y1, x + width, y1 + h) && !m.wasPressed()) {
                             if(Mouse.isButtonDown(0)) {
                                 val.next();
@@ -145,7 +145,7 @@ public class Panel extends MinecraftInstance {
                     } else if (v instanceof BoolValue) {
                         BoolValue val = (BoolValue) v;
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        f.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), val.value ? main_color.getRGB() : main_color.darker().darker().getRGB());
+                        f.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), val.get() ? main_color.getRGB() : main_color.darker().darker().getRGB());
                         if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !m.wasPressed()) {
                             val.next();
                             mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
