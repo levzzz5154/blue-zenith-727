@@ -15,8 +15,8 @@ import org.lwjgl.input.Keyboard;
 
 @SuppressWarnings("unused")
 public class Flight extends Module {
-    private final ModeValue mode = new ModeValue("flight_mode", "Mode", "Vanilla", true, null, "Vanilla", "OldVerus");
-    private final FloatValue speed = new FloatValue("1", "Speed", 2f, 0f, 5f, 0.1f, true, __ -> mode.get().equals("Vanilla")); //example of a visibility modifier
+    private final ModeValue mode = new ModeValue("Mode", "Vanilla", true, null, "Vanilla", "OldVerus");
+    private final FloatValue speed = new FloatValue("Speed", 2f, 0f, 5f, 0.1f, true, __ -> mode.get().equals("Vanilla")); //example of a visibility modifier
     public Flight() {
         super("Flight", "", ModuleCategory.MOVEMENT, Keyboard.KEY_F);
     }

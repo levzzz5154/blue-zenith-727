@@ -18,7 +18,7 @@ import java.nio.file.Files;
 @SuppressWarnings("unused")
 public class CustomCape extends Module {
     ResourceLocation d = null;
-    BoolValue selectCape = new BoolValue("1", "SelectCape", false, true, (oldValue, newValue) -> {
+    BoolValue selectCape = new BoolValue("SelectCape", false, true, (oldValue, newValue) -> {
         if(newValue){
             File temp = ClientUtils.openFileChooser(null, new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.jpeg"));
             if(temp == null || !temp.exists()){

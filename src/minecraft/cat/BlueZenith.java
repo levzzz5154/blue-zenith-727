@@ -1,5 +1,7 @@
 package cat;
 
+import cat.client.ConfigManager;
+import cat.client.Connection;
 import cat.command.CommandManager;
 import cat.events.EventManager;
 import cat.module.ModuleManager;
@@ -7,16 +9,12 @@ import cat.module.modules.render.ClickGUI;
 import cat.ui.GuiMain;
 import cat.ui.clickgui.ClickGui;
 import cat.util.ClientUtils;
-import cat.util.config.ConfigManager;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
-import net.minecraft.client.Minecraft;
-import org.apache.commons.codec.digest.DigestUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.security.MessageDigest;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BlueZenith {
     //test commit
@@ -27,6 +25,8 @@ public class BlueZenith {
     public static ModuleManager moduleManager;
     public static CommandManager commandManager;
     public static GuiMain guiMain;
+    public static Connection connection;
+    public static ExecutorService executorService = Executors.newSingleThreadExecutor();
     private static final String applicationID = "865299936043073547";
     private static DiscordRichPresence rpc;
 
@@ -40,10 +40,11 @@ public class BlueZenith {
         ClientUtils.getLogger().info("Loaded "+commandManager.commands.size()+" commands.");
         hook();
         ClientUtils.getLogger().info("Added a shutdown hook.");
-        // why load binds separately?
-        ConfigManager.load("default", true, false);
-        //ConfigManager.loadBinds();
+        ConfigManager.load("default", false, false);
+        ConfigManager.loadBinds();
         ClientUtils.getLogger().info("Loaded the default config and binds.");
+        connection = new Connection();
+        connection.authenticate();
         guiMain = new GuiMain();
         initRPC();
         //startup();

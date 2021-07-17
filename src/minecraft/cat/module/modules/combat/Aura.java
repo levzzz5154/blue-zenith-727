@@ -11,7 +11,6 @@ import cat.module.value.types.IntegerValue;
 import cat.util.ClientUtils;
 import cat.util.EntityManager;
 import cat.util.MillisTimer;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
@@ -19,21 +18,20 @@ import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C09PacketHeldItemChange;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.*;
 import org.lwjgl.input.Keyboard;
 
 public class Aura extends Module {
     public boolean blockStatus = false;
-    private final IntegerValue minCPS = new IntegerValue("1", "MinCPS", 15, 0, 20, 1, true, null);
-    private final IntegerValue maxCPS = new IntegerValue("2", "MaxCPS", 7, 0, 20, 1, true, null);
-    private final FloatValue range = new FloatValue("3", "Range", 3f, 1f, 8f, 1f, true, null);
-    private final IntegerValue hurtTime = new IntegerValue("4", "HurtTime", 10, 1, 10, 1, true, null);
-    private final BoolValue swing = new BoolValue("5", "SwingItem",true, true, null);
-    private final BoolValue silent = new BoolValue("6", "SilentRotations",true, true, null);
-    private final BoolValue rotations = new BoolValue("6", "Rotations",true, true, null);
-    private final BoolValue autoBlock = new BoolValue("7", "AutoBlock",true, true, null);
-    private final BoolValue vanillaAutoBlock = new BoolValue("7", "VanillaAutoBlock",true, true, null);
+    private final IntegerValue minCPS = new IntegerValue("MinCPS", 15, 0, 20, 1, true, null);
+    private final IntegerValue maxCPS = new IntegerValue("MaxCPS", 7, 0, 20, 1, true, null);
+    private final FloatValue range = new FloatValue("Range", 3f, 1f, 8f, 1f, true, null);
+    private final IntegerValue hurtTime = new IntegerValue( "HurtTime", 10, 1, 10, 1, true, null);
+    private final BoolValue swing = new BoolValue( "SwingItem",true, true, null);
+    private final BoolValue silent = new BoolValue("SilentRotations",true, true, null);
+    private final BoolValue rotations = new BoolValue("Rotations",true, true, null);
+    private final BoolValue autoBlock = new BoolValue( "AutoBlock",true, true, null);
+    private final BoolValue vanillaAutoBlock = new BoolValue( "VanillaAutoBlock",true, true, null);
     public Aura() {
         super("Aura", "", ModuleCategory.COMBAT, Keyboard.KEY_R, "aura", "ka", "killaura");
     }

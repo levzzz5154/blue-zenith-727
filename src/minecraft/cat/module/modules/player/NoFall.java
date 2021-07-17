@@ -2,17 +2,14 @@ package cat.module.modules.player;
 
 import cat.events.Subscriber;
 import cat.events.impl.BlockBBEvent;
-import cat.events.impl.PacketEvent;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.ModeValue;
-import net.minecraft.network.EnumPacketDirection;
-import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.AxisAlignedBB;
 
 public class NoFall extends Module {
-    private final ModeValue mode = new ModeValue("1", "Mode", "Edit", true, null, "Edit", "Verus");
+    private final ModeValue mode = new ModeValue("Mode", "Edit", true, null, "Edit", "Verus");
     public NoFall(){
         super("NoFall", "", ModuleCategory.PLAYER, "NoFall");
     }

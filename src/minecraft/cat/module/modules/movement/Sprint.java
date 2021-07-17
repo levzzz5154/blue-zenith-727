@@ -4,8 +4,7 @@ import cat.events.Subscriber;
 import cat.events.impl.UpdateEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
-import cat.module.value.types.BoolValue;
-import cat.module.value.types.ModeValue;
+import cat.util.MillisTimer;
 import cat.util.MovementUtil;
 
 @SuppressWarnings("unused")
@@ -13,6 +12,8 @@ public class Sprint extends Module {
     public Sprint() {
         super("Sprint", "", ModuleCategory.MOVEMENT, "Sprint");
     }
+
+    private final MillisTimer timer = new MillisTimer();
 
     @Subscriber
     public void onUpdate(UpdateEvent e) {

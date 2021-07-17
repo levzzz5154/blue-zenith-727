@@ -10,15 +10,15 @@ import java.util.function.Predicate;
 public final class IntegerValue extends Value<Integer> {
     public Integer max, min;
     public final int increment;
-    public IntegerValue(String id, String valueName, int value, int min, int max, int increment, boolean visible, ValueConsumer<Integer> consumer, Predicate<Integer> modifier) {
-        super(id, valueName, value, visible, consumer, modifier);
+    public IntegerValue(String valueName, int value, int min, int max, int increment, boolean visible, ValueConsumer<Integer> consumer, Predicate<Integer> modifier) {
+        super(valueName, value, visible, consumer, modifier);
         this.max = max;
         this.min = min;
         this.increment = increment;
     }
 
-    public IntegerValue(String id, String valueName, int value, int min, int max, int increment, boolean visible, Predicate<Integer> modifier) {
-        super(id, valueName, value, visible, null, modifier);
+    public IntegerValue(String valueName, int value, int min, int max, int increment, boolean visible, Predicate<Integer> modifier) {
+        super(valueName, value, visible, null, modifier);
         this.max = max;
         this.min = min;
         this.increment = increment;

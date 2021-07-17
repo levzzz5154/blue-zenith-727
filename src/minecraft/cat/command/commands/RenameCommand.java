@@ -28,7 +28,7 @@ public class RenameCommand extends Command {
                 mod.displayName = mod.getName();
                 chat("Reset name for " + mod.getName() + "!");
             } else {
-              mod.displayName = args[2].replaceAll("_", " ");
+              mod.displayName = args[2].replaceAll("_", " ").replaceAll("&", "§");
               chat("Renamed " + mod.getName() + " to " + mod.displayName);
             }
         }

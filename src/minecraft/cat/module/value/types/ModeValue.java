@@ -12,12 +12,12 @@ import java.util.function.Predicate;
 public final class ModeValue extends Value<String> {
 
     private final ArrayList<String> range;
-    public ModeValue(String id, String valueName, String defaultValue, boolean visible, ValueConsumer<String> update, Predicate<String> visibility, String... range) {
-        super(id, valueName, defaultValue, visible, update, visibility);
+    public ModeValue(String valueName, String defaultValue, boolean visible, ValueConsumer<String> update, Predicate<String> visibility, String... range) {
+        super(valueName, defaultValue, visible, update, visibility);
         this.range = new ArrayList<>(Arrays.asList(range));
     }
-    public ModeValue(String id, String valueName, String defaultValue, boolean visible, Predicate<String> visibility, String... range) {
-        super(id, valueName, defaultValue, visible, null, visibility);
+    public ModeValue(String valueName, String defaultValue, boolean visible, Predicate<String> visibility, String... range) {
+        super(valueName, defaultValue, visible, null, visibility);
         this.range = new ArrayList<>(Arrays.asList(range));
     }
     @Override
@@ -25,6 +25,7 @@ public final class ModeValue extends Value<String> {
         return this.value;
     }
 
+    public boolean is(String other) { return this.value.equalsIgnoreCase(other); }
     @Override
     public void set(String newValue) {
         if(consumer != null) {

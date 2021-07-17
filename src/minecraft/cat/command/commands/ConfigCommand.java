@@ -1,7 +1,7 @@
 package cat.command.commands;
 
 import cat.command.Command;
-import cat.util.config.ConfigManager;
+import cat.client.ConfigManager;
 
 public final class ConfigCommand extends Command {
 
