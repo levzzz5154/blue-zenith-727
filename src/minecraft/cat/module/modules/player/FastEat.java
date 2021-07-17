@@ -6,14 +6,13 @@ import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.FloatValue;
 import cat.module.value.types.ModeValue;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemFood;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class FastEat extends Module {
-    private final ModeValue mode = new ModeValue("eat_mode", "Mode", "Packet", true, null, "Packet", "Timer");
-    private final FloatValue timer = new FloatValue("1", "Timer", 2f, 1.1f, 10f, 0.5f, true, __ -> mode.get().equals("Timer"));
-    private final FloatValue packet = new FloatValue("1", "Packet", 5f, 1f, 20f, 0.5f, true, __ -> mode.get().equals("Packet"));
+    private final ModeValue mode = new ModeValue("Mode", "Packet", true, null, "Packet", "Timer");
+    private final FloatValue timer = new FloatValue("Timer", 2f, 1.1f, 10f, 0.5f, true, __ -> mode.get().equals("Timer"));
+    private final FloatValue packet = new FloatValue("Packet", 5f, 1f, 20f, 0.5f, true, __ -> mode.get().equals("Packet"));
 
     public FastEat() {
         super("FastEat", "", ModuleCategory.PLAYER, "fasteat");

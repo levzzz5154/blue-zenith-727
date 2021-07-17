@@ -17,10 +17,10 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class HUD extends Module {
-    BoolValue shadow = new BoolValue("1", "FontShadow", true, true, null);
-    BoolValue icame = new BoolValue("1", "Border", true, true, null);
-    IntegerValue backgroundOpacity = new IntegerValue("3", "BackgroundOpacity", 50, 0, 255, 1, true, null);
-    IntegerValue margin = new IntegerValue("4", "Margin", 10, 0, 15, 1, true, null);
+    BoolValue shadow = new BoolValue("FontShadow", true, true, null);
+    BoolValue icame = new BoolValue("Border", true, true, null);
+    IntegerValue backgroundOpacity = new IntegerValue("BackgroundOpacity", 50, 0, 255, 1, true, null);
+    IntegerValue margin = new IntegerValue( "Margin", 10, 0, 15, 1, true, null);
     ArrayList<Module> modules = new ArrayList<>();
     public HUD() {
         super("HUD", "", ModuleCategory.RENDER);
