@@ -29,7 +29,7 @@ public class BlueZenith {
     public static ExecutorService executorService = Executors.newSingleThreadExecutor();
     private static final String applicationID = "865299936043073547";
     private static DiscordRichPresence rpc;
-
+ //h
     public static void start(){
         ClientUtils.getLogger().info("Starting BlueZenith b"+version);
         eventManager = new EventManager();
