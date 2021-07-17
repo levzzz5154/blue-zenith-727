@@ -10,8 +10,8 @@ import net.minecraft.network.play.client.C00PacketKeepAlive;
 import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
 
 public class AntiBan extends Module {
-    private final BoolValue confirm = new BoolValue("C0FPacketConfirmTransaction", true, true, null);
-    private final BoolValue keepalive = new BoolValue("C00PacketKeepAlive", false, true, null);
+    private final BoolValue confirm = new BoolValue("Cancel C0F", false, true, null);
+    private final BoolValue keepalive = new BoolValue("Cancel C00", false, true, null);
 
     public AntiBan() {
         super("AntiBan", "", ModuleCategory.MISC, "antiban");
