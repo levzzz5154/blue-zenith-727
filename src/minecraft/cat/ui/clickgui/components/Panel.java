@@ -5,10 +5,7 @@ import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.modules.render.ClickGUI;
 import cat.module.value.Value;
-import cat.module.value.types.BoolValue;
-import cat.module.value.types.FloatValue;
-import cat.module.value.types.IntegerValue;
-import cat.module.value.types.ModeValue;
+import cat.module.value.types.*;
 import cat.util.MinecraftInstance;
 import cat.util.RenderUtil;
 import cat.util.lmao.FontUtil;
@@ -16,12 +13,15 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.Sys;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Panel extends MinecraftInstance {
     ModuleCategory category;
@@ -31,7 +31,6 @@ public class Panel extends MinecraftInstance {
     public float x,y;
     public float prevX,prevY;
     private final FontRenderer f;
-    boolean showModules;
     ClickGUI click = (ClickGUI) BlueZenith.moduleManager.getModule(ClickGUI.class);
     public Panel(float x, float y, ModuleCategory category){
         f = FontUtil.fontSFLight35;
@@ -54,8 +53,10 @@ public class Panel extends MinecraftInstance {
     public void addModule(Module mod){
         this.modules.add(mod);
     }
+    float textFieldCounter = 0;
     Value<?> sliderVal = null;
-    public void drawPanel(int mouseX, int mouseY){
+    private boolean wasPressed = false;
+    public void drawPanel(int mouseX, int mouseY, float partialTicks){
         Color main_color = click.main_color;
         Color backgroundColor = click.backgroundColor;
 
@@ -64,7 +65,7 @@ public class Panel extends MinecraftInstance {
         float y1 = y + mHeight;
         for (Module m : modules) {
             List<Value<?>> vl = m.getValues();
-            if(i(mouseX, mouseY, x, y1, x + width, y1 + mHeight) && !m.wasPressed()){
+            if(i(mouseX, mouseY, x, y1, x + width, y1 + mHeight) && !wasPressed){
                 if(Mouse.isButtonDown(0)){
                     m.toggle();
                     mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
@@ -92,7 +93,7 @@ public class Panel extends MinecraftInstance {
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
                         f.drawString(val.name, x + 5, y1 + h / 2f - f.FONT_HEIGHT / 2f, main_color.getRGB());
                         f.drawString(val.get(), x + 10 + f.getStringWidth(val.name), y1 + (h / 2f - f.FONT_HEIGHT / 2f), Color.GRAY.getRGB());
-                        if(i(mouseX, mouseY, x, y1, x + width, y1 + h) && !m.wasPressed()) {
+                        if(i(mouseX, mouseY, x, y1, x + width, y1 + h) && !wasPressed) {
                             if(Mouse.isButtonDown(0)) {
                                 val.next();
                                 mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
@@ -142,11 +143,20 @@ public class Panel extends MinecraftInstance {
                         }
 
                         y1 += h;
+                    } else if (v instanceof StringValue) {
+                        StringValue val = (StringValue) v;
+                        RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
+                        f.drawString(val.name + ": "+val.get() + (selectedTextField != null && selectedTextField == val && textFieldCounter > partialTicks % 0.5 ? "_" : ""), x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), Color.WHITE.getRGB());
+                        if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0)) && !wasPressed) {
+                            this.selectedTextField = val;
+                            mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
+                        }
+                        y1 += h;
                     } else if (v instanceof BoolValue) {
                         BoolValue val = (BoolValue) v;
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
                         f.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), val.get() ? main_color.getRGB() : main_color.darker().darker().getRGB());
-                        if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !m.wasPressed()) {
+                        if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !wasPressed) {
                             val.next();
                             mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                         }
@@ -154,7 +164,33 @@ public class Panel extends MinecraftInstance {
                     }
                 }
             }
-            m.updatePressed();
+        }
+        textFieldCounter += 0.1;
+        textFieldCounter %= 1;
+        wasPressed = Mouse.isButtonDown(0) || Mouse.isButtonDown(1);
+    }
+    public float sigma(float v, float m, float mx){
+        return v % m % mx;
+    }
+    StringValue selectedTextField = null;
+    public void keyTyped(char charTyped, int keyCode){
+        if(selectedTextField == null || selectedTextField.get() == null){
+            if (keyCode == 1 && selectedTextField == null) {
+                mc.displayGuiScreen(null);
+
+                if (mc.currentScreen == null) {
+                    mc.setIngameFocus();
+                }
+            }
+            return;
+        }
+        String fieldText = selectedTextField.get();
+        if(keyCode == 14) {
+            selectedTextField.set(fieldText.substring(0, fieldText.length() > 0 ? fieldText.length() - 1 : 0));
+        }else if(keyCode == 28 || keyCode == Keyboard.KEY_ESCAPE){
+            selectedTextField = null;
+        }else if(!Character.isISOControl(charTyped)){
+            selectedTextField.set(fieldText + charTyped);
         }
     }
     public boolean i(int mouseX, int mouseY, float x, float y, float x2, float y2){

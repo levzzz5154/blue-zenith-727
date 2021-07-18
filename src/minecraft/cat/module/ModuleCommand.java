@@ -2,10 +2,7 @@ package cat.module;
 
 import cat.command.Command;
 import cat.module.value.Value;
-import cat.module.value.types.BoolValue;
-import cat.module.value.types.FloatValue;
-import cat.module.value.types.IntegerValue;
-import cat.module.value.types.ModeValue;
+import cat.module.value.types.*;
 
 import java.util.regex.Pattern;
 
@@ -34,11 +31,16 @@ public class ModuleCommand extends Command {
                     String result = v.find(args[2]);
                     if(result != null) {
                         v.set(result);
+                        changedSound();
                     } else {
                         chat("Illegal argument: " + args[2] + " is not in the " + value.name + " possible values range.");
                     }
-                }
-                if(!Pattern.matches("[a-zA-Z]+", args[2])){
+                }else if(value instanceof StringValue){
+                    StringValue v = (StringValue) value;
+                    v.set(args[2]);
+                    chat("Set "+v.name+" to "+v.get());
+                    changedSound();
+                }else if(!Pattern.matches("[a-zA-Z]+", args[2])){
                     if(value instanceof FloatValue){
                         FloatValue v = (FloatValue) value;
                         v.set(Float.parseFloat(args[2]));

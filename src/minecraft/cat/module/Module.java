@@ -18,7 +18,6 @@ public class Module {
     private boolean state;
     public int keyBind;
     public boolean showSettings;
-    private boolean wasPressed;
     public final String[] aliases;
     private final List<Value<?>> values = new ArrayList<>();
     public Module(String name, String tag, ModuleCategory cat, String... aliases){
@@ -98,11 +97,5 @@ public class Module {
             }
         }
         return null;
-    }
-    public boolean wasPressed(){
-        return wasPressed;
-    }
-    public void updatePressed(){
-        wasPressed = Mouse.isButtonDown(0) || Mouse.isButtonDown(1);
     }
 }

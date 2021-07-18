@@ -10,6 +10,7 @@ import cat.util.RenderUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
@@ -37,7 +38,7 @@ public class ClickGui extends GuiScreen {
         FontRenderer f = mc.fontRendererObj;
         ClickGUI click = (ClickGUI) BlueZenith.moduleManager.getModule(ClickGUI.class);
         for (Panel p : panels) {
-            p.drawPanel(mouseX, mouseY);
+            p.drawPanel(mouseX, mouseY, partialTicks);
             boolean n = i(mouseX, mouseY,p.x, p.y, p.x+p.width, p.y + f.FONT_HEIGHT + 16) && selectedPanel == null;
             if(Mouse.isButtonDown(0) && (n || selectedPanel == p)){
                 if(!mousePressed){
@@ -50,6 +51,7 @@ public class ClickGui extends GuiScreen {
             }else if(selectedPanel == p){
                 selectedPanel = null;
             }
+            GlStateManager.resetColor();
         }
         float w = 120;
         float h = 125;
@@ -71,6 +73,11 @@ public class ClickGui extends GuiScreen {
     }
     public boolean i(int mouseX, int mouseY, float x, float y, float x2, float y2){
         return mouseX >= x && mouseY >= y && mouseX <= x2 && mouseY <= y2;
+    }
+    protected void keyTyped(char typedChar, int keyCode){
+        for (Panel p : panels) {
+            p.keyTyped(typedChar, keyCode);
+        }
     }
     public void onGuiClosed(){
         BlueZenith.moduleManager.getModule(ClickGUI.class).setState(false);
