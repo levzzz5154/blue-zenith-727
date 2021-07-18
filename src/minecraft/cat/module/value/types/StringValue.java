@@ -12,6 +12,10 @@ public class StringValue extends Value<String> {
         super(valueName, value, visible, consumer, modifier);
     }
 
+    public StringValue(String valueName, String value, boolean visible, Predicate<String> modifier) {
+        super(valueName, value, visible, null, modifier);
+    }
+
     @Override
     public String get() {
         return value;

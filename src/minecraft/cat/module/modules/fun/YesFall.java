@@ -1,13 +1,13 @@
 package cat.module.modules.fun;
 
 import cat.events.Subscriber;
-import cat.events.impl.MoveEvent;
-import cat.events.impl.PacketEvent;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
+import cat.util.PacketUtil;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
+@SuppressWarnings("unused")
 public class YesFall extends Module {
     // lmao thx levzzz for the idea
     public YesFall(){
@@ -16,9 +16,10 @@ public class YesFall extends Module {
 
     @Subscriber
     public void onMove(UpdatePlayerEvent e){
-        if(mc.thePlayer.fallDistance >= 3){
+        if(Math.round(mc.thePlayer.fallDistance) % 3 == 0){
             // rip i couldn't make it :((( :cry:
-            e.y += 10;
+            //i am gaming :sunglasses:
+            PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + mc.thePlayer.fallDistance, mc.thePlayer.posZ, false));
         }
     }
 }

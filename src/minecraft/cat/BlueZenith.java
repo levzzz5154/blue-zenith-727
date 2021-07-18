@@ -15,6 +15,7 @@ import net.arikia.dev.drpc.DiscordRichPresence;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class BlueZenith {
     //test commit
@@ -27,6 +28,7 @@ public class BlueZenith {
     public static GuiMain guiMain;
     public static Connection connection;
     public static ExecutorService executorService = Executors.newSingleThreadExecutor();
+    public static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private static final String applicationID = "865299936043073547";
     private static DiscordRichPresence rpc;
  //h

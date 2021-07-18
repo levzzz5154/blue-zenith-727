@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ClickGui extends GuiScreen {
@@ -40,15 +41,16 @@ public class ClickGui extends GuiScreen {
         for (Panel p : panels) {
             p.drawPanel(mouseX, mouseY, partialTicks);
             boolean n = i(mouseX, mouseY,p.x, p.y, p.x+p.width, p.y + f.FONT_HEIGHT + 16) && selectedPanel == null;
-            if(Mouse.isButtonDown(0) && (n || selectedPanel == p)){
-                if(!mousePressed){
+            if(Mouse.isButtonDown(0) && (n || selectedPanel == p)) {
+                if (!mousePressed) {
                     p.prevX = (mouseX - p.x);
                     p.prevY = (mouseY - p.y);
                 }
                 selectedPanel = p;
                 p.x = mouseX - p.prevX;
                 p.y = mouseY - p.prevY;
-            }else if(selectedPanel == p){
+            }
+            else if(selectedPanel == p){
                 selectedPanel = null;
             }
             GlStateManager.resetColor();
@@ -57,7 +59,7 @@ public class ClickGui extends GuiScreen {
         float h = 125;
         float i = f.FONT_HEIGHT + 16;
         RenderUtil.rect(this.width - w - 2, this.height - h - i, this.width, this.height - h, click.main_color);
-        f.drawString("Targets", this.width - (w / 2f) + f.getStringWidth("Targets"), this.height - (i / 2f - f.FONT_HEIGHT / 2f), Color.WHITE.getRGB());
+        f.drawString("Targets", this.width - w - 2 + f.getStringWidth("Targets"), this.height - h - i + 7, Color.WHITE.getRGB());
         float y = this.height - h;
         for (EntityManager.Targets c : EntityManager.Targets.values()) {
             RenderUtil.rect(this.width - w, y, this.width - 2, y + i, click.backgroundColor);
@@ -79,6 +81,18 @@ public class ClickGui extends GuiScreen {
             p.keyTyped(typedChar, keyCode);
         }
     }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if(mouseButton != 1) return;
+        panels.forEach(p -> {
+            if(i(mouseX, mouseY,p.x, p.y, p.x+p.width, p.y + mc.fontRendererObj.FONT_HEIGHT + 16)) {
+                p.hidden = !p.hidden;
+            }
+        });
+
+    }
+
     public void onGuiClosed(){
         BlueZenith.moduleManager.getModule(ClickGUI.class).setState(false);
     }

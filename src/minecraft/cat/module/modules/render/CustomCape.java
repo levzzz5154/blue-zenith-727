@@ -2,7 +2,7 @@ package cat.module.modules.render;
 
 import cat.module.Module;
 import cat.module.ModuleCategory;
-import cat.module.value.types.BoolValue;
+import cat.module.value.types.BooleanValue;
 import cat.util.ClientUtils;
 import javafx.stage.FileChooser;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -18,7 +18,7 @@ import java.nio.file.Files;
 @SuppressWarnings("unused")
 public class CustomCape extends Module {
     ResourceLocation d = null;
-    BoolValue selectCape = new BoolValue("SelectCape", false, true, (oldValue, newValue) -> {
+    BooleanValue selectCape = new BooleanValue("SelectCape", false, true, (oldValue, newValue) -> {
         if(newValue){
             File temp = ClientUtils.openFileChooser(null, new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.jpeg"));
             if(temp == null || !temp.exists()){

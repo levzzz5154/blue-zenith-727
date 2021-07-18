@@ -28,6 +28,7 @@ public class Panel extends MinecraftInstance {
     float mHeight;
     public float x,y;
     public float prevX,prevY;
+    public boolean hidden = false;
     private final FontRenderer f;
     ClickGUI click = (ClickGUI) BlueZenith.moduleManager.getModule(ClickGUI.class);
     public Panel(float x, float y, ModuleCategory category){
@@ -59,9 +60,10 @@ public class Panel extends MinecraftInstance {
         Color backgroundColor = click.backgroundColor;
 
         RenderUtil.rect(x, y, x + width, y + mHeight, main_color);
-        f.drawString(category.displayName, x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
+        f.drawString(category.displayName, x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB(), true);
         float y1 = y + mHeight;
         for (Module m : modules) {
+            if(hidden) return;
             List<Value<?>> vl = m.getValues();
             if(i(mouseX, mouseY, x, y1, x + width, y1 + mHeight) && !wasPressed){
                 if(Mouse.isButtonDown(0)){
@@ -77,7 +79,7 @@ public class Panel extends MinecraftInstance {
             RenderUtil.rect(x, y1, x + width, y1 + mHeight, backgroundColor);
             f.drawString(m.getName(), x + 5, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), m.getState() ? main_color.getRGB() : main_color.darker().darker().getRGB());
             y1 += mHeight;
-            if(m.showSettings){
+            if(m.showSettings) {
                 for (Value<?> v : vl) {
                     //lmao i forgot this
                     if(!v.isVisible()) continue;
@@ -101,7 +103,7 @@ public class Panel extends MinecraftInstance {
                             }
                         }
                         y1 += h;
-                    }else if (v instanceof FloatValue) {
+                    } else if (v instanceof FloatValue) {
                         FloatValue value = (FloatValue) v;
                         final float a = x + w * (Math.max(value.min, Math.min(value.get(), value.max)) - value.min) / (value.max - value.min);
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
@@ -150,10 +152,13 @@ public class Panel extends MinecraftInstance {
                             mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                         }
                         y1 += h;
-                    } else if (v instanceof BoolValue) {
-                        BoolValue val = (BoolValue) v;
+                    } else if (v instanceof BooleanValue) {
+                        BooleanValue val = (BooleanValue) v;
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        f.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), val.get() ? main_color.getRGB() : main_color.darker().darker().getRGB());
+                        RenderUtil.rect(x + width - 14, y1 + 2f, x + width - 3.2f, y1 + h - 2f, new Color(60, 60, 60));
+                        if(val.get())
+                            RenderUtil.rect(x + width - 12.5f, y1 + 3.5f, x + width - 4.5f, y1 + h - 3.5f, main_color);
+                        f.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), main_color.getRGB());
                         if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !wasPressed) {
                             val.next();
                             mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));

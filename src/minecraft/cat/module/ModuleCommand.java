@@ -20,8 +20,8 @@ public class ModuleCommand extends Command {
                 chat("Invalid value!");
                 return;
             }
-            if (value instanceof BoolValue) {
-                BoolValue v = (BoolValue) value;
+            if (value instanceof BooleanValue) {
+                BooleanValue v = (BooleanValue) value;
                 v.next();
                 chat("Set "+v.name+" to "+v.get());
                 changedSound();

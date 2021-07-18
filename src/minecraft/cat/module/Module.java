@@ -3,7 +3,6 @@ package cat.module;
 import cat.BlueZenith;
 import cat.module.value.Value;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Mouse;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class Module {
     ModuleCategory category;
     private boolean state;
     public int keyBind;
-    public boolean showSettings;
+    public boolean showSettings, hidden;
     public final String[] aliases;
     private final List<Value<?>> values = new ArrayList<>();
     public Module(String name, String tag, ModuleCategory cat, String... aliases){

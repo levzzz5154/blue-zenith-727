@@ -17,19 +17,24 @@ public class RenameCommand extends Command {
             chat("Usage: <module> <new name>");
             return;
         }
-        Module mod = BlueZenith.moduleManager.getModule(args[1]);
-        if(mod == null) {
-            chat("Couldn't find that module!");
-            return;
-        }
-        if(args.length >= 3) {
+        if(args.length == 2) {
+            if(args[1].equalsIgnoreCase("reset")) {
+                BlueZenith.moduleManager.getModules().forEach(a -> a.displayName = a.getName());
+                chat("Reset all custom names!");
+            }
+        } else {
+            Module mod = BlueZenith.moduleManager.getModule(args[1]);
+            if (mod == null) {
+                chat("Couldn't find that module!");
+                return;
+            }
             String newName = args[2];
-            if(newName.equalsIgnoreCase("reset")) {
+            if (newName.equalsIgnoreCase("reset")) {
                 mod.displayName = mod.getName();
                 chat("Reset name for " + mod.getName() + "!");
             } else {
-              mod.displayName = args[2].replaceAll("_", " ").replaceAll("&", "§");
-              chat("Renamed " + mod.getName() + " to " + mod.displayName);
+                mod.displayName = args[2].replaceAll("_", " ").replaceAll("&", "§");
+                chat("Renamed " + mod.getName() + " to " + mod.displayName);
             }
         }
     }

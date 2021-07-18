@@ -5,7 +5,7 @@ import cat.events.Subscriber;
 import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
-import cat.module.value.types.BoolValue;
+import cat.module.value.types.BooleanValue;
 import cat.module.value.types.IntegerValue;
 import cat.util.lmao.FontUtil;
 import net.minecraft.client.gui.FontRenderer;
@@ -17,8 +17,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class HUD extends Module {
-    BoolValue shadow = new BoolValue("FontShadow", true, true, null);
-    BoolValue icame = new BoolValue("Border", true, true, null);
+    BooleanValue shadow = new BooleanValue("FontShadow", true, true, null);
+    BooleanValue icame = new BooleanValue("Border", true, true, null);
     IntegerValue backgroundOpacity = new IntegerValue("BackgroundOpacity", 50, 0, 255, 1, true, null);
     IntegerValue margin = new IntegerValue( "Margin", 10, 0, 15, 1, true, null);
     ArrayList<Module> modules = new ArrayList<>();
@@ -55,6 +55,7 @@ public class HUD extends Module {
         float y = 0;
         for (int i = 0; i < modules.size(); i++) {
             Module m = modules.get(i);
+            if(m.hidden) continue;
             Module burgir = modules.get(i > 0 ? i - 1 : i);
             Color c = hi(colorDark, color, Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * ((i * 2) + 2.55) / 60);
             Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar, y, sc.getScaledWidth(), y + increment, new Color(0,0,0,backgroundOpacity.get()).getRGB());

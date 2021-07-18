@@ -7,12 +7,12 @@ import com.google.gson.JsonPrimitive;
 
 import java.util.function.Predicate;
 
-public final class BoolValue extends Value<Boolean> {
-    public BoolValue(String valueName, Boolean value, boolean visible, Predicate<Boolean> modifier) {
+public final class BooleanValue extends Value<Boolean> {
+    public BooleanValue(String valueName, Boolean value, boolean visible, Predicate<Boolean> modifier) {
         super(valueName, value, visible, null, modifier);
     }
 
-    public BoolValue(String valueName, Boolean value, boolean visible, ValueConsumer<Boolean> consumer, Predicate<Boolean> modifier) {
+    public BooleanValue(String valueName, Boolean value, boolean visible, ValueConsumer<Boolean> consumer, Predicate<Boolean> modifier) {
         super(valueName, value, visible, consumer, modifier);
     }
 
