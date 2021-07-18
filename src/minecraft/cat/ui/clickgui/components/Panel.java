@@ -13,7 +13,6 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -21,7 +20,6 @@ import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class Panel extends MinecraftInstance {
     ModuleCategory category;
@@ -174,6 +172,7 @@ public class Panel extends MinecraftInstance {
     }
     StringValue selectedTextField = null;
     public void keyTyped(char charTyped, int keyCode){
+        Keyboard.enableRepeatEvents(true);
         if(selectedTextField == null || selectedTextField.get() == null){
             if (keyCode == 1 && selectedTextField == null) {
                 mc.displayGuiScreen(null);

@@ -2,14 +2,13 @@ package cat.events;
 
 import cat.BlueZenith;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class EventManager {
-    private final Map<Class, CopyOnWriteArrayList<Method>> listeners = new HashMap<>();
+    private final Map<Class, CopyOnWriteArrayList<Method>> listeners = new LinkedHashMap<>();
 
     /**
      * only use this when shutting down the client or ur fucked
@@ -37,19 +36,13 @@ public final class EventManager {
         listeners.values().forEach(list -> list.forEach(func -> list.removeIf(method -> method.getDeclaringClass() == listener.getClass())));
     }
 
+    private final CopyOnWriteArrayList<Method> empty = new CopyOnWriteArrayList<>();
     public void call(Event event) {
-        listeners.forEach((targetEvent, methods) -> {
-            if(targetEvent == event.getClass()){
-                for (Method m : methods) {
-                    m.setAccessible(true);
-                    try {
-                        m.invoke(BlueZenith.moduleManager.getModule(m.getDeclaringClass()), event);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-
-                    }
-                }
-            }
-        });
+        listeners.getOrDefault(event.getClass(), empty).forEach(a -> {
+            try {
+                a.invoke(BlueZenith.moduleManager.getModule(a.getDeclaringClass()), event);
+            } catch(Exception ex) { }
+            });
     }
 }
 

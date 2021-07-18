@@ -15,7 +15,7 @@ public class shabadadubalikeameboo extends Module {
     ModeValue test3 = new ModeValue("test3", "test", true, null, "test", "test1", "test2");
     // this breaks the config system :(
     StringValue test4 = new StringValue("test4", "sexy", true, null, null);
-    StringValue test5 = new StringValue("test4", "hamburger", true, null, null);
+    StringValue test5 = new StringValue("test5", "hamburger", true, null, null);
     public shabadadubalikeameboo(){
         super("test_module", "", ModuleCategory.FUN);
     }
