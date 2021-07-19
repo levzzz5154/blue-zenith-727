@@ -6,21 +6,12 @@ import cat.module.modules.render.Rotations;
 import cat.util.EntityManager;
 import cat.util.RenderUtil;
 import com.google.common.collect.Lists;
-
-import java.awt.*;
-import java.nio.FloatBuffer;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelSpider;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -40,6 +31,10 @@ import net.optifine.shaders.Shaders;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.nio.FloatBuffer;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glScalef;
@@ -116,7 +111,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
      */
     public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
         Rotations rt = (Rotations) BlueZenith.moduleManager.getModule(Rotations.class);
-        if (!Reflector.RenderLivingEvent_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Pre_Constructor, new Object[]{entity, this, Double.valueOf(x), Double.valueOf(y), Double.valueOf(z)})) {
+        if (!Reflector.RenderLivingEvent_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Pre_Constructor, entity, this, x, y, z)) {
             if (animateModelLiving) {
                 entity.limbSwingAmount = 1.0F;
             }
@@ -127,7 +122,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
             this.mainModel.isRiding = entity.isRiding();
 
             if (Reflector.ForgeEntity_shouldRiderSit.exists()) {
-                this.mainModel.isRiding = entity.isRiding() && entity.ridingEntity != null && Reflector.callBoolean(entity.ridingEntity, Reflector.ForgeEntity_shouldRiderSit, new Object[0]);
+                this.mainModel.isRiding = entity.isRiding() && entity.ridingEntity != null && Reflector.callBoolean(entity.ridingEntity, Reflector.ForgeEntity_shouldRiderSit);
             }
 
             this.mainModel.isChild = entity.isChild();

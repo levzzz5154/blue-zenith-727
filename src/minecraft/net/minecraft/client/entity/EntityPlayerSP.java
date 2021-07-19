@@ -1,6 +1,8 @@
 package net.minecraft.client.entity;
 
 import cat.BlueZenith;
+import cat.events.EventType;
+import cat.events.impl.SlowdownEvent;
 import cat.events.impl.UpdateEvent;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.modules.combat.Aura;
@@ -10,21 +12,8 @@ import cat.module.modules.render.Rotations;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiCommandBlock;
-import net.minecraft.client.gui.GuiEnchantment;
-import net.minecraft.client.gui.GuiHopper;
-import net.minecraft.client.gui.GuiMerchant;
-import net.minecraft.client.gui.GuiRepair;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiScreenBook;
-import net.minecraft.client.gui.inventory.GuiBeacon;
-import net.minecraft.client.gui.inventory.GuiBrewingStand;
-import net.minecraft.client.gui.inventory.GuiChest;
-import net.minecraft.client.gui.inventory.GuiCrafting;
-import net.minecraft.client.gui.inventory.GuiDispenser;
-import net.minecraft.client.gui.inventory.GuiEditSign;
-import net.minecraft.client.gui.inventory.GuiFurnace;
-import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
+import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.inventory.*;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.entity.Entity;
@@ -36,26 +25,12 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C01PacketChatMessage;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraft.network.play.client.C0BPacketEntityAction;
-import net.minecraft.network.play.client.C0CPacketInput;
-import net.minecraft.network.play.client.C0DPacketCloseWindow;
-import net.minecraft.network.play.client.C13PacketPlayerAbilities;
-import net.minecraft.network.play.client.C16PacketClientStatus;
+import net.minecraft.network.play.client.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MovementInput;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 
@@ -218,7 +193,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
         }
 
         if (this.isCurrentViewEntity()) {
-            UpdatePlayerEvent event = new UpdatePlayerEvent(this.rotationYaw, this.rotationPitch, this.posX, this.getEntityBoundingBox().minY, this.posZ, this.onGround);
+            UpdatePlayerEvent event = new UpdatePlayerEvent(this.rotationYaw, this.rotationPitch, this.posX, this.getEntityBoundingBox().minY, this.posZ, this.onGround, EventType.PRE);
             BlueZenith.eventManager.call(event);
             Rotations rt = (Rotations) BlueZenith.moduleManager.getModule(Rotations.class);
             rt.prevYaw = event.yaw;
@@ -261,6 +236,8 @@ public class EntityPlayerSP extends AbstractClientPlayer {
                 this.lastReportedYaw = event.yaw;
                 this.lastReportedPitch = event.pitch;
             }
+            event.setType(EventType.POST);
+            BlueZenith.eventManager.call(event);
         }
     }
 
@@ -628,7 +605,6 @@ public class EntityPlayerSP extends AbstractClientPlayer {
      * use this to react to sunlight and start to burn.
      */
     public void onLivingUpdate() {
-        NoSlowDown ns = (NoSlowDown) BlueZenith.moduleManager.getModule(NoSlowDown.class);
         if(this == Minecraft.getMinecraft().thePlayer){
             BlueZenith.eventManager.call(new UpdateEvent());
         }
@@ -689,7 +665,10 @@ public class EntityPlayerSP extends AbstractClientPlayer {
         this.movementInput.updatePlayerMoveState();
 
         if ((this.isUsingItem() || ((Aura) BlueZenith.moduleManager.getModule(Aura.class)).blockStatus) && !this.isRiding()) {
-            float m = ns.getState() ? ns.itemMulti.get() : 0.2F;
+            SlowdownEvent event = new SlowdownEvent(0.2F);
+            BlueZenith.eventManager.call(event);
+            if(event.cancelled) return;
+            float m = event.reducer;//ns.getState() ? ns.itemMulti.get() : 0.2F;
             this.movementInput.moveStrafe *= m;
             this.movementInput.moveForward *= m;
             this.sprintToggleTimer = 0;
@@ -709,7 +688,7 @@ public class EntityPlayerSP extends AbstractClientPlayer {
             }
         }
 
-        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !(this.isUsingItem() && !ns.getState()) && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown()) {
+        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !(this.isUsingItem() && !BlueZenith.moduleManager.getModule(NoSlowDown.class).getState()) && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown()) {
             this.setSprinting(true);
         }
         Flight fly = (Flight) BlueZenith.moduleManager.getModule(Flight.class);

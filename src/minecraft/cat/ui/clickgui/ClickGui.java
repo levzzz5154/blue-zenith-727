@@ -93,7 +93,7 @@ public class ClickGui extends GuiScreen {
 
     }
 
-    public void onGuiClosed(){
+    public void onGuiClosed() {
         BlueZenith.moduleManager.getModule(ClickGUI.class).setState(false);
     }
     public boolean doesGuiPauseGame(){

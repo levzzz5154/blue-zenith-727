@@ -67,6 +67,7 @@ public class Panel extends MinecraftInstance {
             List<Value<?>> vl = m.getValues();
             if(i(mouseX, mouseY, x, y1, x + width, y1 + mHeight) && !wasPressed){
                 if(Mouse.isButtonDown(0)){
+                    if(m.getName().equals("ClickGUI")) { m.setState(false); mc.thePlayer.closeScreen(); }
                     m.toggle();
                     mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                 }
@@ -92,7 +93,7 @@ public class Panel extends MinecraftInstance {
                         ModeValue val = (ModeValue) v;
                         RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
                         f.drawString(val.name, x + 5, y1 + h / 2f - f.FONT_HEIGHT / 2f, main_color.getRGB());
-                        f.drawString(val.get(), x + 10 + f.getStringWidth(val.name), y1 + (h / 2f - f.FONT_HEIGHT / 2f), Color.GRAY.getRGB());
+                        f.drawString(val.get(), x + 10 + f.getStringWidth(val.name), y1 + (h / 2f - f.FONT_HEIGHT / 2f) + 0.2f, Color.GRAY.getRGB());
                         if(i(mouseX, mouseY, x, y1, x + width, y1 + h) && !wasPressed) {
                             if(Mouse.isButtonDown(0)) {
                                 val.next();

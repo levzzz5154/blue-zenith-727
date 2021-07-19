@@ -2,6 +2,7 @@ package cat.module.value.types;
 
 import cat.module.value.Value;
 import cat.module.value.ValueConsumer;
+import cat.util.ClientUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
@@ -43,6 +44,7 @@ public class StringValue extends Value<String> {
 
     @Override
     public void fromPrimitive(JsonPrimitive primitive) {
-        this.value = primitive.getAsString();
+        ClientUtils.fancyMessage(primitive.getAsString());
+        set(primitive.getAsString());
     }
 }

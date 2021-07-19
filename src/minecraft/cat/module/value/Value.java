@@ -33,6 +33,4 @@ public abstract class Value<T> {
         visible = modifier.test(value);
         return visible;
     }
-
-    protected interface n {}
 }
