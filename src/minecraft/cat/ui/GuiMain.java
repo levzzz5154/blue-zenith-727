@@ -2,8 +2,6 @@ package cat.ui;
 
 import cat.BlueZenith;
 import cat.ui.alt.GuiAltLogin;
-import cat.util.RenderUtil;
-import cat.util.lmao.FontUtil;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -27,7 +25,7 @@ public class GuiMain extends GuiScreen {
     String hamburger = "BlueZenith";
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks){
-        FontRenderer f = FontUtil.fontMonoLisaL120;
+        FontRenderer f = mc.fontRendererObj;
         ScaledResolution sc = new ScaledResolution(mc);
         //RenderUtil.drawImage(bg, 0, 0, this.width, this.height, 1);
         drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(),BlueZenith.getMainColor().getRGB());
@@ -39,7 +37,10 @@ public class GuiMain extends GuiScreen {
         float v = 0;
         int n = 0;
         Color Z = BlueZenith.getEpicColor(n);
-        f.drawString(hamburger, sc.getScaledWidth() / 2f - (f.getStringWidth(hamburger) / 2f) + v, j - 48 - f.FONT_HEIGHT, Z.getRGB());
+        float scale = 4.5f;
+        //GlStateManager.translate(sc.getScaledWidth() / 2f - (f.getStringWidth(hamburger) * scale / 2f), j - 48 - f.FONT_HEIGHT, 1);
+        GlStateManager.scale(scale, scale, 1);
+        f.drawString(hamburger, sc.getScaledWidth() / 11f - (f.getStringWidth(hamburger) / 11f) + v, j - 150 - f.FONT_HEIGHT, Z.getRGB());
         for (char c : gd) {
             v += f.getStringWidth(String.valueOf(c));
             n -= 1;

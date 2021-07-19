@@ -97,7 +97,7 @@ public class BlueZenith {
     public static Color getEpicColor(int secs){
         Color color = getBackgroundColor();
         Color color2 = getMainColor();
-        double delay = Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * ((secs * 2) + 2.55) / 60;
+        double delay = Math.abs(System.currentTimeMillis() / 20L) / 100.0 + 6.0F * ((secs * 2) + 2.55) / 60;
         if (delay > 1.0) {
             final double n2 = delay % 1.0;
             delay = (((int) delay % 2 == 0) ? n2 : (1.0 - n2));

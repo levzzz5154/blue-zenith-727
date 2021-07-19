@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 public class TargetsPanel extends Panel {
     private final ArrayList<EntityManager.Targets> targets = new ArrayList<>();
+    private boolean closed = false;
     public TargetsPanel(float x, float y) {
         super(x, y);
         f = FontUtil.fontSFLight35;
@@ -19,13 +20,19 @@ public class TargetsPanel extends Panel {
         targets.addAll(Arrays.asList(EntityManager.Targets.values()));
         width = 120;
     }
-    boolean sex = false;
+    boolean sex, cum = false;
     public void drawPanel(int mouseX, int mouseY, float partialTicks, boolean handleClicks){
         Color main_color = click.main_color;
         Color backgroundColor = click.backgroundColor;
 
+        if(!sex && Mouse.isButtonDown(1) && i(mouseX, mouseY, x, y, x + width, y + mHeight)) {
+            closed = !closed;
+            sex = true;
+        }
+        sex = Mouse.isButtonDown(0) || Mouse.isButtonDown(1);
         RenderUtil.rect(x, y, x + width, y + mHeight, main_color);
         f.drawString("Targets", x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
+        if(closed) return;
         float y = this.y + mHeight;
         for (EntityManager.Targets tar : targets) {
             RenderUtil.rect(x, y, x + width, y + mHeight, backgroundColor);
@@ -36,6 +43,8 @@ public class TargetsPanel extends Panel {
             }
             y += mHeight;
         }
-        sex = Mouse.isButtonDown(0);
+        if(!Mouse.isButtonDown(1)) {
+            cum = false;
+        }
     }
 }

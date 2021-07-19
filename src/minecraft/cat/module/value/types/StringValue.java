@@ -24,7 +24,9 @@ public class StringValue extends Value<String> {
 
     @Override
     public void set(String newValue) {
-        value = newValue;
+        if(consumer != null) {
+            value = consumer.check(this.value, newValue);
+        } else value = newValue;
     }
 
     @Override
