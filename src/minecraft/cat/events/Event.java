@@ -6,3 +6,4 @@ public class Event {
          cancelled = true;
      }
 }
+
