@@ -57,6 +57,9 @@ public class BlueZenith {
 
     private static void hook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if(moduleManager.getModule(ClickGUI.class).getState()) {
+                moduleManager.getModule(ClickGUI.class).setState(false);
+            }
             eventManager.shutdown();
             ConfigManager.save("default");
             ConfigManager.saveBinds();
