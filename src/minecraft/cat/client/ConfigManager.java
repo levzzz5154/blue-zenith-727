@@ -14,9 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public final class ConfigManager {
+public final class  ConfigManager {
     private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
+    public static String currentConfig = "";
     public static void save(String name) {
         JsonObject config = new JsonObject();
         BlueZenith.moduleManager.getModules().forEach(mod -> {
@@ -48,6 +48,7 @@ public final class ConfigManager {
                 ClientUtils.fancyMessage("Something went wrong. Is this supposed to happen?");
                 return;
             }
+            currentConfig = name;
             JsonObject config = new JsonParser().parse(reader).getAsJsonObject();
             config.entrySet().forEach(entry -> {
                 Module module = BlueZenith.moduleManager.getModule(entry.getKey());
@@ -80,7 +81,7 @@ public final class ConfigManager {
             ClientUtils.fancyMessage("Loaded config " + name + " " + (changeBinds ? "with binds " : "") + (ignoreRender ? "and ignored render modules." : ""));
             try {
                 reader.close();
-            } catch(IOException exception) {
+            } catch(IOException ignored) {
 
             }
         }

@@ -22,6 +22,7 @@ public class HUD extends Module {
     IntegerValue backgroundOpacity = new IntegerValue("BackgroundOpacity", 50, 0, 255, 1, true, null);
     IntegerValue margin = new IntegerValue( "Margin", 10, 0, 15, 1, true, null);
     ArrayList<Module> modules = new ArrayList<>();
+    @SuppressWarnings("unused")
     public HUD() {
         super("HUD", "", ModuleCategory.RENDER);
         this.setState(true);
@@ -37,16 +38,14 @@ public class HUD extends Module {
                 modules.remove(m);
             }
         }
-        Color colorDark = new Color(0,40,40);
-        Color color = new Color(0, 140, 160);
         ScaledResolution sc = e.resolution;
-        FontRenderer font = FontUtil.fontSFLight42;
+        FontRenderer font = FontUtil.fontMonoLisaL120;
         modules.sort((m, m1) -> Float.compare(font.getStringWidth(m1.getTagName()), font.getStringWidth(m.getTagName())));
         String str = BlueZenith.name+" b"+BlueZenith.version;
         char[] strArr = str.toCharArray();
         float x1 = 5;
         for (int i = 0; i < strArr.length; i++) {
-            Color c = hi(colorDark, color, Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * (i + 2.55) / 60);
+            Color c = BlueZenith.getEpicColor(i);
             font.drawString(String.valueOf(strArr[i]), x1, 5, c.getRGB(), shadow.get());
             x1 += font.getStringWidth(String.valueOf(strArr[i]));
         }
@@ -57,7 +56,7 @@ public class HUD extends Module {
             Module m = modules.get(i);
             if(m.hidden) continue;
             Module burgir = modules.get(i > 0 ? i - 1 : i);
-            Color c = hi(colorDark, color, Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * ((i * 2) + 2.55) / 60);
+            Color c = BlueZenith.getEpicColor(i);
             Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar, y, sc.getScaledWidth(), y + increment, new Color(0,0,0,backgroundOpacity.get()).getRGB());
             if(icame.get()){
                 Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar - 1, y, sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar, y + increment, c.getRGB());
@@ -70,13 +69,5 @@ public class HUD extends Module {
             y += increment;
         }
         GlStateManager.resetColor();
-    }
-    public static Color hi(final Color color, final Color color2, double delay) {
-        if (delay > 1.0) {
-            final double n2 = delay % 1.0;
-            delay = (((int) delay % 2 == 0) ? n2 : (1.0 - n2));
-        }
-        final double n3 = 1.0 - delay;
-        return new Color((int) (color.getRed() * n3 + color2.getRed() * delay), (int) (color.getGreen() * n3 + color2.getGreen() * delay), (int) (color.getBlue() * n3 + color2.getBlue() * delay), (int) (color.getAlpha() * n3 + color2.getAlpha() * delay));
     }
 }

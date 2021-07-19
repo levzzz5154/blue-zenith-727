@@ -58,17 +58,17 @@ public class MinecraftFontRenderer extends CFont {
     public int drawSmoothString(String text, double x, float y, int color) {
         return (int)this.drawSmoothString(text, x, y, color, false);
     }
-    
+
     public float drawCenteredString(String text, float x, float y, int color) {
         return this.drawString(text, x - (float)(this.getStringWidth(text) / 2), y, color);
     }
-    
+
     public float drawCenteredStringWithShadow(String text, float x, float y, int color) {
         return this.drawStringWithShadow(text, x - (float)(this.getStringWidth(text) / 2), y, color);
     }
     public double fontScaleOffset = 1;
     public float drawString(String text, double x, double y, int color, boolean shadow, float kerning) {
-    	
+
         x -= 1.0;
         if (text == null) {
             return 0.0f;
@@ -181,7 +181,7 @@ public class MinecraftFontRenderer extends CFont {
         RenderSystem.setColor(Color.WHITE);
         return (float)x / 2.0f;
     }
-    
+
     public float drawSmoothString(String text, double x2, double y2, int color, boolean shadow) {
         x2 -= 1.0;
         if (text == null) {
@@ -290,7 +290,7 @@ public class MinecraftFontRenderer extends CFont {
         RenderSystem.setColor(Color.WHITE);
         return (float)x2 / 2.0f;
     }
-    
+
     public float drawNoBSString(String text, double x2, double y2, int color, boolean shadow) {
         x2 -= 1.0;
         if (text == null) {
@@ -381,7 +381,7 @@ public class MinecraftFontRenderer extends CFont {
                     currentData = this.charData;
                 }
                 ++i2;
-            } else if (character < currentData.length) {
+            } else if (character < currentData.length && character >= '\u0000') {
                 GL11.glBegin(4);
                 this.drawChar(currentData, character, (float)x2, (float)y2);
                 GL11.glEnd();
@@ -601,14 +601,14 @@ public class MinecraftFontRenderer extends CFont {
             ++index;
         }
     }
-    
+
     public String trimStringToWidth(String p_78269_1_, int p_78269_2_)
     {
         return this.trimStringToWidth(p_78269_1_, p_78269_2_, false);
     }
     public String trimStringToWidthPassword(String p_78269_1_, int p_78269_2_, boolean wha)
     {
-    	p_78269_1_ = p_78269_1_.replaceAll(".", ".");
+        p_78269_1_ = p_78269_1_.replaceAll(".", ".");
         return this.trimStringToWidth(p_78269_1_, p_78269_2_, wha);
     }
     private float getCharWidthFloat(char p_78263_1_)
@@ -705,4 +705,3 @@ public class MinecraftFontRenderer extends CFont {
         return var4.toString();
     }
 }
-
