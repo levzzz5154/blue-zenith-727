@@ -27,8 +27,8 @@ public class Aura extends Module {
     private final ModeValue mode = new ModeValue("Mode", "Single", true, null, "Single", "Switch", "Multi");
     private final IntegerValue switchDelay = new IntegerValue("Switch Delay", 500, 50, 2000, 50, true, ___ -> mode.get().equals("Switch"));
     private final ModeValue sortMode = new ModeValue("Sort by", "Health", true,  (a1, a2) -> {target = null; return a2;}, null,"Health", "Distance", "HurtTime");
-    private final IntegerValue minCPS = new IntegerValue("MinCPS", 15, 1, 20, 1, true, null);
-    private final IntegerValue maxCPS = new IntegerValue("MaxCPS", 7, 1, 20, 1, true, null);
+    private final IntegerValue minCPS = new IntegerValue("MinCPS", 15, 1, 20, 1, true, (a1, a2) -> {bruh(); return a2;}, null);
+    private final IntegerValue maxCPS = new IntegerValue("MaxCPS", 7, 1, 20, 1, true, (a1, a2) -> {if(minCPS.get() > a2) minCPS.set(a2); return a2;}, null);
     private final FloatValue range = new FloatValue("Range", 3f, 1f, 6f, 1f, true, null);
     private final IntegerValue hurtTime = new IntegerValue( "HurtTime", 10, 1, 10, 1, true, __ -> !mode.get().equals("Multi"));
     private final BooleanValue swing = new BooleanValue( "Swing",true, true, null);
@@ -178,5 +178,11 @@ public class Aura extends Module {
     @Override
     public String getTagName() {
         return this.displayName + " §7" +mode.get();
+    }
+
+    private void bruh() {
+        if(minCPS.get() > maxCPS.get()) {
+            maxCPS.set(minCPS.get());
+        }
     }
 }
