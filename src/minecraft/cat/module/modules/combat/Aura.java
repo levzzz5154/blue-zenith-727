@@ -50,7 +50,7 @@ public class Aura extends Module {
                 && ((EntityLivingBase) ent).getHealth() > 0
                 && EntityManager.isTarget(ent)
                 && mc.thePlayer.getDistanceToEntity(ent) <= range.get())
-                .map(j -> (EntityLivingBase) j) //due to the loadedEntityList being a list of Entity by default, you need to cast every entity to EntityLiving base
+                .map(j -> (EntityLivingBase) j) //due to the loadedEntityList being a list of Entity by default, you need to cast every entity to EntityLivingBase
                 .sorted((ent1, ent2) -> {
                     switch(sortMode.get()) { //this language fucking sucks
                         case "Distance":
