@@ -2,6 +2,8 @@ package cat.ui;
 
 import cat.BlueZenith;
 import cat.ui.alt.GuiAltLogin;
+import cat.util.RenderUtil;
+import cat.util.lmao.FontUtil;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -9,8 +11,6 @@ import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.io.IOException;
-
-import static cat.module.modules.render.HUD.hi;
 
 public class GuiMain extends GuiScreen {
     public void initGui(){
@@ -24,26 +24,24 @@ public class GuiMain extends GuiScreen {
         this.buttonList.add(new GuiButton(14, this.width / 2 - 100, j + 24 * 2, "Alt Manager"));
     }
     ResourceLocation bg = new ResourceLocation("cat/ui/bluezenith.jpg");
-    String hamburger = BlueZenith.name + " " + BlueZenith.version;
+    String hamburger = "BlueZenith";
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks){
+        FontRenderer f = FontUtil.fontMonoLisaL120;
         ScaledResolution sc = new ScaledResolution(mc);
         //RenderUtil.drawImage(bg, 0, 0, this.width, this.height, 1);
-        drawGradientRect(0, 0, this.width, this.height, new Color(0, 60, 60).getRGB(), new Color(0, 140, 160).getRGB());
-        drawGradientRect(0,0, this.width, this.height, new Color(0, 60, 60).getRGB(), hi(new Color(0, 60, 60), new Color(0, 140, 160), Math.abs(System.currentTimeMillis() / 30L) / 100.0 + 6.0F * (10 + 2.55) / 60).getRGB());
+        drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(),BlueZenith.getMainColor().getRGB());
+        drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getEpicColor(10).getRGB());
+        //drawGradientRect(0,0, this.width, this.height, new Color(0,0,0, 80).getRGB(), new Color(0,0,255,80).getRGB());
         GlStateManager.pushMatrix();
-        FontRenderer font = mc.fontRendererObj;
-        float scale = 2f * sc.getScaleFactor();
         float j = this.height / 3.5f + 48;
-        GlStateManager.translate(sc.getScaledWidth() / 2f - (font.getStringWidth(hamburger) * scale / 2f), j - 48 - font.FONT_HEIGHT, 1);
-        GlStateManager.scale(scale,scale,1);
         char[] gd = hamburger.toCharArray();
         float v = 0;
         int n = 0;
+        Color Z = BlueZenith.getEpicColor(n);
+        f.drawString(hamburger, sc.getScaledWidth() / 2f - (f.getStringWidth(hamburger) / 2f) + v, j - 48 - f.FONT_HEIGHT, Z.getRGB());
         for (char c : gd) {
-            Color Z = hi(new Color(0, 60, 60), new Color(0, 140, 160), Math.abs(System.currentTimeMillis() / 10L) / 100.0 + 6.0F * (n + 2.55) / 60);
-            font.drawString(String.valueOf(c), v, 0, Z.getRGB(), true);
-            v += font.getStringWidth(String.valueOf(c));
+            v += f.getStringWidth(String.valueOf(c));
             n -= 1;
         }
         GlStateManager.popMatrix();

@@ -12,6 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class RenderUtil extends MinecraftInstance {
     public static int delta = 0;
     public static void drawImage(ResourceLocation image, float x, float y, float width, float height, float alpha) {
+        GlStateManager.pushMatrix();
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glDepthMask(false);
@@ -22,6 +23,7 @@ public class RenderUtil extends MinecraftInstance {
         glDepthMask(true);
         glDisable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
+        GlStateManager.popMatrix();
     }
     public static void rect(final float x, final float y, final float x2, final float y2, final Color color) {
         Gui.drawRect(x,y,x2,y2,color.getRGB());

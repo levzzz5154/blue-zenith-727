@@ -590,7 +590,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
 
                 GL11.glEnable(GL11.GL_LINE_SMOOTH);
-                //TODO: Add custom font renderer
+                //fuck no it looks blurry af
                 //FontRenderer fontRenderer = Fonts.fontSFLight55;
                 FontRenderer fontRenderer = mc.fontRendererObj;
                 //FontRenderer fontRenderer2 = Fonts.fontSFLight35;

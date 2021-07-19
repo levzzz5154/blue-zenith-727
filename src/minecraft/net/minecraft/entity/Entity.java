@@ -15,6 +15,7 @@ import net.minecraft.block.BlockWall;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockPattern;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandResultStats;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.crash.CrashReport;
@@ -576,14 +577,16 @@ public abstract class Entity implements ICommandSender {
      * Tries to moves the entity by the passed in displacement. Args: x, y, z
      */
     public void moveEntity(double x, double y, double z) {
-        MoveEvent event = new MoveEvent(x,y ,z);
-        BlueZenith.eventManager.call(event);
-        if(event.cancelled){
-            return;
+        if(this == Minecraft.getMinecraft().thePlayer){
+            MoveEvent event = new MoveEvent(x,y ,z);
+            BlueZenith.eventManager.call(event);
+            if(event.cancelled){
+                return;
+            }
+            x = event.x;
+            y = event.y;
+            z = event.z;
         }
-        x = event.x;
-        y = event.y;
-        z = event.z;
         if (this.noClip) {
             this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
             this.resetPositionToBB();

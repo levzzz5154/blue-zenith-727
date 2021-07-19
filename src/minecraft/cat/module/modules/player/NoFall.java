@@ -20,8 +20,8 @@ public class NoFall extends Module {
     @Subscriber
     public void onBlockBB(BlockBBEvent e){
         if(mode.get().equals("Verus")){
-            if(mc.thePlayer.fallDistance >= 3 && e.pos.getY() < mc.thePlayer.posY){
-                e.blockBB = AxisAlignedBB.fromBounds(-5, -1, -5, 5, 1, 5).offset(e.pos.getX(), e.pos.getY(), e.pos.getZ());
+            if(mc.thePlayer.fallDistance >= 2.5 && e.pos.getY() < mc.thePlayer.posY && e.pos.getY() > mc.thePlayer.posY - 1){
+                e.blockBB = AxisAlignedBB.fromBounds(-5, -1, -5, 5, 0, 5).offset(e.pos.getX(), e.pos.getY(), e.pos.getZ());
             }
         }
     }
