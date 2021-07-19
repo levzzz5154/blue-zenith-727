@@ -91,7 +91,7 @@ public class Module {
     }
     public Value<?> getValue(String name){
         for (Value<?> v : getValues()) {
-            if(v.name.equalsIgnoreCase(name)){
+            if(v.name.replace(" ", "").equalsIgnoreCase(name)){
                 return v;
             }
         }
