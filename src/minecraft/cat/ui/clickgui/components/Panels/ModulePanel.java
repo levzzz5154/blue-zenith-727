@@ -5,6 +5,7 @@ import cat.module.ModuleCategory;
 import cat.module.value.Value;
 import cat.module.value.types.*;
 import cat.ui.clickgui.components.Panel;
+import cat.util.MillisTimer;
 import cat.util.RenderUtil;
 import cat.util.font.jello.FontUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -21,6 +22,8 @@ import java.util.List;
 public class ModulePanel extends Panel {
     ModuleCategory category;
     ArrayList<Module> modules = new ArrayList<>();
+    private Module lastMod = null;
+    private final MillisTimer timer = new MillisTimer();
     public ModulePanel(float x, float y, ModuleCategory category){
         super(x, y, "Modules " + category.displayName);
         this.category = category;
@@ -50,7 +53,7 @@ public class ModulePanel extends Panel {
         Color main_color = click.main_color;
         Color backgroundColor = click.backgroundColor;
 
-        RenderUtil.rect(x, y, x + width, y + mHeight, main_color);
+        RenderUtil.rect(x, y, x + width, y + mHeight, new Color(main_color.getRed(), main_color.getGreen(), main_color.getBlue(), click.ba.get()));
         f.drawString(category.displayName, x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
         float y1 = y + mHeight;
         for (Module m : modules) {
@@ -63,15 +66,18 @@ public class ModulePanel extends Panel {
                     mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                 }
                 if(Mouse.isButtonDown(1) && !vl.isEmpty()){
+                    if(lastMod != null && lastMod != m&& click.closePrevious.get()) lastMod.showSettings = false;
+                    lastMod = m;
                     m.showSettings = !m.showSettings;
                     mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
+                    timer.reset();
                 }
             }
 
             RenderUtil.rect(x, y1, x + width, y1 + mHeight, backgroundColor);
             f.drawString(m.getName(), x + 5, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), m.getState() ? main_color.getRGB() : main_color.darker().darker().getRGB());
             y1 += mHeight;
-            if(m.showSettings){
+            if(m.showSettings && (timer.hasTimeReached(35) || !click.closePrevious.get())){
                 for (Value<?> v : vl) {
                     //lmao i forgot this
                     if(!v.isVisible()) continue;
