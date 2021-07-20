@@ -74,7 +74,7 @@ public class Aura extends Module {
         if(e.post()) return;
         switch(mode.get()) {
             case "Single":
-                if(target == null) {
+                if(target == null || mc.thePlayer.getDistanceToEntity(target) > range.get()) {
                     target = list.get(0);
                 }
                 attack(target, e);
@@ -131,7 +131,7 @@ public class Aura extends Module {
         final double diffY = entPos.yCoord - eyesPos.yCoord;
         final double diffZ = entPos.zCoord - eyesPos.zCoord;
         final float yaw = (float) MathHelper.wrapAngleTo180_double(Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F);
-        final float pitch = (float)MathHelper.wrapAngleTo180_double((-Math.toDegrees(Math.atan2(diffY, Math.sqrt(diffX * diffX + diffZ * diffZ)))));
+        final float pitch = (float)MathHelper.wrapAngleTo180_double((-Math.toDegrees(Math.atan2(diffY, Math.sqrt(diffX * diffX + diffZ * diffZ + diffY * diffY)))));
         if(silent.get()){
             e.yaw = yaw;
             e.pitch = pitch;
