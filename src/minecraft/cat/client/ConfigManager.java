@@ -3,8 +3,10 @@ package cat.client;
 import cat.BlueZenith;
 import cat.module.Module;
 import cat.module.ModuleCategory;
+import cat.module.modules.render.ClickGUI;
 import cat.module.value.Value;
 import cat.module.value.types.ActionValue;
+import cat.ui.clickgui.components.Panel;
 import cat.util.ClientUtils;
 import cat.util.FileUtil;
 import com.google.gson.*;
@@ -113,5 +115,55 @@ public final class  ConfigManager {
            } catch(Exception ex) {
                ClientUtils.getLogger().error("Failed to load keybinds!");
            }
+        }
+
+        public static void saveClickGUIPanels() {
+            try {
+                final BufferedWriter writer = FileUtil.getWriter(true, File.separator + "clickgui.json");
+                assert writer != null;
+                JsonObject panels = new JsonObject();
+                ClickGUI.clickGui.getPanels().forEach(panel -> {
+                    JsonObject panelInfo = new JsonObject();
+                    panelInfo.add("x", new JsonPrimitive(panel.x));
+                    panelInfo.add("y", new JsonPrimitive(panel.y));
+                    panelInfo.add("shown", new JsonPrimitive(panel.shown));
+                    panels.add(panel.identifier, panelInfo);
+                });
+                writer.write(gson.toJson(panels));
+                writer.close();
+            } catch(Exception ex) {
+                ClientUtils.getLogger().error("Failed to save ClickGUI positions!");
+            }
+        }
+
+        public static void loadClickGUIPanels() {
+          try {
+              final BufferedReader reader = FileUtil.getReader(true, File.separator + "clickgui.json");
+              assert reader != null;
+              JsonObject panels = new JsonParser().parse(reader).getAsJsonObject();
+              panels.entrySet().forEach(entry -> {
+                  Panel panel = ClickGUI.clickGui.getPanel(entry.getKey());
+                  if(panel == null) return;
+                  entry.getValue().getAsJsonObject().entrySet().forEach(pos -> {
+                      System.out.println(pos.getValue());
+                      switch(pos.getKey()) {
+                          case "x":
+                              panel.x = pos.getValue().getAsFloat();
+                          break;
+
+                          case "y":
+                              panel.y = pos.getValue().getAsFloat();
+                          break;
+
+                          case "shown":
+                              panel.shown = pos.getValue().getAsBoolean();
+                          break;
+                      }
+                  });
+              });
+              reader.close();
+          } catch(Exception exception) {
+              ClientUtils.getLogger().error("Failed to load ClickGUI positions!");
+          }
         }
     }

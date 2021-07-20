@@ -22,7 +22,7 @@ public class ModulePanel extends Panel {
     ModuleCategory category;
     ArrayList<Module> modules = new ArrayList<>();
     public ModulePanel(float x, float y, ModuleCategory category){
-        super(x, y);
+        super(x, y, "Modules " + category.displayName);
         this.category = category;
         f = FontUtil.fontSFLight35;
         mHeight = f.FONT_HEIGHT + 14;
@@ -54,7 +54,7 @@ public class ModulePanel extends Panel {
         f.drawString(category.displayName, x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
         float y1 = y + mHeight;
         for (Module m : modules) {
-            if(!this.showModules) continue;
+            if(!this.shown) continue;
 
             List<Value<?>> vl = m.getValues();
             if(i(mouseX, mouseY, x, y1, x + width, y1 + mHeight) && !wasPressed){

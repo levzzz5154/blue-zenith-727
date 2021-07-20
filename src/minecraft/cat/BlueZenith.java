@@ -53,6 +53,7 @@ public class BlueZenith {
         //startup();
         ClickGUI.clickGui = new ClickGui();
         ClientUtils.getLogger().info("Creating ClickGui...");
+        ConfigManager.loadClickGUIPanels();
         ClientUtils.getLogger().info("Finished Starting!");
     }
 
@@ -64,6 +65,7 @@ public class BlueZenith {
             eventManager.shutdown();
             ConfigManager.save("default");
             ConfigManager.saveBinds();
+            ConfigManager.saveClickGUIPanels();
             DiscordRPC.discordShutdown();
         }));
     }

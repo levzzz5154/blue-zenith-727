@@ -6,8 +6,8 @@ public enum ModuleCategory {
     MOVEMENT("Movement"),
     MISC("Misc"),
     PLAYER("Player"),
-    RENDER("Render"),
-    WORLD("World");
+    RENDER("Render");
+   //WORLD("World");
     public String displayName;
     ModuleCategory(String displayName) {
         this.displayName = displayName;

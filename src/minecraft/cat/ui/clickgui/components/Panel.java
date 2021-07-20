@@ -10,12 +10,14 @@ import net.minecraft.util.ResourceLocation;
 public class Panel extends MinecraftInstance {
     protected FontRenderer f = mc.fontRendererObj;
     public float x, y, prevX, prevY, width, height, mHeight;
-    public boolean showModules;
+    public boolean shown;
+    public final String identifier;
     protected ClickGUI click = (ClickGUI) BlueZenith.moduleManager.getModule(ClickGUI.class);
-    public Panel(float x, float y){
+    public Panel(float x, float y, String identifier){
         this.x = x;
         this.y = y;
-        showModules = true;
+        shown = true;
+        this.identifier = identifier;
     }
     public Panel calculateSize(){
         width = 120;

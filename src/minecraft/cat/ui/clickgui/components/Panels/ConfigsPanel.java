@@ -26,10 +26,10 @@ public class ConfigsPanel extends Panel {
     private StringValue selectedTextField = null;
     private float textFieldCounter = 0f;
     private String selectedConfig;
-    private boolean closed = false;
+    //private boolean closed = false;
     ArrayList<File> files = new ArrayList<>();
     public ConfigsPanel(float x, float y) {
-        super(x, y);
+        super(x, y, "Configs");
         f = FontUtil.fontSFLight35;
         mHeight = f.FONT_HEIGHT + 14;
         width = 120;
@@ -46,21 +46,16 @@ public class ConfigsPanel extends Panel {
             }
         }
     }
-    boolean sex, hot = false;
+    boolean sex = false;
     public void drawPanel(int mouseX, int mouseY, float partialTicks, boolean handleClicks) {
         if(!Mouse.isButtonDown(0)) sex = false;
-        if(!Mouse.isButtonDown(1)) hot = false;
         textFieldCounter += 0.1f;
         Color main_color = click.main_color;
         Color backgroundColor = click.backgroundColor;
 
         RenderUtil.rect(x, y, x + width, y + mHeight, main_color);
-        if(Mouse.isButtonDown(1) && !hot && i(mouseX, mouseY, x, y, x+width, y+mHeight)) {
-            closed = !closed;
-            hot = true;
-        }
         f.drawString("Configs", x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
-        if(closed) return;
+        if(!shown) return;
         float y = this.y + mHeight;
         for (File file : files) {
             String no = FilenameUtils.removeExtension(file.getName());

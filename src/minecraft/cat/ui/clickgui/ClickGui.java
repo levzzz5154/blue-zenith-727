@@ -64,7 +64,7 @@ public class ClickGui extends GuiScreen {
             }
             if(d){
                 if(!mousePressed && Mouse.isButtonDown(1)){
-                    p.showModules = !p.showModules;
+                    p.shown = !p.shown;
                     p.toggleSound();
                 }
             }
@@ -87,5 +87,11 @@ public class ClickGui extends GuiScreen {
     }
     public boolean doesGuiPauseGame(){
         return false;
+    }
+    public ArrayList<Panel> getPanels() {
+        return panels;
+    }
+    public Panel getPanel(String identifier) {
+        return panels.stream().filter(p -> p.identifier.equalsIgnoreCase(identifier)).findFirst().orElse(null);
     }
 }
