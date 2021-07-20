@@ -89,12 +89,9 @@ public class Module {
     public boolean getState(){
         return state;
     }
+
     public Value<?> getValue(String name){
-        for (Value<?> v : getValues()) {
-            if(v.name.replace(" ", "").equalsIgnoreCase(name)){
-                return v;
-            }
-        }
-        return null;
+        return values.stream().filter(val -> val.name.equalsIgnoreCase(name)).findFirst()
+                .orElse(values.stream().filter(val1 -> val1.name.replace(" ", "").equalsIgnoreCase(name)).findFirst().orElse(null));
     }
 }

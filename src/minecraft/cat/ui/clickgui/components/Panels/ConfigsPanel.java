@@ -89,11 +89,18 @@ public class ConfigsPanel extends Panel {
             update();
             sex = true;
             if(StringUtils.isBlank(val.get())) {
+                if(selectedConfig != null) {
+                    ConfigManager.save(selectedConfig);
+                    update();
+                    val.set("");
+                    selectedConfig = null;
+                } else
                 ClientUtils.fancyMessage("Specify a config name to proceed.");
             } else {
                 ConfigManager.save(val.get());
                 update();
                 val.set("");
+                selectedConfig = null;
             }
         }
         y += 10;
@@ -116,6 +123,7 @@ public class ConfigsPanel extends Panel {
             sex = true;
             if(selectedConfig != null) {
                 ConfigManager.load(selectedConfig, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT), (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && Keyboard.isKeyDown(Keyboard.KEY_X)) || Keyboard.isKeyDown(Keyboard.KEY_X));
+                selectedConfig = null;
             } else ClientUtils.fancyMessage("Select a config to load!");
             val.set("");
         }
