@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class Aura extends Module {
     public boolean blockStatus = false;
-
+    
     private final ModeValue mode = new ModeValue("Mode", "Single", true, null, "Single", "Switch", "Multi");
     private final IntegerValue switchDelay = new IntegerValue("Switch Delay", 500, 50, 2000, 50, true, ___ -> mode.get().equals("Switch"));
     private final ModeValue sortMode = new ModeValue("Sort by", "Health", true, (a1, a2) -> { target = null; return a2; }, null, "Health", "Distance", "HurtTime");
