@@ -1,4 +1,4 @@
-package cat.util.lmao;
+package cat.util.font.jello;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

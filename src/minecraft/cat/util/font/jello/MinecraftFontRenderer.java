@@ -1,4 +1,4 @@
-package cat.util.lmao;
+package cat.util.font.jello;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;

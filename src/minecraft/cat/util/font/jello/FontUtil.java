@@ -1,4 +1,4 @@
-package cat.util.lmao;
+package cat.util.font.jello;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -28,5 +28,6 @@ public class FontUtil {
 	public static FontRenderer fontSFLight55 = MinecraftFontRenderer.createFontRenderer(getEpicFont("sf-ui-display-light",55));
 	public static FontRenderer fontSFLight35 = MinecraftFontRenderer.createFontRenderer(getEpicFont("sf-ui-display-light",35));
 	public static FontRenderer fontSFLight120 = MinecraftFontRenderer.createFontRenderer(getEpicFont("sf-ui-display-light",120));
-	public static FontRenderer fontMonoLisaL120 = MinecraftFontRenderer.createFontRenderer(getEpicFont("monolisa-light",35));
+	public static FontRenderer fontMonoLisaL35 = MinecraftFontRenderer.createFontRenderer(getEpicFont("monolisa-light",35));
+	public static FontRenderer fontMonoLisaLT = MinecraftFontRenderer.createFontRenderer(getEpicFont("monolisa-light",95));
 }

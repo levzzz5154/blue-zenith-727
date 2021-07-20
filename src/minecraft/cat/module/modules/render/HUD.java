@@ -7,7 +7,7 @@ import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.BooleanValue;
 import cat.module.value.types.IntegerValue;
-import cat.util.lmao.FontUtil;
+import cat.util.font.jello.FontUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -39,7 +39,8 @@ public class HUD extends Module {
             }
         }
         ScaledResolution sc = e.resolution;
-        FontRenderer font = FontUtil.fontMonoLisaL120;
+        // ok
+        FontRenderer font = FontUtil.fontSFLight42;
         modules.sort((m, m1) -> Float.compare(font.getStringWidth(m1.getTagName()), font.getStringWidth(m.getTagName())));
         String str = BlueZenith.name+" b"+BlueZenith.version;
         char[] strArr = str.toCharArray();

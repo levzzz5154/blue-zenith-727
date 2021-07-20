@@ -2,6 +2,7 @@ package cat.ui;
 
 import cat.BlueZenith;
 import cat.ui.alt.GuiAltLogin;
+import cat.util.font.jello.FontUtil;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -25,28 +26,23 @@ public class GuiMain extends GuiScreen {
     String hamburger = "BlueZenith";
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks){
-        FontRenderer f = mc.fontRendererObj;
         ScaledResolution sc = new ScaledResolution(mc);
         //RenderUtil.drawImage(bg, 0, 0, this.width, this.height, 1);
         drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(),BlueZenith.getMainColor().getRGB());
         drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getEpicColor(10).getRGB());
-        //drawGradientRect(0,0, this.width, this.height, new Color(0,0,0, 80).getRGB(), new Color(0,0,255,80).getRGB());
         GlStateManager.pushMatrix();
         float j = this.height / 3.5f + 48;
-        char[] gd = hamburger.toCharArray();
-        float v = 0;
-        int n = 0;
-        Color Z = BlueZenith.getEpicColor(n);
-        float scale = 4.5f;
-        //GlStateManager.translate(sc.getScaledWidth() / 2f - (f.getStringWidth(hamburger) * scale / 2f), j - 48 - f.FONT_HEIGHT, 1);
-        GlStateManager.scale(scale, scale, 1);
-        f.drawString(hamburger, sc.getScaledWidth() / 11f - (f.getStringWidth(hamburger) / 11f) + v, j - 150 - f.FONT_HEIGHT, Z.getRGB());
-        for (char c : gd) {
-            v += f.getStringWidth(String.valueOf(c));
-            n -= 1;
-        }
+        Color Z = BlueZenith.getEpicColor(120);
+        sussy(mc.fontRendererObj, hamburger, sc.getScaledWidth() / 2f, j - 12, Z.getRGB(), true, 4);
         GlStateManager.popMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+    public void sussy(FontRenderer f, String s,float x, float y, int color, boolean shadow, float scale){
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x - (f.getStringWidth(hamburger) * scale / 2f), y - f.FONT_HEIGHT * scale, 0);
+        GlStateManager.scale(scale,scale,1);
+        f.drawString(s, 0,0, color, shadow);
+        GlStateManager.popMatrix();
     }
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id){

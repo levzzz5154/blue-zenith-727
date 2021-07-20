@@ -3,7 +3,7 @@ package cat.ui.clickgui.components.Panels;
 import cat.ui.clickgui.components.Panel;
 import cat.util.EntityManager;
 import cat.util.RenderUtil;
-import cat.util.lmao.FontUtil;
+import cat.util.font.jello.FontUtil;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
