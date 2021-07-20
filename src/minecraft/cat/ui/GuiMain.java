@@ -2,7 +2,6 @@ package cat.ui;
 
 import cat.BlueZenith;
 import cat.ui.alt.GuiAltLogin;
-import cat.util.font.jello.FontUtil;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -13,6 +12,7 @@ import java.io.IOException;
 
 public class GuiMain extends GuiScreen {
     public void initGui(){
+        BlueZenith.updateRPC("Main Menu", "");
         int j = this.height / 3 + 48;
         this.buttonList.clear();
 
@@ -59,7 +59,8 @@ public class GuiMain extends GuiScreen {
                 this.mc.displayGuiScreen(new GuiMultiplayer(this));
                 break;
             case 4:
-                this.mc.shutdown();
+                //this.mc.shutdown();
+                mc.displayGuiScreen(new GuiConfirmShutdown(this));
                 break;
             case 14:
                 this.mc.displayGuiScreen(new GuiAltLogin(this));

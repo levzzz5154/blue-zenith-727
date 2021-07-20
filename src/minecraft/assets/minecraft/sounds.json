@@ -2031,5 +2031,10 @@
     "sounds":[
       "shabadaduba like a meboo"
     ]
-  }
+  },
+"shutdown": {
+"sounds":[
+"shutdown"
+]
+}
 }

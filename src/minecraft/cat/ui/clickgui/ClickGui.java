@@ -10,6 +10,7 @@ import cat.ui.clickgui.components.Panel;
 import cat.ui.clickgui.components.Panels.TargetsPanel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
@@ -54,9 +55,11 @@ public class ClickGui extends GuiScreen {
             if(Mouse.isButtonDown(0) && ((d && selectedPanel == null) || selectedPanel == p)){
                 if(!mousePressed){
                     selectedPanel = p;
+                    if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
                     p.prevX = (mouseX - p.x);
                     p.prevY = (mouseY - p.y);
                 }
+                if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
                 p.x = mouseX - p.prevX;
                 p.y = mouseY - p.prevY;
             }else if(selectedPanel == p){

@@ -1,5 +1,6 @@
 package cat.ui.alt;
 
+import cat.BlueZenith;
 import cat.util.RenderUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -62,6 +63,7 @@ public final class GuiAltLogin extends GuiScreen {
     }
 
     public void initGui() {
+        BlueZenith.updateRPC("Alt Manager", "");
         int var3 = this.height / 4 + 24;
         this.buttonList.add(new GuiButton(0, this.width / 2 - 100, var3 + 20, "Login"));
         this.buttonList.add(new GuiButton(1, this.width / 2 - 100, var3 + 20 + 24, "Back"));

@@ -1,6 +1,6 @@
 package net.minecraft.client.gui;
 
-import java.io.IOException;
+import cat.BlueZenith;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundCategory;
@@ -10,6 +10,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+
+import java.io.IOException;
 
 public class GuiScreenOptionsSounds extends GuiScreen
 {
@@ -32,6 +34,7 @@ public class GuiScreenOptionsSounds extends GuiScreen
      */
     public void initGui()
     {
+        BlueZenith.updateRPC("Music & Sounds", "");
         int i = 0;
         this.field_146507_a = I18n.format("options.sounds.title", new Object[0]);
         this.field_146508_h = I18n.format("options.off", new Object[0]);

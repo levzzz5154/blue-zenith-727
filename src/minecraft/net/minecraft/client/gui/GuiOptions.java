@@ -1,6 +1,6 @@
 package net.minecraft.client.gui;
 
-import java.io.IOException;
+import cat.BlueZenith;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.audio.SoundEventAccessorComposite;
@@ -14,6 +14,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.EnumDifficulty;
+
+import java.io.IOException;
 
 public class GuiOptions extends GuiScreen implements GuiYesNoCallback
 {
@@ -38,6 +40,7 @@ public class GuiOptions extends GuiScreen implements GuiYesNoCallback
      */
     public void initGui()
     {
+        BlueZenith.updateRPC("Options", "");
         int i = 0;
         this.field_146442_a = I18n.format("options.title", new Object[0]);
 

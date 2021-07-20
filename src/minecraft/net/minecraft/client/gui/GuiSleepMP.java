@@ -1,9 +1,11 @@
 package net.minecraft.client.gui;
 
-import java.io.IOException;
+import cat.BlueZenith;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
+
+import java.io.IOException;
 
 public class GuiSleepMP extends GuiChat
 {
@@ -13,6 +15,7 @@ public class GuiSleepMP extends GuiChat
      */
     public void initGui()
     {
+        BlueZenith.updateRPC("Sleeping in Multiplayer", "IP: " + BlueZenith.currentServerIP);
         super.initGui();
         this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height - 40, I18n.format("multiplayer.stopSleeping", new Object[0])));
     }

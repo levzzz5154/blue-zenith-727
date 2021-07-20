@@ -1,13 +1,13 @@
 package net.minecraft.client.gui;
 
-import java.io.IOException;
-
 import cat.BlueZenith;
 import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.realms.RealmsBridge;
+
+import java.io.IOException;
 
 public class GuiIngameMenu extends GuiScreen
 {
@@ -20,6 +20,7 @@ public class GuiIngameMenu extends GuiScreen
      */
     public void initGui()
     {
+        BlueZenith.updateRPC("In-game Menu", mc.isSingleplayer() ? "" : "IP: " + BlueZenith.currentServerIP);
         this.field_146445_a = 0;
         this.buttonList.clear();
         int i = -16;
@@ -57,6 +58,7 @@ public class GuiIngameMenu extends GuiScreen
                 button.enabled = false;
                 this.mc.theWorld.sendQuittingDisconnectingPacket();
                 this.mc.loadWorld((WorldClient)null);
+                BlueZenith.currentServerIP = null;
 
                 if (flag)
                 {
@@ -112,5 +114,12 @@ public class GuiIngameMenu extends GuiScreen
         this.drawDefaultBackground();
         this.drawCenteredString(this.fontRendererObj, I18n.format("menu.game", new Object[0]), this.width / 2, 40, 16777215);
         super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    public void onGuiClosed() {
+        if(mc.isSingleplayer()) {
+            BlueZenith.updateRPC("Playing Singleplayer", "");
+        } else BlueZenith.updateRPC("Playing Multiplayer", "IP: " + BlueZenith.currentServerIP);
     }
 }

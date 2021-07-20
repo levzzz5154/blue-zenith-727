@@ -20,6 +20,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class BlueZenith {
     //test commit
+    public static String currentServerIP;
     public static String name = "BlueZenith";
     //no men its 1.5 lmao :rofl:
     public static String version = "1.5";
@@ -80,6 +81,9 @@ public class BlueZenith {
         updateRPC("In the main menu", "");
         new Thread(() -> {
             while (true) {
+                try {
+                    Thread.sleep(2000L);
+                } catch (InterruptedException ignored) { }
                 DiscordRPC.discordRunCallbacks();
                 DiscordRPC.discordUpdatePresence(rpc);
             }
