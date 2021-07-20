@@ -34,19 +34,21 @@ public class Aura extends Module {
 
     private final FloatValue range = new FloatValue("Range", 3f, 1f, 6f, 1f, true, null);
     private final IntegerValue hurtTime = new IntegerValue("HurtTime", 10, 1, 10, 1, true, __ -> !mode.get().equals("Multi"));
+    private final FloatValue aimHeight = new FloatValue("Aim Height", 1.5f, 0f, 1.5f, 0.1f, true, __ -> unsex());
+
     private final BooleanValue swing = new BooleanValue("Swing", true, true, null);
+
+    private final BooleanValue autoBlock = new BooleanValue("AutoBlock", true, true, null);
+    private final BooleanValue vanillaAutoBlock = new BooleanValue("Vanilla Autoblock", true, true, __ -> autoBlock.get());
 
     private final BooleanValue rotations = new BooleanValue("Rotations", true, true, null);
     private final BooleanValue silent = new BooleanValue("Silent Rotations", true, true, __ -> rotations.get());
 
-    private final FloatValue aimHeight = new FloatValue("Aim Height", 1.5f, 0f, 1.5f, 0.1f, true, __ -> rotations.get());
 
-    private final BooleanValue randomRotations = new BooleanValue("Random Rotations", true, true, __ -> rotations.get());
-    private final FloatValue randomRotVertical = new FloatValue("RRVertical", 0.5f, 0f, 1f, 0.1f, true, __ -> randomRotations.get() && rotations.get());
-    private final FloatValue randomRotHorizontal = new FloatValue("RRHorizontal", 0.5f, 0f, 1f, 0.1f, true, __ -> randomRotations.get() && rotations.get());
+    private final BooleanValue randomRotations = new BooleanValue("Randomize Rotations", true, true, __ -> rotations.get());
+    private final FloatValue randomRotVertical = new FloatValue("RR Vertical", 0.5f, 0f, 0.7f, 0.1f, true, __ -> randomRotations.isVisible() && randomRotations.get());
+    private final FloatValue randomRotHorizontal = new FloatValue("RR Horizontal", 0.5f, 0f, 0.7f, 0.1f, true, __ -> randomRotations.isVisible() && randomRotations.get());
 
-    private final BooleanValue autoBlock = new BooleanValue("AutoBlock", true, true, null);
-    private final BooleanValue vanillaAutoBlock = new BooleanValue("Vanilla Autoblock", true, true, __ -> autoBlock.get());
 
 
     public Aura() {
@@ -221,5 +223,9 @@ public class Aura extends Module {
         if (minCPS.get() > maxCPS.get()) {
             maxCPS.set(minCPS.get());
         }
+    }
+
+    private boolean unsex() {
+        return rotations.get();
     }
 }
