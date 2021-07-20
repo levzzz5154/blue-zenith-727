@@ -28,8 +28,7 @@ public class TargetsPanel extends Panel {
         if(!sex && Mouse.isButtonDown(1) && i(mouseX, mouseY, x, y, x + width, y + mHeight)) {
             closed = !closed;
             sex = true;
-        }
-        sex = Mouse.isButtonDown(0) || Mouse.isButtonDown(1);
+        };
         RenderUtil.rect(x, y, x + width, y + mHeight, main_color);
         f.drawString("Targets", x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
         if(closed) return;
@@ -37,12 +36,13 @@ public class TargetsPanel extends Panel {
         for (EntityManager.Targets tar : targets) {
             RenderUtil.rect(x, y, x + width, y + mHeight, backgroundColor);
             f.drawString(tar.displayName, x + 5, y + (mHeight / 2f - f.FONT_HEIGHT / 2f), tar.on ? main_color.getRGB() : main_color.darker().darker().getRGB());
-            if(i(mouseX, mouseY, x, y, x + width, y + mHeight) && !sex && Mouse.isButtonDown(0) && handleClicks){
+            if(i(mouseX, mouseY, x, y, x + width, y + mHeight) && Mouse.isButtonDown(0) && !sex && handleClicks){
                 tar.on = !tar.on;
                 toggleSound();
             }
             y += mHeight;
         }
+        sex = Mouse.isButtonDown(0);
         if(!Mouse.isButtonDown(1)) {
             cum = false;
         }

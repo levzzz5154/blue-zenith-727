@@ -156,7 +156,7 @@ public class Aura extends Module {
         final Vec3 eyesPos = new Vec3(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY + mc.thePlayer.getEyeHeight(), mc.thePlayer.posZ);
         final Vec3 entPos = new Vec3(bb.minX + (bb.maxX - bb.minX) * (0.5 * randRotHorizontal), bb.minY + (bb.maxY - bb.minY) * (0.5 * randRotVertical), bb.minZ + (bb.maxZ - bb.minZ) * (0.5 * randRotHorizontal));
 
-        final double diffX = entPos.xCoord - eyesPos.xCoord;
+        final double diffX = entPos.xCoord - eyesPos.xCoord + 0.3;
         final double diffY = entPos.yCoord - eyesPos.yCoord + aimHeight.get();
         final double diffZ = entPos.zCoord - eyesPos.zCoord + 0.3; // adding 0.3 unfucks the horizontal rotation
 

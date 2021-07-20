@@ -95,7 +95,7 @@ public class GuiButton extends Gui {
         FontRenderer f = FontUtil.fontSFLight35;
         this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
         this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, new Color(0,0,16, 100).getRGB(), new Color(0, 0, 32, 100).getRGB());
-        this.drawCenteredString(f, this.displayString, this.xPosition + this.width / 2f, this.yPosition + (this.height - 8) / 2, 0xffffff);
+        this.drawCenteredString(f, this.displayString, this.xPosition + this.width / 2f, this.yPosition + (this.height - 6) / 2f, 0xffffff);
     }
     private void drawVanillaButton(Minecraft mc, int mouseX, int mouseY){
         FontRenderer fontrenderer = mc.fontRendererObj;

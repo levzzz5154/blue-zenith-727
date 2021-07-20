@@ -593,7 +593,6 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                 //fuck no it looks blurry af
                 //FontRenderer fontRenderer = Fonts.fontSFLight55;
                 FontRenderer fontRenderer = mc.fontRendererObj;
-                //FontRenderer fontRenderer2 = Fonts.fontSFLight35;
                 FontRenderer fontRenderer2 = mc.fontRendererObj;
 
                 String name = entity.getDisplayName().getUnformattedText();
