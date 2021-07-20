@@ -64,7 +64,7 @@ public class ClickGui extends GuiScreen {
             }
             if(d){
                 if(!mousePressed && Mouse.isButtonDown(1)){
-                    p.shown = !p.shown;
+                    p.showContent = !p.showContent;
                     p.toggleSound();
                 }
             }
@@ -82,16 +82,16 @@ public class ClickGui extends GuiScreen {
             p.keyTyped(typedChar, keyCode);
         }
     }
+    public ArrayList<Panel> getPanels(){
+        return panels;
+    }
+    public Panel getPanel(String identifier) {
+        return panels.stream().filter(p -> p.id.equalsIgnoreCase(identifier)).findFirst().orElse(null);
+    }
     public void onGuiClosed(){
         BlueZenith.moduleManager.getModule(ClickGUI.class).setState(false);
     }
     public boolean doesGuiPauseGame(){
         return false;
-    }
-    public ArrayList<Panel> getPanels() {
-        return panels;
-    }
-    public Panel getPanel(String identifier) {
-        return panels.stream().filter(p -> p.identifier.equalsIgnoreCase(identifier)).findFirst().orElse(null);
     }
 }

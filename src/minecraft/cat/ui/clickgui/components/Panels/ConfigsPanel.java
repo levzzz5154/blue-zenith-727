@@ -55,7 +55,7 @@ public class ConfigsPanel extends Panel {
 
         RenderUtil.rect(x, y, x + width, y + mHeight, main_color);
         f.drawString("Configs", x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
-        if(!shown) return;
+        if(!showContent) return;
         float y = this.y + mHeight;
         for (File file : files) {
             String no = FilenameUtils.removeExtension(file.getName());
