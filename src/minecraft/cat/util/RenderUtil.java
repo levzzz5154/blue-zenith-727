@@ -1,9 +1,11 @@
 package cat.util;
 
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -37,7 +39,6 @@ public class RenderUtil extends MinecraftInstance {
 
         GlStateManager.color(red, green, blue, alpha);
     }
-
     private static void glColor(final int hex) {
         final float alpha = (hex >> 24 & 0xFF) / 255F;
         final float red = (hex >> 16 & 0xFF) / 255F;

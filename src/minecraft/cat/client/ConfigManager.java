@@ -126,8 +126,8 @@ public final class  ConfigManager {
                     JsonObject panelInfo = new JsonObject();
                     panelInfo.add("x", new JsonPrimitive(panel.x));
                     panelInfo.add("y", new JsonPrimitive(panel.y));
-                    panelInfo.add("shown", new JsonPrimitive(panel.shown));
-                    panels.add(panel.identifier, panelInfo);
+                    panelInfo.add("shown", new JsonPrimitive(panel.showContent));
+                    panels.add(panel.id, panelInfo);
                 });
                 writer.write(gson.toJson(panels));
                 writer.close();
@@ -145,7 +145,6 @@ public final class  ConfigManager {
                   Panel panel = ClickGUI.clickGui.getPanel(entry.getKey());
                   if(panel == null) return;
                   entry.getValue().getAsJsonObject().entrySet().forEach(pos -> {
-                      System.out.println(pos.getValue());
                       switch(pos.getKey()) {
                           case "x":
                               panel.x = pos.getValue().getAsFloat();
@@ -156,7 +155,7 @@ public final class  ConfigManager {
                           break;
 
                           case "shown":
-                              panel.shown = pos.getValue().getAsBoolean();
+                              panel.showContent = pos.getValue().getAsBoolean();
                           break;
                       }
                   });

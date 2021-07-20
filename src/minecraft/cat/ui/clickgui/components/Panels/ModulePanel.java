@@ -54,7 +54,7 @@ public class ModulePanel extends Panel {
         f.drawString(category.displayName, x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
         float y1 = y + mHeight;
         for (Module m : modules) {
-            if(!this.shown) continue;
+            if(!this.showContent) continue;
 
             List<Value<?>> vl = m.getValues();
             if(i(mouseX, mouseY, x, y1, x + width, y1 + mHeight) && !wasPressed){
