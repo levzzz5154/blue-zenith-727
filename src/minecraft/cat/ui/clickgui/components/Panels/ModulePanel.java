@@ -8,7 +8,6 @@ import cat.ui.clickgui.components.Panel;
 import cat.util.RenderUtil;
 import cat.util.lmao.FontUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
@@ -154,6 +153,15 @@ public class ModulePanel extends Panel {
                         f.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), main_color.getRGB());
                         if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !wasPressed && handleClicks) {
                             val.next();
+                            mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
+                        }
+                        y1 += h;
+                    }
+                    else if(v instanceof ActionValue) {
+                        RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
+                        f.drawString(v.name, x + width/2-f.getStringWidth(v.name)/2f, y1 + h / 2f - f.FONT_HEIGHT / 2f, main_color.getRGB());
+                        if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !wasPressed && handleClicks) {
+                            v.next();
                             mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                         }
                         y1 += h;

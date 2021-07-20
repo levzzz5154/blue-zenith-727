@@ -4,6 +4,7 @@ import cat.BlueZenith;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.Value;
+import cat.module.value.types.ActionValue;
 import cat.util.ClientUtils;
 import cat.util.FileUtil;
 import com.google.gson.*;
@@ -24,7 +25,10 @@ public final class  ConfigManager {
             module.add("toggled", new JsonPrimitive(mod.getState()));
             module.add("displayName", new JsonPrimitive(mod.displayName));
             module.add("keybind", new JsonPrimitive(mod.keyBind));
-            mod.getValues().forEach(val -> module.add(val.name, val.getPrimitive()));
+            mod.getValues().forEach(val -> {
+               if(!(val instanceof ActionValue))
+                   module.add(val.name, val.getPrimitive());
+            });
             config.add(mod.getName(), module);
         });
         try {

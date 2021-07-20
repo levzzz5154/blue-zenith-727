@@ -4,10 +4,11 @@ import cat.events.Subscriber;
 import cat.events.impl.UpdateEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
-import cat.module.value.types.BooleanValue;
+import cat.module.value.types.ActionValue;
 import cat.module.value.types.IntegerValue;
 import cat.module.value.types.ModeValue;
 import cat.module.value.types.StringValue;
+import cat.util.ClientUtils;
 import cat.util.MillisTimer;
 import cat.util.PacketUtil;
 import net.minecraft.network.play.client.C01PacketChatMessage;
@@ -26,8 +27,8 @@ public class Spammer extends Module {
     private final ModeValue mode = new ModeValue("Bypass", "Random", true, null, "Random", "Invisible", "None");
     private final ModeValue randomMode = new ModeValue("Placing", "First", false, __ -> mode.is("Random"), "First", "Last");
     private final IntegerValue randomLength = new IntegerValue("String length", 5, 1, 20, 1, false, __ -> randomMode.isVisible());
-    private final BooleanValue reset = new BooleanValue("Reset Text", true, true, (a1, a2) -> {text.set(""); return a1;}, null);
-    private final BooleanValue paste = new BooleanValue("From Clipboard", true, true, (a1, a2) -> {if(!a2) fromClipboard(); return a1;}, null);
+    private final ActionValue test = new ActionValue("Reset Text", () -> text.set(""));
+    private final ActionValue paste = new ActionValue("Copy from clipboard", this::fromClipboard);
 
     private final MillisTimer timer = new MillisTimer();
 
@@ -50,6 +51,8 @@ public class Spammer extends Module {
     private void fromClipboard() {
         try {
             text.set(String.valueOf(Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor)));
-        } catch(Exception ignored) { }
+        } catch(Exception ignored) {
+            ClientUtils.fancyMessage("This option only supports plain text!");
+        }
     }
 }
