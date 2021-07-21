@@ -6,7 +6,7 @@ import cat.ui.clickgui.components.Panel;
 import cat.util.ClientUtils;
 import cat.util.FileUtil;
 import cat.util.RenderUtil;
-import cat.util.font.jello.FontUtil;
+import cat.util.font.sigma.FontUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;

@@ -119,7 +119,7 @@ public class Aura extends Module {
             target = f.get(0);
         } else target = f.get(g);
     }
-
+    private long funnyVariable = 0;
     private void attack(EntityLivingBase target, UpdatePlayerEvent e) {
 
         if (target.getHealth() <= 0) {
@@ -134,11 +134,12 @@ public class Aura extends Module {
             if (rotations.get()) {
                 setRotation(e);
             }
-            if (timer.hasTimeReached(ClientUtils.getRandomLong(minCPS.get(), maxCPS.get()))) {
+            if (timer.hasTimeReached(funnyVariable)) {
                 if (swing.get()) {
                     mc.thePlayer.swingItem();
                 } else PacketUtil.send(new C0APacketAnimation());
                 mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
+                funnyVariable = ClientUtils.getRandomLong(minCPS.get(), maxCPS.get());
                 timer.reset();
             }
             block();

@@ -262,7 +262,7 @@ public class FontRenderer implements IResourceManagerReloadListener {
         }
     }
 
-    private void readGlyphSizes() {
+    protected void readGlyphSizes() {
         InputStream inputstream = null;
 
         try {
@@ -582,7 +582,7 @@ public class FontRenderer implements IResourceManagerReloadListener {
     /**
      * Render single line string by setting GL color, current (posX,posY), and calling renderStringAtPos()
      */
-    private int renderString(String text, float x, float y, int color, boolean dropShadow) {
+    protected int renderString(String text, float x, float y, int color, boolean dropShadow) {
         if (text == null) {
             return 0;
         } else {
@@ -613,6 +613,9 @@ public class FontRenderer implements IResourceManagerReloadListener {
     /**
      * Returns the width of this string. Equivalent of FontMetrics.stringWidth(String s).
      */
+    public float getStringWidthF(String text){
+        return getStringWidth(text);
+    }
     public int getStringWidth(String text) {
         if (text == null) {
             return 0;

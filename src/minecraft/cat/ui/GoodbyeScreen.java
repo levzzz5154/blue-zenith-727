@@ -2,7 +2,7 @@ package cat.ui;
 
 import cat.BlueZenith;
 import cat.util.MillisTimer;
-import cat.util.font.jello.FontUtil;
+import cat.util.font.sigma.FontUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;

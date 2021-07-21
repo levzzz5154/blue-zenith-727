@@ -1,7 +1,7 @@
 package cat.ui;
 
 import cat.BlueZenith;
-import cat.util.font.jello.FontUtil;
+import cat.util.font.sigma.FontUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

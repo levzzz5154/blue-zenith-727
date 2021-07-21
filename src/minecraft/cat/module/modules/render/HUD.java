@@ -10,7 +10,7 @@ import cat.module.value.types.IntegerValue;
 import cat.module.value.types.ModeValue;
 import cat.ui.arraylist.IArraylistRenderer;
 import cat.ui.arraylist.impl.VanillaFont;
-import cat.util.font.jello.FontUtil;
+import cat.util.font.sigma.FontUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -70,15 +70,15 @@ public class HUD extends Module {
             if(m.hidden) continue;
             Module burgir = modules.get(i > 0 ? i - 1 : i);
             Color c = BlueZenith.getEpicColor(i);
-            Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar, y, sc.getScaledWidth(), y + increment, new Color(0,0,0,backgroundOpacity.get()).getRGB());
+            Gui.drawRect(sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar, y, sc.getScaledWidth(), y + increment, new Color(0,0,0,backgroundOpacity.get()).getRGB());
             if(icame.get()){
-                Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar - 1, y, sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar, y + increment, c.getRGB());
-                Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(burgir.getTagName()) - mar - 1, y - 1, sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar, y, c.getRGB());
+                Gui.drawRect(sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar - 1, y, sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar, y + increment, c.getRGB());
+                Gui.drawRect(sc.getScaledWidth() - font.getStringWidthF(burgir.getTagName()) - mar - 1, y - 1, sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar, y, c.getRGB());
                 if(m == modules.get(modules.size() - 1)){
-                    Gui.drawRect(sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - mar - 1, y + increment - 1, sc.getScaledWidth(), y + increment, c.getRGB());
+                    Gui.drawRect(sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar - 1, y + increment - 1, sc.getScaledWidth(), y + increment, c.getRGB());
                 }
             }
-            font.drawString(m.getTagName(), sc.getScaledWidth() - font.getStringWidth(m.getTagName()) - (mar / 2f), y + (increment / 2f - font.FONT_HEIGHT / 2f), c.getRGB(), shadow.get());
+            font.drawString(m.getTagName(), sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - (mar / 2f), y + (increment / 2f - font.FONT_HEIGHT / 2f), c.getRGB(), shadow.get());
             y += increment;
         }
         GlStateManager.resetColor();

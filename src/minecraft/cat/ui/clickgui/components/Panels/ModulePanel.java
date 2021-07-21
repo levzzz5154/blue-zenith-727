@@ -7,7 +7,7 @@ import cat.module.value.types.*;
 import cat.ui.clickgui.components.Panel;
 import cat.util.MillisTimer;
 import cat.util.RenderUtil;
-import cat.util.font.jello.FontUtil;
+ import cat.util.font.sigma.FontUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;

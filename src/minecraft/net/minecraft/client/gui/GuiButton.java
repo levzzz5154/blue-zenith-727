@@ -1,6 +1,7 @@
 package net.minecraft.client.gui;
 
-import cat.util.font.jello.FontUtil;
+import cat.util.font.sigma.FontUtil;
+import cat.util.font.sigma.TFFFontRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
@@ -92,10 +93,11 @@ public class GuiButton extends Gui {
         }
     }
     private void drawModifiedButton(Minecraft mc, int mouseX, int mouseY){
-        FontRenderer f = FontUtil.fontSFLight35;
+        TFFFontRenderer f = FontUtil.fontSFLight35;
         this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
         this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, new Color(0,0,16, 100).getRGB(), new Color(0, 0, 32, 100).getRGB());
-        this.drawCenteredString(f, this.displayString, this.xPosition + this.width / 2f, this.yPosition + (this.height - 6) / 2f, 0xffffff);
+        f.drawCenteredString(this.displayString, this.xPosition + this.width / 2f, this.yPosition + (f.FONT_HEIGHT / 2f), Color.WHITE.getRGB());
+        this.mouseDragged(mc, mouseX, mouseY);
     }
     private void drawVanillaButton(Minecraft mc, int mouseX, int mouseY){
         FontRenderer fontrenderer = mc.fontRendererObj;
