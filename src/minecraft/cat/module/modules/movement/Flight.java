@@ -13,7 +13,7 @@ import cat.util.MovementUtil;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "SpellCheckingInspection"})
 public class Flight extends Module {
     private final ModeValue mode = new ModeValue("Mode", "Vanilla", true, null, "Vanilla", "OldVerus");
     private final FloatValue speed = new FloatValue("Speed", 2f, 0f, 5f, 0.1f, true, __ -> mode.get().equals("Vanilla")); //example of a visibility modifier
@@ -21,8 +21,7 @@ public class Flight extends Module {
         super("Flight", "", ModuleCategory.MOVEMENT, Keyboard.KEY_F);
     }
     public final float[] movementSpeed = new float[]{0, 0, 0};
-    private long st = System.currentTimeMillis();
-    private final MillisTimer i_hate_ticks = new MillisTimer();
+    private final MillisTimer verusTimer = new MillisTimer();
     @Subscriber
     public void onUpdate(UpdatePlayerEvent e) {
         switch (mode.get()) {
@@ -55,15 +54,15 @@ public class Flight extends Module {
                 }else if(movementSpeed[2] <= f){
                     if(movementSpeed[2] <= f - 1){
                         e.onGround = false;
-                        if(i_hate_ticks.hasTicksPassed(12)){
+                        if(verusTimer.hasTicksPassed(12)){
                             mc.thePlayer.jump();
-                            i_hate_ticks.reset();
+                            verusTimer.reset();
                             movementSpeed[2]++;
                         }
-                    }else if(i_hate_ticks.hasTicksPassed(12)){
+                    }else if(verusTimer.hasTicksPassed(12)){
                         e.onGround = true;
                         movementSpeed[2]++;
-                        i_hate_ticks.reset();
+                        verusTimer.reset();
                         mc.thePlayer.setPosition(mc.thePlayer.posX, Math.round(mc.thePlayer.posY) + 0.42, mc.thePlayer.posZ);
                     }
                     if(mc.thePlayer.hurtTime == 9){

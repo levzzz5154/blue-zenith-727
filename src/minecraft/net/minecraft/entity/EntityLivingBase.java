@@ -1,5 +1,7 @@
 package net.minecraft.entity;
 
+import cat.BlueZenith;
+import cat.module.modules.render.Rotations;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;
@@ -14,6 +16,7 @@ import java.util.UUID;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
@@ -379,6 +382,11 @@ public abstract class EntityLivingBase extends Entity {
         this.prevMovedDistance = this.movedDistance;
         this.prevRenderYawOffset = this.renderYawOffset;
         this.prevRotationYawHead = this.rotationYawHead;
+        if(this == Minecraft.getMinecraft().thePlayer){
+            Rotations r = (Rotations) BlueZenith.moduleManager.getModule(Rotations.class);
+            r.prevYaw = r.yaw;
+            r.prevPitch = r.pitch;
+        }
         this.prevRotationYaw = this.rotationYaw;
         this.prevRotationPitch = this.rotationPitch;
         this.worldObj.theProfiler.endSection();
