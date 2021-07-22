@@ -22,19 +22,19 @@ import org.lwjgl.input.Keyboard;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class Aura extends Module {
     public boolean blockStatus = false;
     
     private final ModeValue mode = new ModeValue("Mode", "Single", true, null, "Single", "Switch", "Multi");
     private final IntegerValue switchDelay = new IntegerValue("Switch Delay", 500, 50, 2000, 50, true, ___ -> mode.get().equals("Switch"));
     private final ModeValue sortMode = new ModeValue("Sort by", "Health", true, (a1, a2) -> { target = null; return a2; }, null, "Health", "Distance", "HurtTime");
-
-    private final IntegerValue minCPS = new IntegerValue("MinCPS", 15, 1, 20, 1, true, (a1, a2) -> { bruh(); return a2; }, null);
-    private final IntegerValue maxCPS = new IntegerValue("MaxCPS", 7, 1, 20, 1, true, (a1, a2) -> { if (minCPS.get() > a2) minCPS.set(a2); return a2; }, null);
+    private final IntegerValue maxCPS = new IntegerValue("MaxCPS", 7, 1, 20, 1, true, (a1, a2) -> { if(a2 < getMinCPS().get()){ return a1; } return a2; }, null);
+    private final IntegerValue minCPS = new IntegerValue("MinCPS", 15, 1, 20, 1, true, (a1, a2) -> { if(a2 > maxCPS.get()) { return a1; } return a2; }, null);
 
     private final FloatValue range = new FloatValue("Range", 3f, 1f, 6f, 1f, true, null);
     private final IntegerValue hurtTime = new IntegerValue("HurtTime", 10, 1, 10, 1, true, __ -> !mode.get().equals("Multi"));
-    private final FloatValue aimHeight = new FloatValue("Aim Height", 1.5f, 0f, 1.5f, 0.1f, true, __ -> unsex());
+    private final FloatValue aimHeight = new FloatValue("Aim Height", 1.5f, 0f, 1.5f, 0.1f, true, __ -> getRotationsValue());
 
     private final BooleanValue swing = new BooleanValue("Swing", true, true, null);
 
@@ -56,7 +56,7 @@ public class Aura extends Module {
     }
 
     EntityLivingBase target = null;
-    private final MillisTimer timer = new MillisTimer();
+    private final MillisTimer attackTimer = new MillisTimer();
     private final MillisTimer switchTimer = new MillisTimer();
 
     @Subscriber
@@ -97,7 +97,7 @@ public class Aura extends Module {
 
             case "Switch":
                 if (target == null || switchTimer.hasTimeReached(switchDelay.get())) {
-                    костыль(list);
+                    setTargetToNext(list);
                     switchTimer.reset();
                 }
                 attack(target, e);
@@ -105,14 +105,14 @@ public class Aura extends Module {
 
             case "Multi":
                 if (target == null || target.hurtTime > 0) {
-                    костыль(list);
+                    setTargetToNext(list);
                 }
                 attack(target, e);
                 break;
         }
     }
 
-    private void костыль(List<EntityLivingBase> f) { // чзх // секс
+    private void setTargetToNext(List<EntityLivingBase> f) { // чзх // секс
         int g = f.indexOf(target) + 1;
         if (g >= f.size()) {
             target = f.get(0);
@@ -120,6 +120,10 @@ public class Aura extends Module {
     }
     private long funnyVariable = 0;
     private void attack(EntityLivingBase target, UpdatePlayerEvent e) {
+        if(!EntityManager.isTarget(target)){
+            this.target = null;
+            return;
+        }
         if (target.hurtTime <= hurtTime.get()) {
             if (!vanillaAutoBlock.get()) {
                 unBlock();
@@ -127,13 +131,13 @@ public class Aura extends Module {
             if (rotations.get()) {
                 setRotation(e);
             }
-            if (timer.hasTimeReached(funnyVariable)) {
+            if (attackTimer.hasTimeReached(funnyVariable)) {
                 if (swing.get()) {
                     mc.thePlayer.swingItem();
                 } else PacketUtil.send(new C0APacketAnimation());
                 mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
                 funnyVariable = ClientUtils.getRandomLong(minCPS.get(), maxCPS.get());
-                timer.reset();
+                attackTimer.reset();
             }
             block();
         }
@@ -141,7 +145,6 @@ public class Aura extends Module {
 
 
     private void setRotation(UpdatePlayerEvent e) {
-
         AxisAlignedBB bb = target.getEntityBoundingBox();
         // checks if random rots are enabled
         float randRotVertical = randomRotations.get() ? ClientUtils.getRandomFloat(-randomRotVertical.get(), randomRotVertical.get()) : 0f;
@@ -196,16 +199,17 @@ public class Aura extends Module {
         }
     }
 
+    @SuppressWarnings("unused")
     @Subscriber
     public void onPacket(PacketEvent e) {
-        if (e.packet instanceof C09PacketHeldItemChange) {
+        if (e.packet instanceof C09PacketHeldItemChange && blockStatus) {
             mc.getNetHandler().getNetworkManager().sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             blockStatus = false;
         }
     }
 
     public boolean canBlock() {
-        return mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword && autoBlock.get();
+        return autoBlock.get() && mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword;
     }
 
     @Override
@@ -213,13 +217,10 @@ public class Aura extends Module {
         return this.displayName + " §7" + mode.get();
     }
 
-    private void bruh() {
-        if (minCPS.get() > maxCPS.get()) {
-            maxCPS.set(minCPS.get());
-        }
+    private IntegerValue getMinCPS(){
+        return minCPS;
     }
-
-    private boolean unsex() {
+    private boolean getRotationsValue() {
         return rotations.get();
     }
 }
