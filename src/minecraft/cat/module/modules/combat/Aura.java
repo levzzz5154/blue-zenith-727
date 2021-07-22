@@ -63,7 +63,6 @@ public class Aura extends Module {
     public void onUpdate(UpdatePlayerEvent e) {
         //filter the list of entities
         List<EntityLivingBase> list = mc.theWorld.loadedEntityList.parallelStream().filter(ent -> ent instanceof EntityLivingBase
-                && ((EntityLivingBase) ent).getHealth() > 0
                 && EntityManager.isTarget(ent)
                 && mc.thePlayer.getDistanceToEntity(ent) <= range.get())
                 .map(j -> (EntityLivingBase) j) //due to the loadedEntityList being a list of Entity by default, you need to cast every entity to EntityLivingBase
@@ -113,7 +112,7 @@ public class Aura extends Module {
         }
     }
 
-    private void костыль(List<EntityLivingBase> f) { // чзх
+    private void костыль(List<EntityLivingBase> f) { // чзх // секс
         int g = f.indexOf(target) + 1;
         if (g >= f.size()) {
             target = f.get(0);
@@ -121,12 +120,6 @@ public class Aura extends Module {
     }
     private long funnyVariable = 0;
     private void attack(EntityLivingBase target, UpdatePlayerEvent e) {
-
-        if (target.getHealth() <= 0) {
-            this.target = null;
-            return;
-        }
-
         if (target.hurtTime <= hurtTime.get()) {
             if (!vanillaAutoBlock.get()) {
                 unBlock();

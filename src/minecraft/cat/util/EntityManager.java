@@ -1,6 +1,7 @@
 package cat.util;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
@@ -22,6 +23,8 @@ public class EntityManager extends MinecraftInstance{
         }
     }
     public static boolean isTarget(Entity ent){
+        if(ent instanceof EntityLivingBase && ((EntityLivingBase) ent).getHealth() <= 0 && !Targets.DEAD.on)
+            return false;
         if(ent == mc.thePlayer)
             return false;
         if(isMob(ent))
@@ -32,9 +35,8 @@ public class EntityManager extends MinecraftInstance{
             return Targets.ANIMALS.on;
         if(ent.isInvisible())
             return Targets.INVISIBLE.on;
-        if(ent.isDead)
-            return Targets.DEAD.on;
-        return ent != mc.thePlayer;
+
+        return false;
     }
     public static boolean isAnimal(Entity ent){
         return ent instanceof EntitySheep || ent instanceof EntityCow || ent instanceof EntityPig
