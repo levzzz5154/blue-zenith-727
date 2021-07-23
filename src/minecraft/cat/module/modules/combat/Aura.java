@@ -149,12 +149,13 @@ public class Aura extends Module {
         // checks if random rots are enabled
         float randRotVertical = randomRotations.get() ? ClientUtils.getRandomFloat(-randomRotVertical.get(), randomRotVertical.get()) : 0f;
         float randRotHorizontal = randomRotations.get() ? ClientUtils.getRandomFloat(-randomRotHorizontal.get(), randomRotHorizontal.get()) : 0f;
-
+        double entHeight = 0.5F - (target.isChild() ? target.height / 2.0F : 0.0F);
+        double entWidth = target.width / 2f;
         final Vec3 eyesPos = new Vec3(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY + mc.thePlayer.getEyeHeight(), mc.thePlayer.posZ);
-        final Vec3 entPos = new Vec3(bb.minX + (bb.maxX - bb.minX) * (0.5 * randRotHorizontal), bb.minY + (bb.maxY - bb.minY) * (0.5 * randRotVertical), bb.minZ + (bb.maxZ - bb.minZ) * (0.5 * randRotHorizontal));
+        final Vec3 entPos = new Vec3(bb.minX + (bb.maxX - bb.minX) * (entWidth * randRotHorizontal), bb.minY + (bb.maxY - bb.minY) * (entHeight * randRotVertical), bb.minZ + (bb.maxZ - bb.minZ) * (entWidth * randRotHorizontal));
 
         final double diffX = entPos.xCoord - eyesPos.xCoord + 0.3;
-        final double diffY = entPos.yCoord - eyesPos.yCoord + aimHeight.get();
+        final double diffY = entPos.yCoord - eyesPos.yCoord + (entHeight * aimHeight.get());
         final double diffZ = entPos.zCoord - eyesPos.zCoord + 0.3; // adding 0.3 unfucks the horizontal rotation
 
         final float yaw = (float) MathHelper.wrapAngleTo180_double(Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F);

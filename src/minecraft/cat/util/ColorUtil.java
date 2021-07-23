@@ -4,10 +4,7 @@ import java.awt.*;
 
 public class ColorUtil {
     public static Color rainbow(float g, float m){
-        double delay = Math.abs(System.currentTimeMillis() / 20L) / 100.0 + 6.0F * ((g * m) + 2.55) / 60;
-        if (delay > 1.0) {
-            delay %= 1;
-        }
+        double delay = (Math.abs(System.currentTimeMillis() / 20L) / 100.0 + 6.0F * ((g * m) + 2.55) / 60) % 1;
         final double n3 = 1.0 - delay;
         return Color.getHSBColor((float) n3, 0.6f, 1);
     }

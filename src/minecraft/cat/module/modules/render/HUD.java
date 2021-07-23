@@ -38,7 +38,6 @@ public class HUD extends Module {
         super("HUD", "", ModuleCategory.RENDER);
         this.setState(true);
     }
-    int ticks = 0;
     @Subscriber
     public void onRender2D(Render2DEvent e) {
         if(mc.gameSettings.showDebugInfo) return;
@@ -72,13 +71,13 @@ public class HUD extends Module {
         float y = 0;
         for (int i = 0; i < modules.size(); i++) {
             Module m = modules.get(i);
+            Module d = modules.get(i > 0 ? i - 1 : i);
             if(m.hidden) continue;
-            Module burgir = modules.get(i > 0 ? i - 1 : i);
             Color c = colorMode.get().equals("Rainbow") ? rainbow(i, rainbowMulti.get()) : colorMode.get().equals("Pulse") ? ColorUtil.getEpicColor(i) : new Color(255,255, 255);
             RenderUtil.rect(sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar, y, sc.getScaledWidth(), y + increment, new Color(0,0,0,backgroundOpacity.get()).getRGB());
             if(border.get()){
                 RenderUtil.rect(sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar - 1, y, sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar, y + increment, c.getRGB());
-                RenderUtil.rect(sc.getScaledWidth() - font.getStringWidthF(burgir.getTagName()) - mar - 1, y - 1, sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar, y, c.getRGB());
+                RenderUtil.rect(sc.getScaledWidth() - font.getStringWidthF(d.getTagName()) - mar - 1, y - 1, sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar, y, c.getRGB());
                 if(m == modules.get(modules.size() - 1)){
                     RenderUtil.rect(sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar - 1, y + increment - 1, sc.getScaledWidth(), y + increment, c.getRGB());
                 }
