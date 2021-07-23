@@ -27,6 +27,10 @@ public class RenderUtil extends MinecraftInstance {
         glEnable(GL_DEPTH_TEST);
         GlStateManager.popMatrix();
     }
+    public static void rect(final float x, final float y, final float x2, final float y2, final int color) {
+        Gui.drawRect(x,y,x2,y2, color);
+        GlStateManager.resetColor();
+    }
     public static void rect(final float x, final float y, final float x2, final float y2, final Color color) {
         Gui.drawRect(x,y,x2,y2,color.getRGB());
         GlStateManager.resetColor();

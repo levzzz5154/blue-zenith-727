@@ -2,6 +2,7 @@ package cat.ui;
 
 import cat.BlueZenith;
 import cat.ui.alt.GuiAltLogin;
+import cat.util.ColorUtil;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -28,11 +29,11 @@ public class GuiMain extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks){
         ScaledResolution sc = new ScaledResolution(mc);
         //RenderUtil.drawImage(bg, 0, 0, this.width, this.height, 1);
-        drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(),BlueZenith.getMainColor().getRGB());
-        drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getEpicColor(10).getRGB());
+        drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(),ColorUtil.getMainColor().getRGB());
+        drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getEpicColor(10).getRGB());
         GlStateManager.pushMatrix();
         float j = this.height / 3.5f + 48;
-        Color Z = BlueZenith.getEpicColor(120);
+        Color Z = ColorUtil.getEpicColor(120);
         sussy(mc.fontRendererObj, hamburger, sc.getScaledWidth() / 2f, j - 12, Z.getRGB(), true, 4);
         GlStateManager.popMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);

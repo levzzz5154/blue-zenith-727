@@ -1,6 +1,7 @@
 package cat.ui;
 
 import cat.BlueZenith;
+import cat.util.ColorUtil;
 import cat.util.MillisTimer;
 import cat.util.font.sigma.FontUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -31,8 +32,8 @@ public class GoodbyeScreen extends GuiScreen {
         FontRenderer font = FontUtil.fontSFLight42;
         if(isDreamLuck) {
             a = "You're dream-lucky today. Hope you didn't set your volume too high.";
-            drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getMainColor().getRGB());
-            drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getEpicColor(10).getRGB());
+            drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getMainColor().getRGB());
+            drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getEpicColor(10).getRGB());
             if(dreamluckTimer.hasTimeReached(500)) {
                 mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("hi")));
                 dreamluckTimer.reset();
@@ -42,8 +43,8 @@ public class GoodbyeScreen extends GuiScreen {
         }
         if(faggots >= 255)
             faggots = 255;
-        drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getMainColor().getRGB());
-        drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getEpicColor(10).getRGB());
+        drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getMainColor().getRGB());
+        drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getEpicColor(10).getRGB());
         drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, faggots).getRGB());
         faggots += 2;
         niggers += 4;

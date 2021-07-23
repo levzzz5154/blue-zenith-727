@@ -1,6 +1,7 @@
 package cat.ui;
 
 import cat.BlueZenith;
+import cat.util.ColorUtil;
 import cat.util.font.sigma.FontUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -30,9 +31,9 @@ public class GuiConfirmShutdown extends GuiScreen {
         ScaledResolution sc = new ScaledResolution(mc);
         FontRenderer font = FontUtil.fontSFLight42;
         //RenderUtil.drawImage(bg, 0, 0, this.width, this.height, 1);
-        drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(),BlueZenith.getMainColor().getRGB());
-        drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getEpicColor(10).getRGB());
-        font.drawStringWithShadow(a, sc.getScaledWidth()/2 - font.getStringWidth(a)/2f, sc.getScaledHeight()/3f, -1);
+        drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(),ColorUtil.getMainColor().getRGB());
+        drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getEpicColor(10).getRGB());
+        font.drawStringWithShadow(a, sc.getScaledWidth()/2f - font.getStringWidth(a)/2f, sc.getScaledHeight()/3f, -1);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
