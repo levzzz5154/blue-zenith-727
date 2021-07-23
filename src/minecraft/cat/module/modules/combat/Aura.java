@@ -55,7 +55,7 @@ public class Aura extends Module {
         super("Aura", "", ModuleCategory.COMBAT, Keyboard.KEY_R, "aura", "ka", "killaura");
     }
 
-    EntityLivingBase target = null;
+    public EntityLivingBase target = null;
     private final MillisTimer attackTimer = new MillisTimer();
     private final MillisTimer switchTimer = new MillisTimer();
 
