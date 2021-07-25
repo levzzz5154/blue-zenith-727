@@ -5,7 +5,6 @@ import org.reflections.Reflections;
 import java.util.ArrayList;
 
 public final class ModuleManager {
-    private final Module dummyModule = new Module("Dummy", "how tf did you get this module", ModuleCategory.COMBAT);
     private final ArrayList<Module> modules = new ArrayList<>();
     public ModuleManager(){
         new Reflections("cat.module.modules").getSubTypesOf(Module.class).forEach(mod -> {
@@ -32,10 +31,10 @@ public final class ModuleManager {
                 }
             }
         }
-        return dummyModule;
+        return null;
     }
     public Module getModule(Class<?> clazz){
-       return modules.stream().filter(mod -> mod.getClass() == clazz).findFirst().orElse(dummyModule);
+       return modules.stream().filter(mod -> mod.getClass() == clazz).findFirst().orElse(null);
     }
     public void handleKey(int keyCode){
         for (Module m : modules) {
