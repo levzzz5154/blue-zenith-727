@@ -105,6 +105,10 @@ public final class TFFFontRenderer extends FontRenderer {
         GL11.glTexImage2D(3553, 0, 6408, image.getWidth(), image.getHeight(), 0, 6408, 5121, buffer);
     }
 
+    public int drawString(final String text, final int x, final int y, final int color) {
+        return renderString(text, x, y, color, false);
+    }
+
     public int drawString(final String text, final float x, final float y, final int color) {
         return renderString(text, x, y, color, false);
     }

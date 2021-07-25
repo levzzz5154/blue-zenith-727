@@ -55,7 +55,7 @@ public class Aura extends Module {
         super("Aura", "", ModuleCategory.COMBAT, Keyboard.KEY_R, "aura", "ka", "killaura");
     }
 
-    public EntityLivingBase target = null;
+    private EntityLivingBase target = null;
     private final MillisTimer attackTimer = new MillisTimer();
     private final MillisTimer switchTimer = new MillisTimer();
 
@@ -78,21 +78,17 @@ public class Aura extends Module {
                             return Float.compare(ent1.getHealth(), ent2.getHealth());
                     }
                 }).collect(Collectors.toList());
-
         if (list.isEmpty()) {
             if (blockStatus) {
                 unBlock();
             }
             return;
         }
-
-        if (e.post()) return;
         switch (mode.get()) { // la mode
             case "Single":
                 if (target == null || mc.thePlayer.getDistanceToEntity(target) > range.get()) {
                     target = list.get(0);
                 }
-                attack(target, e);
                 break;
 
             case "Switch":
@@ -100,18 +96,20 @@ public class Aura extends Module {
                     setTargetToNext(list);
                     switchTimer.reset();
                 }
-                attack(target, e);
                 break;
 
             case "Multi":
                 if (target == null || target.hurtTime > 0) {
                     setTargetToNext(list);
                 }
-                attack(target, e);
                 break;
         }
-    }
+        if (e.post() || !isValid(target)){
+            return;
+        }
 
+        attack(target, e);
+    }
     private void setTargetToNext(List<EntityLivingBase> f) { // чзх // секс
         int g = f.indexOf(target) + 1;
         if (g >= f.size()) {
@@ -120,10 +118,6 @@ public class Aura extends Module {
     }
     private long funnyVariable = 0;
     private void attack(EntityLivingBase target, UpdatePlayerEvent e) {
-        if(!EntityManager.isTarget(target)){
-            this.target = null;
-            return;
-        }
         if (target.hurtTime <= hurtTime.get()) {
             if (!vanillaAutoBlock.get()) {
                 unBlock();
@@ -142,7 +136,6 @@ public class Aura extends Module {
             block();
         }
     }
-
 
     private void setRotation(UpdatePlayerEvent e) {
         AxisAlignedBB bb = target.getEntityBoundingBox();
@@ -221,7 +214,20 @@ public class Aura extends Module {
     private IntegerValue getMinCPS(){
         return minCPS;
     }
+
     private boolean getRotationsValue() {
         return rotations.get();
+    }
+
+    private boolean isValid(EntityLivingBase ent){
+        return EntityManager.isTarget(ent) && mc.theWorld.loadedEntityList.contains(ent);
+    }
+
+    public float getRange(){
+        return this.range.get();
+    }
+
+    public EntityLivingBase getTarget(){
+        return isValid(target) ? target : null;
     }
 }

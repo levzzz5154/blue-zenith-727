@@ -102,6 +102,7 @@ public class HUD extends Module {
         }
         GlStateManager.resetColor();
     }
+    // kinda by fxy, i just made it less cancerous
     private void drawInfo(ScaledResolution sr){
         FontRenderer f = getFont();
         final float fy = f.FONT_HEIGHT + 2;
@@ -135,7 +136,7 @@ public class HUD extends Module {
         }
         if(showBPS.get()){
             Color colorD = getColor(z);
-            f.drawString("Blocks/sec§r:" + MathUtil.round(getBPS(), 2), 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
+            f.drawString("Blocks/sec§r: " + MathUtil.round(getBPS(), 2), 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
         }
     }
     private Color getColor(int i){

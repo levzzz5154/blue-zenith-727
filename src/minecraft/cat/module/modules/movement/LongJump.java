@@ -5,6 +5,7 @@ import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.BooleanValue;
+import cat.ui.notifications.NotiManager;
 import cat.util.MovementUtil;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
@@ -19,10 +20,14 @@ public class LongJump extends Module {
     public void onEnable(){
         maccacokkk = false;
         if(this.mc.thePlayer != null && autoDamage.get()){
+            if(mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(0, 3.77, 0).expand(0, 0, 0)).isEmpty()){
+                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 3.77, mc.thePlayer.posZ, false));
+                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
+                mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
+            }else{
+                NotiManager.addNoti("Couldn't damage you: not enough space", "", NotiManager.NotiType.ERROR, 3000);
+            }
             c = 0;
-            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 3.77, mc.thePlayer.posZ, false));
-            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
         }
     }
     boolean maccacokkk = Boolean.FALSE;

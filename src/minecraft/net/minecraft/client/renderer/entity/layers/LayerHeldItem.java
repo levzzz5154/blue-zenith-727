@@ -1,5 +1,7 @@
 package net.minecraft.client.renderer.entity.layers;
 
+import cat.BlueZenith;
+import cat.module.modules.combat.Aura;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
@@ -13,6 +15,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
+import java.util.UUID;
+
 public class LayerHeldItem implements LayerRenderer<EntityLivingBase>
 {
     private final RendererLivingEntity<?> livingEntityRenderer;
@@ -22,35 +26,50 @@ public class LayerHeldItem implements LayerRenderer<EntityLivingBase>
         this.livingEntityRenderer = livingEntityRendererIn;
     }
 
-    public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale)
-    {
+    public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale) {
         ItemStack itemstack = entitylivingbaseIn.getHeldItem();
 
-        if (itemstack != null)
-        {
+        if(itemstack != null) {
             GlStateManager.pushMatrix();
 
-            if (this.livingEntityRenderer.getMainModel().isChild)
-            {
+            if(this.livingEntityRenderer.getMainModel().isChild) {
                 float f = 0.5F;
                 GlStateManager.translate(0.0F, 0.625F, 0.0F);
                 GlStateManager.rotate(-20.0F, -1.0F, 0.0F, 0.0F);
                 GlStateManager.scale(f, f, f);
             }
 
-            ((ModelBiped)this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F);
+            final UUID uuid = entitylivingbaseIn.getUniqueID();
+            final EntityPlayer entityplayer = Minecraft.getMinecraft().theWorld.getPlayerEntityByUUID(uuid);
+            /*
+             * Author: orange_cat
+             */
+            Aura aura = (Aura) BlueZenith.moduleManager.getModule(Aura.class);
+            boolean yoo = entityplayer == Minecraft.getMinecraft().thePlayer && aura.getState() && aura.blockStatus;
+            if(entityplayer != null && (entityplayer.isBlocking() || yoo)) {
+                if(entitylivingbaseIn.isSneaking()) {
+                    ((ModelBiped) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0325F);
+                    GlStateManager.translate(-0.58F, 0.3F, -0.2F);
+                    GlStateManager.rotate(-24390.0F, 137290.0F, -2009900.0F, -2054900.0F);
+                }else{
+                    ((ModelBiped) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0325F);
+                    GlStateManager.translate(-0.48F, 0.2F, -0.2F);
+                    GlStateManager.rotate(-24390.0F, 137290.0F, -2009900.0F, -2054900.0F);
+                }
+            }else{
+                ((ModelBiped) this.livingEntityRenderer.getMainModel()).postRenderArm(0.0625F);
+            }
+
             GlStateManager.translate(-0.0625F, 0.4375F, 0.0625F);
 
-            if (entitylivingbaseIn instanceof EntityPlayer && ((EntityPlayer)entitylivingbaseIn).fishEntity != null)
-            {
+            if(entitylivingbaseIn instanceof EntityPlayer && ((EntityPlayer) entitylivingbaseIn).fishEntity != null) {
                 itemstack = new ItemStack(Items.fishing_rod, 0);
             }
 
             Item item = itemstack.getItem();
             Minecraft minecraft = Minecraft.getMinecraft();
 
-            if (item instanceof ItemBlock && Block.getBlockFromItem(item).getRenderType() == 2)
-            {
+            if(item instanceof ItemBlock && Block.getBlockFromItem(item).getRenderType() == 2) {
                 GlStateManager.translate(0.0F, 0.1875F, -0.3125F);
                 GlStateManager.rotate(20.0F, 1.0F, 0.0F, 0.0F);
                 GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
@@ -58,8 +77,7 @@ public class LayerHeldItem implements LayerRenderer<EntityLivingBase>
                 GlStateManager.scale(-f1, -f1, f1);
             }
 
-            if (entitylivingbaseIn.isSneaking())
-            {
+            if(entitylivingbaseIn.isSneaking()) {
                 GlStateManager.translate(0.0F, 0.203125F, 0.0F);
             }
 

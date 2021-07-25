@@ -1,6 +1,7 @@
 package net.minecraft.entity;
 
 import cat.BlueZenith;
+import cat.module.modules.render.Animations;
 import cat.module.modules.render.Rotations;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -1164,7 +1165,17 @@ public abstract class EntityLivingBase extends Entity {
      * progress indicator. Takes dig speed enchantments into account.
      */
     private int getArmSwingAnimationEnd() {
-        return this.isPotionActive(Potion.digSpeed) ? 6 - (1 + this.getActivePotionEffect(Potion.digSpeed).getAmplifier()) * 1 : (this.isPotionActive(Potion.digSlowdown) ? 6 + (1 + this.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : 6);
+        Animations anim = (Animations) BlueZenith.moduleManager.getModule(Animations.class);
+        if(anim.getState() && anim.slowSwing.get()){
+            return 6 + (1 + anim.slowSwingValue.get());
+        }else if(this.isPotionActive(Potion.digSpeed)){
+            return 6 - (1 + this.getActivePotionEffect(Potion.digSpeed).getAmplifier());
+        }else if(this.isPotionActive(Potion.digSlowdown)){
+            return 6 + (1 + this.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2;
+        }else{
+            return 6;
+        }
+        //return this.isPotionActive(Potion.digSpeed) ? 6 - (1 + this.getActivePotionEffect(Potion.digSpeed).getAmplifier()) : (this.isPotionActive(Potion.digSlowdown) ? 6 + (1 + this.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : 6);
     }
 
     /**

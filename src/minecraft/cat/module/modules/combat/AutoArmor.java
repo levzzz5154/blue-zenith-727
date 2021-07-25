@@ -4,41 +4,56 @@ import cat.events.Subscriber;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
+import cat.module.value.types.IntegerValue;
+import cat.util.ClientUtils;
+import cat.util.MillisTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
 
 /**
- * @Author Fxyqq
+ * @Author Fxy
  */
 @SuppressWarnings("SpellCheckingInspection")
 public class AutoArmor extends Module {
-    private final int[] chestplate;
-    private final int[] leggings;
-    private final int[] boots;
-    private final int[] helmet;
-    private int delay;
-    private final boolean best;
+    private final IntegerValue maxDelay = new IntegerValue("MaxDelay", 400, 0, 600, 0, true, (old_, new_) -> {updateTime(); return new_ < getMinDelay().get() ? old_ : new_;}, null);
+    private final IntegerValue minDelay = new IntegerValue("MinDelay", 400, 0, 600, 0, true, (old_, new_) -> {updateTime(); return new_ > maxDelay.get() ? old_ : new_;}, null);
 
-
-    public AutoArmor() {
-        super("AutoArmor", "", ModuleCategory.COMBAT, Keyboard.KEY_L, "autoArmor", "aut", "AutoArmor");
-        chestplate = new int[] {311, 307, 315, 303, 299};
-        leggings = new int[] {312, 308, 316, 304, 300};
-        boots = new int[] {313, 309, 317, 305, 301};
-        helmet = new int[] {310, 306, 314, 302, 298};
-        delay = 0;
-        best = true;
+    private IntegerValue getMinDelay() {
+        return minDelay;
     }
 
-
+    private final int[] chestplate = new int[]{311, 307, 315, 303, 299};
+    private final int[] leggings = new int[]{312, 308, 316, 304, 300};
+    private final int[] boots = new int[]{313, 309, 317, 305, 301};
+    private final int[] helmet = new int[]{310, 306, 314, 302, 298};
+    private final boolean best;
+    private final MillisTimer timer;
+    private long waitTime;
+    public AutoArmor() {
+        super("AutoArmor", "", ModuleCategory.COMBAT, Keyboard.KEY_L, "autoArmor", "aut", "AutoArmor");
+        best = true;
+        timer = new MillisTimer();
+        updateTime();
+    }
+    @Override
+    public void onEnable() {
+        updateTime();
+    }
+    @Subscriber
+    public void onEvent(UpdatePlayerEvent e) {
+        if(mc.thePlayer == null){
+            return;
+        }
+        autoArmor();
+        betterArmor();
+    }
     public void autoArmor() {
         if(best)
             return;
         int item = -1;
-        delay += 1;
-        if(delay >= 10) {
+        if(timer.hasTimeReached(waitTime)) {
             if(mc.thePlayer.inventory.armorInventory[0] == null) {
                 int[] boots;
                 int length = (boots = this.boots).length;
@@ -85,16 +100,16 @@ public class AutoArmor extends Module {
             }
             if(item != -1) {
                 mc.playerController.windowClick(0, item, 0, 1, mc.thePlayer);
-                delay = 0;
             }
+            updateTime();
+            timer.reset();
         }
     }
 
     public void betterArmor() {
         if(!best)
             return;
-        delay += 1;
-        if(delay >= 10 && (mc.thePlayer.openContainer == null || mc.thePlayer.openContainer.windowId == 0)) {
+        if(timer.hasTimeReached(waitTime) && (mc.thePlayer.openContainer == null || mc.thePlayer.openContainer.windowId == 0)) {
             boolean switchArmor = false;
             int item = -1;
             int[] array;
@@ -168,31 +183,10 @@ public class AutoArmor extends Module {
             switchArmor = switchArmor && !b;
             if(item != -1) {
                 mc.playerController.windowClick(0, item, 0, switchArmor ? 4 : 1, mc.thePlayer);
-                delay = 0;
             }
+            updateTime();
+            timer.reset();
         }
-    }
-
-    @Override
-    public void onEnable() {
-        super.onEnable();
-    }
-
-    @Override
-    public void onDisable() {
-        super.onDisable();
-    }
-
-
-    Minecraft mc = Minecraft.getMinecraft();
-
-    @Subscriber
-    public void onEvent(UpdatePlayerEvent e) {
-        if(mc.thePlayer == null){
-            return;
-        }
-        autoArmor();
-        betterArmor();
     }
     public static boolean isBetterArmor(int slot, int[] armorType) {
         if(Minecraft.getMinecraft().thePlayer.inventory.armorInventory[slot] != null) {
@@ -232,5 +226,9 @@ public class AutoArmor extends Module {
                 return i;
         }
         return -1;
+    }
+
+    private void updateTime(){
+        waitTime = ClientUtils.getRandomInt(minDelay.get(), maxDelay.get());
     }
 }

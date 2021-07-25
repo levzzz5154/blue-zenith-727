@@ -367,18 +367,18 @@ public class ItemRenderer {
             float f = -0.4F * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI);
             float f1 = 0.2F * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI * 2.0F);
             float f2 = -0.2F * MathHelper.sin(swingProgress * (float) Math.PI);
+            GlStateManager.translate(a.itemPosX.get() / 100, a.itemPosY.get() / 100, a.itemPosZ.get() / 100);
             GlStateManager.translate(f, f1, f2);
             GlStateManager.translate(0.56F, -0.52F, -0.71999997F);
             GlStateManager.translate(0.0F, equipProgress * -0.6F, 0.0F);
-            GlStateManager.scale(a.itemScale.get(), a.itemScale.get(), a.itemScale.get());
             GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
             float sex = MathHelper.sin(swingProgress * swingProgress * (float) Math.PI);
             float sex1 = MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI);
             GlStateManager.rotate(sex * -20.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(sex1 * -20.0F, 0.0F, 0.0F, 1.0F);
             GlStateManager.rotate(sex1 * -80.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.translate(a.itemPosX.get() / 100, a.itemPosY.get() / 100, a.itemPosZ.get() / 100);
-            GlStateManager.scale(0.4F, 0.4F, 0.4F);
+            GlStateManager.scale(0.4f * a.itemScale.get(), 0.4f * a.itemScale.get(), 0.4f * a.itemScale.get());
+            //GlStateManager.scale(0.4F, 0.4F, 0.4F);
         }else{
             this.func_178105_d(swingProgress);
             this.transformFirstPersonItem(equipProgress, swingProgress);
@@ -388,10 +388,16 @@ public class ItemRenderer {
     public void onBlockTranslate(float equipProgress, float swingProgress){
         Animations a = (Animations) BlueZenith.moduleManager.getModule(Animations.class);
         if(a.getState()){
-            //noinspection SwitchStatementWithTooFewBranches
             switch (a.anim.get()){
                 case "SlideDown":
                     this.transformFirstPersonItem(equipProgress, swingProgress);
+                    this.doBlockTransformations();
+                    break;
+                case "Exhibition":
+                    this.transformFirstPersonItem(equipProgress, swingProgress);
+                    GlStateManager.translate(0, 0.235F, 0F);
+                    GL11.glRotated(-MathHelper.sin((float) (MathHelper.sqrt_float(swingProgress) * Math.PI)) * 40.0F, MathHelper.sin((float) (MathHelper.sqrt_float(swingProgress) * Math.PI)) / 2, 0.0F, 9.0F);
+                    GL11.glRotated(-MathHelper.sin((float) (MathHelper.sqrt_float(swingProgress) * Math.PI)) * 50.0F, 0.8F, MathHelper.sin((float) (MathHelper.sqrt_float(swingProgress) * Math.PI)) / 2, 0F);
                     this.doBlockTransformations();
                     break;
             }

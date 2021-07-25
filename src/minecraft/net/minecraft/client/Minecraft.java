@@ -964,7 +964,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
         if (!this.skipRenderWorld) {
             this.mcProfiler.endStartSection("gameRenderer");
-            this.entityRenderer.func_181560_a(this.timer.renderPartialTicks, i);
+            this.entityRenderer.updateCameraAndRender(this.timer.renderPartialTicks, i);
             this.mcProfiler.endSection();
         }
 

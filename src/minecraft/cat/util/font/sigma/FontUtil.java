@@ -9,16 +9,17 @@ import java.io.InputStream;
 
 public class FontUtil {
 	private static Font getEpicFont(String str, float size) {
-		Font font;
+		Font font = new Font("default", Font.PLAIN, (int) (size / 2));
 		try {
-			InputStream is = Minecraft.getMinecraft().getResourceManager()
-					.getResource(new ResourceLocation("ttf/"+str+".ttf")).getInputStream();
+			InputStream is = FontUtil.class.getResourceAsStream("/assets/minecraft/ttf/"+str+".ttf");
+			if(is == null){
+				throw new Exception("Font path does not exist. "+str);
+			}
 			font = Font.createFont(Font.TRUETYPE_FONT, is);
 			font = font.deriveFont(Font.PLAIN, size / 2f);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.out.println("Error loading font");
-			font = new Font("default", Font.PLAIN, (int) (size / 2));
 		}
 		return font;
 	}
@@ -26,4 +27,5 @@ public class FontUtil {
 	public static FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
 	public static TFFFontRenderer fontSFLight35 = new TFFFontRenderer(getEpicFont("sf-ui-display-light", 35));
 	public static TFFFontRenderer fontSFLight42 = new TFFFontRenderer(getEpicFont("sf-ui-display-light", 42));
+	public static TFFFontRenderer icon = new TFFFontRenderer(getEpicFont("icons", 80));
 }

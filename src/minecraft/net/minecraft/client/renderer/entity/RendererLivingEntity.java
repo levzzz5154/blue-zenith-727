@@ -5,6 +5,7 @@ import cat.module.modules.render.NameTags;
 import cat.module.modules.render.Rotations;
 import cat.util.EntityManager;
 import cat.util.RenderUtil;
+import cat.util.font.sigma.FontUtil;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -249,7 +250,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
                 GlStateManager.disableRescaleNormal();
             } catch (Exception exception) {
-                logger.error((String) "Couldn\'t render entity", (Throwable) exception);
+                logger.error("Couldn\'t render entity", (Throwable) exception);
             }
 
             GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
@@ -591,9 +592,9 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
                 GL11.glEnable(GL11.GL_LINE_SMOOTH);
                 //fuck no it looks blurry af
-                //FontRenderer fontRenderer = Fonts.fontSFLight55;
                 FontRenderer fontRenderer = mc.fontRendererObj;
                 FontRenderer fontRenderer2 = mc.fontRendererObj;
+                //FontRenderer fontRenderer = Fonts.fontSFLight55;
 
                 String name = entity.getDisplayName().getUnformattedText();
 
