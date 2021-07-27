@@ -43,8 +43,8 @@ public class TargetStrafe extends Module {
         double strafeX = -Math.sin(strafeYaw) * speed * direction;
         double strafeZ = Math.cos(strafeYaw) * speed * direction;
 
-        if(mc.thePlayer.onGround && (isAboveGround(mc.thePlayer.posX + encirclementX + (2 * strafeX), mc.thePlayer.posY, mc.thePlayer.posZ + encirclementZ + (2 * strafeZ)) || mc.thePlayer.isCollidedHorizontally)){
-            direction *= 1;
+        if((isAboveGround(mc.thePlayer.posX + encirclementX + (2 * strafeX), mc.thePlayer.posY, mc.thePlayer.posZ + encirclementZ + (2 * strafeZ)) || mc.thePlayer.isCollidedHorizontally)){
+            direction *= -1;
             strafeX *= -1;
             strafeZ *= -1;
         }
@@ -55,7 +55,7 @@ public class TargetStrafe extends Module {
     public void onRender3D(Render3DEvent e){
         if(target == null) return;
         GL11.glPushMatrix();
-        GL11.glDepthMask(true);
+        //GL11.glDepthMask(true);
         GL11.glTranslated(
                 target.lastTickPosX + (target.posX - target.lastTickPosX) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosX,
                 target.lastTickPosY + (target.posY - target.lastTickPosY) * mc.timer.renderPartialTicks - mc.getRenderManager().renderPosY,
@@ -83,7 +83,7 @@ public class TargetStrafe extends Module {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
-        GL11.glDepthMask(false);
+        //GL11.glDepthMask(false);
         GL11.glPopMatrix();
         GlStateManager.resetColor();
     }
