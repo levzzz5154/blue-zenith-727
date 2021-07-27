@@ -10,5 +10,5 @@ public class Rotations extends Module {
     public float yaw = 0;
     public float pitch = 0;
     public float prevYaw = 0;
-    public  float prevPitch = 0;
+    public float prevPitch = 0;
 }

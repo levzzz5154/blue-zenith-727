@@ -13,17 +13,23 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModulePanel extends Panel {
-    ModuleCategory category;
-    ArrayList<Module> modules = new ArrayList<>();
-    private Module lastMod = null;
+    private final ArrayList<Module> modules = new ArrayList<>();
     private final MillisTimer timer = new MillisTimer();
+    private final ModuleCategory category;
+    private StringValue selectedTextField = null;
+    private float textFieldCounter = 0;
+    private boolean wasPressed = false;
+    private Value<?> sliderVal = null;
+    private Module lastMod = null;
     public ModulePanel(float x, float y, ModuleCategory category){
         super(x, y, "Modules " + category.displayName);
         this.category = category;
@@ -45,53 +51,54 @@ public class ModulePanel extends Panel {
     }
     public void addModule(Module mod){
         this.modules.add(mod);
+        mod.clickGuiAnim.setReversed(true);
     }
-    float textFieldCounter = 0;
-    Value<?> sliderVal = null;
-    private boolean wasPressed = false;
     public void drawPanel(int mouseX, int mouseY, float partialTicks, boolean handleClicks){
-        Color main_color = click.main_color;
+        float w = width;
+        float h = f.FONT_HEIGHT + 8;
+        Color mainColor = click.main_color;
         Color backgroundColor = click.backgroundColor;
+        Color settingsColor = backgroundColor.brighter();
 
-        RenderUtil.rect(x, y, x + width, y + mHeight, new Color(main_color.getRed(), main_color.getGreen(), main_color.getBlue(), click.ba.get()));
+        RenderUtil.rect(x, y, x + width, y + mHeight, new Color(mainColor.getRed(), mainColor.getGreen(), mainColor.getBlue(), click.ba.get()));
         f.drawString(category.displayName, x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
         float y1 = y + mHeight;
         for (Module m : modules) {
             if(!this.showContent) continue;
 
-            List<Value<?>> vl = m.getValues();
+            List<Value<?>> vl = m.getValues().stream().filter(Value::isVisible).collect(Collectors.toList());
             if(i(mouseX, mouseY, x, y1, x + width, y1 + mHeight) && !wasPressed){
                 if(Mouse.isButtonDown(0)){
                     m.toggle();
-                    mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
+                    toggleSound();
                 }
                 if(Mouse.isButtonDown(1) && !vl.isEmpty()){
                     if(lastMod != null && lastMod != m&& click.closePrevious.get()) lastMod.showSettings = false;
                     lastMod = m;
                     m.showSettings = !m.showSettings;
-                    mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
+                    m.clickGuiAnim.setReversed(!m.showSettings);
+                    toggleSound();
                     timer.reset();
                 }
             }
 
             RenderUtil.rect(x, y1, x + width, y1 + mHeight, backgroundColor);
-            f.drawString(m.getName(), x + 5, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), m.getState() ? main_color.getRGB() : main_color.darker().darker().getRGB());
+            f.drawString(m.getName(), x + 5, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), m.getState() ? mainColor.getRGB() : mainColor.darker().darker().getRGB());
             y1 += mHeight;
-            if(m.showSettings && (timer.hasTimeReached(35) || !click.closePrevious.get())){
+            if(canRender(m) && (timer.hasTimeReached(35) || !click.closePrevious.get())){
+                float y2 = y1; // im sorry for too many variables :(
+                if(click.animate.get())
+                    m.clickGuiAnim.setMax(h * vl.size()).update();
+                GL11.glEnable(GL11.GL_SCISSOR_TEST);
+                RenderUtil.crop(x, y1, x + width, y1 + d(h * vl.size(), m.clickGuiAnim.getValue()) + 1);
                 for (Value<?> v : vl) {
-                    //lmao i forgot this
-                    if(!v.isVisible()) continue;
-                    float w = width;
-                    Color settingsColor = backgroundColor.brighter();
-                    float h = f.FONT_HEIGHT + 8;
-                    float y1r = y1;
-                    float y2r = y1 + h;
+                    float y2r = y2 + h;
                     if(v instanceof ModeValue) {
                         ModeValue val = (ModeValue) v;
-                        RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        f.drawString(val.name, x + 5, y1 + h / 2f - f.FONT_HEIGHT / 2f, main_color.getRGB());
-                        f.drawString(val.get(), x + 10 + f.getStringWidth(val.name), y1 + (h / 2f - f.FONT_HEIGHT / 2f), Color.GRAY.getRGB());
-                        if(i(mouseX, mouseY, x, y1, x + width, y1 + h) && !wasPressed && handleClicks) {
+                        RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
+                        f.drawString(val.name, x + 5, y2 + h / 2f - f.FONT_HEIGHT / 2f, mainColor.getRGB());
+                        f.drawString(val.get(), x + 10 + f.getStringWidth(val.name), y2 + (h / 2f - f.FONT_HEIGHT / 2f), Color.GRAY.getRGB());
+                        if(i(mouseX, mouseY, x, y2, x + width, y2 + h) && !wasPressed && handleClicks) {
                             if(Mouse.isButtonDown(0)) {
                                 val.next();
                                 toggleSound();
@@ -100,16 +107,16 @@ public class ModulePanel extends Panel {
                                 toggleSound();
                             }
                         }
-                        y1 += h;
+                        y2 += h;
                     }else if (v instanceof FloatValue) {
                         FloatValue value = (FloatValue) v;
                         final float a = x + w * (Math.max(value.min, Math.min(value.get(), value.max)) - value.min) / (value.max - value.min);
-                        RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        RenderUtil.rect(x, y1r, x + w, y2r, new Color(63, 65, 68));
-                        RenderUtil.rect(x, y1r, a, y2r, main_color.darker().darker());
-                        f.drawString(value.name + ": " + value.get(), x + 4, y1 + (h / 2f - f.FONT_HEIGHT / 2f), main_color.getRGB());
+                        RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
+                        RenderUtil.rect(x, y2, x + w, y2r, new Color(63, 65, 68));
+                        RenderUtil.rect(x, y2, a, y2r, mainColor.darker().darker());
+                        f.drawString(value.name + ": " + value.get(), x + 4, y2 + (h / 2f - f.FONT_HEIGHT / 2f), mainColor.getRGB());
 
-                        if (Mouse.isButtonDown(0) && handleClicks && ((i(mouseX, mouseY, x, y1r, x + w, y2r) && sliderVal == null) || sliderVal == v)) {
+                        if (Mouse.isButtonDown(0) && handleClicks && ((i(mouseX, mouseY, x, y2, x + w, y2r) && sliderVal == null) || sliderVal == v)) {
                             sliderVal = v;
                             double i = MathHelper.clamp_double(((double) mouseX - (double) x) / ((double) w - 3), 0, 1);
 
@@ -120,16 +127,16 @@ public class ModulePanel extends Panel {
                             sliderVal = null;
                         }
 
-                        y1 += h;
+                        y2 += h;
                     } else if (v instanceof IntegerValue) {
                         IntegerValue value = (IntegerValue) v;
                         final float a = x + w * (Math.max(value.min, Math.min(value.get(), value.max)) - value.min) / (value.max - value.min);
-                        RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        RenderUtil.rect(x, y1r, x + w, y2r, new Color(63, 65, 68));
-                        RenderUtil.rect(x, y1r, a, y2r, main_color.darker().darker());
-                        f.drawString(value.name + ": " + value.get(), x + 4, y1 + h / 2f - f.FONT_HEIGHT / 2f, main_color.getRGB());
+                        RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
+                        RenderUtil.rect(x, y2, x + w, y2r, new Color(63, 65, 68));
+                        RenderUtil.rect(x, y2, a, y2r, mainColor.darker().darker());
+                        f.drawString(value.name + ": " + value.get(), x + 4, y2 + h / 2f - f.FONT_HEIGHT / 2f, mainColor.getRGB());
 
-                        if (Mouse.isButtonDown(0) && handleClicks && ((i(mouseX, mouseY, x, y1r, x + w, y2r) && sliderVal == null) || sliderVal == v)) {
+                        if (Mouse.isButtonDown(0) && handleClicks && ((i(mouseX, mouseY, x, y2, x + w, y2r) && sliderVal == null) || sliderVal == v)) {
                             sliderVal = v;
                             double i = MathHelper.clamp_double(((double) mouseX - (double) x) / ((double) w - 3), 0, 1);
 
@@ -140,39 +147,41 @@ public class ModulePanel extends Panel {
                             sliderVal = null;
                         }
 
-                        y1 += h;
+                        y2 += h;
                     } else if (v instanceof StringValue) {
                         StringValue val = (StringValue) v;
-                        RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        f.drawString(val.name + ": "+val.get() + (selectedTextField != null && selectedTextField == val && textFieldCounter > partialTicks % 0.5 ? "_" : ""), x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), Color.WHITE.getRGB());
-                        if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0)) && !wasPressed && handleClicks) {
+                        RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
+                        f.drawString(val.name + ": "+val.get() + (selectedTextField != null && selectedTextField == val && textFieldCounter > partialTicks % 0.5 ? "_" : ""), x + 5, y2 + (h / 2f - f.FONT_HEIGHT / 2f), Color.WHITE.getRGB());
+                        if (i(mouseX, mouseY, x, y2, x + width, y2 + h) && (Mouse.isButtonDown(0)) && !wasPressed && handleClicks) {
                             this.selectedTextField = val;
                             toggleSound();
                         }
-                        y1 += h;
+                        y2 += h;
                     } else if (v instanceof BooleanValue) {
                         BooleanValue val = (BooleanValue) v;
-                        RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        RenderUtil.rect(x + width - 14, y1 + 2f, x + width - 3.2f, y1 + h - 2f, new Color(60, 60, 60));
+                        RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
+                        RenderUtil.rect(x + width - 14, y2 + 2f, x + width - 3.2f, y2 + h - 2f, new Color(60, 60, 60));
                         if(val.get())
-                            RenderUtil.rect(x + width - 12.5f, y1 + 3.5f, x + width - 4.5f, y1 + h - 3.5f, main_color);
-                        f.drawString(val.name, x + 5, y1 + (h / 2f - f.FONT_HEIGHT / 2f), main_color.getRGB());
-                        if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !wasPressed && handleClicks) {
+                            RenderUtil.rect(x + width - 12.5f, y2 + 3.5f, x + width - 4.5f, y2 + h - 3.5f, mainColor);
+                        f.drawString(val.name, x + 5, y2 + (h / 2f - f.FONT_HEIGHT / 2f), mainColor.getRGB());
+                        if (i(mouseX, mouseY, x, y2, x + width, y2 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !wasPressed && handleClicks) {
                             val.next();
                             mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                         }
-                        y1 += h;
-                    }
-                    else if(v instanceof ActionValue) {
-                        RenderUtil.rect(x, y1, x + width, y1 + h, settingsColor);
-                        f.drawString(v.name, x + width/2-f.getStringWidth(v.name)/2f, y1 + h / 2f - f.FONT_HEIGHT / 2f, main_color.getRGB());
-                        if (i(mouseX, mouseY, x, y1, x + width, y1 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !wasPressed && handleClicks) {
+                        y2 += h;
+                    }else if(v instanceof ActionValue) {
+                        RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
+                        f.drawString(v.name, x + width/2-f.getStringWidth(v.name)/2f, y2 + h / 2f - f.FONT_HEIGHT / 2f, mainColor.getRGB());
+                        if (i(mouseX, mouseY, x, y2, x + width, y2 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !wasPressed && handleClicks) {
                             v.next();
                             mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
                         }
-                        y1 += h;
+                        y2 += h;
                     }
                 }
+                // i can't find any way of fixing this
+                GL11.glDisable(GL11.GL_SCISSOR_TEST);
+                y1 += d(h * vl.size(), m.clickGuiAnim.getValue());
             }
         }
         height = y1 - y;
@@ -180,7 +189,12 @@ public class ModulePanel extends Panel {
         textFieldCounter %= 1;
         wasPressed = Mouse.isButtonDown(0) || Mouse.isButtonDown(1);
     }
-    StringValue selectedTextField = null;
+    private float d(float h, float value){
+        return click.animate.get() ? value : h;
+    }
+    private boolean canRender(Module m){
+        return click.animate.get() ? m.clickGuiAnim.isReversed() ? m.clickGuiAnim.getValue() != m.clickGuiAnim.getMin() : m.clickGuiAnim.getValue() <= m.clickGuiAnim.getMax() : m.showSettings;
+    }
     public void keyTyped(char charTyped, int keyCode){
         Keyboard.enableRepeatEvents(true);
         if(selectedTextField == null || selectedTextField.get() == null){

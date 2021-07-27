@@ -12,6 +12,10 @@ public class MathUtil {
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
+    public static double round(double value) {
+        int scale = (int) Math.pow(10, 1);
+        return (double) Math.round(value * scale) / scale;
+    }
     public static int inRange(int value, int min, int max){
         return Math.max(Math.min(value, max), min);
     }

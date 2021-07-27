@@ -11,11 +11,11 @@ import net.minecraft.network.play.client.C03PacketPlayer;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class LongJump extends Module {
-    BooleanValue autoDamage = new BooleanValue("AutoDamage", true, true);
     public LongJump(){
         super("LongJump", "", ModuleCategory.MOVEMENT);
     }
-    int c = 0;
+    private final BooleanValue autoDamage = new BooleanValue("AutoDamage", true, true);
+    private int c = 0;
     @Override
     public void onEnable(){
         maccacokkk = false;

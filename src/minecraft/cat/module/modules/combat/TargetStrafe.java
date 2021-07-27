@@ -14,8 +14,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Arrays;
-
 public class TargetStrafe extends Module {
     public TargetStrafe() {
         super("TargetStrafe", "", ModuleCategory.COMBAT);

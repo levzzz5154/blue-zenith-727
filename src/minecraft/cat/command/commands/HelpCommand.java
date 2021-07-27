@@ -4,7 +4,7 @@ import cat.BlueZenith;
 import cat.command.Command;
 
 import java.util.Arrays;
-
+@SuppressWarnings("unused")
 public final class HelpCommand extends Command {
 
     public HelpCommand() {

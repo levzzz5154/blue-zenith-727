@@ -10,7 +10,7 @@ import cat.util.PacketUtil;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class Regen extends Module {
-    IntegerValue speed = new IntegerValue("Speed", 10, 0, 100, 0, true, null);
+    private final IntegerValue speed = new IntegerValue("Speed", 10, 0, 100, 0, true, null);
     public Regen() {
         super("Regen", "", ModuleCategory.PLAYER);
     }

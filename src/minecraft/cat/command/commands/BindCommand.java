@@ -6,7 +6,7 @@ import cat.module.Module;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Locale;
-
+@SuppressWarnings("unused")
 public class BindCommand extends Command {
     public BindCommand() {
         super("Bind", "Bind a module.",".bind module key | .bind key module", "b");

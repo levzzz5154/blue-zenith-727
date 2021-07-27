@@ -10,7 +10,7 @@ import org.lwjgl.input.Keyboard;
 
 @SuppressWarnings("unused")
 public class Speed extends Module {
-    FloatValue speed = new FloatValue("Speed", 0.31f, 0f, 5f, 0.1f, true, null);
+    private final FloatValue speed = new FloatValue("Speed", 0.31f, 0f, 5f, 0.1f, true, null);
     public Speed() {
         super("Speed", "", ModuleCategory.MOVEMENT, Keyboard.KEY_ADD,"bhop");
     }

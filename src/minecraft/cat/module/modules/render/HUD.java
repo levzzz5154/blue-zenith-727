@@ -20,33 +20,29 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.EnumChatFormatting;
-import net.optifine.util.MathUtils;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-import static cat.util.ColorUtil.rainbow;
 // god i hate this check
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings({"SpellCheckingInspection", "unused"})
 public class HUD extends Module {
-    ModeValue fontMode = new ModeValue("Font", "Client", true, null, "Client", "Vanilla");
-    BooleanValue shadow = new BooleanValue("FontShadow", true, true, null);
-    BooleanValue border = new BooleanValue("Border", true, true, null);
-    IntegerValue backgroundOpacity = new IntegerValue("BackgroundOpacity", 50, 0, 255, 1, true, null);
-    IntegerValue margin = new IntegerValue( "Margin", 10, 0, 15, 1, true, null);
-    ModeValue colorMode = new ModeValue("ColorMode", "Pulse", true, null, "Pulse", "Rainbow", "Custom");
-    FloatValue rainbowMulti = new FloatValue("RainbowMulti", 0.4f,0,1,0.1f, true, the -> colorMode.get().equals("Rainbow"));
-    IntegerValue customR = new IntegerValue("CustomR", 0, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
-    IntegerValue customG = new IntegerValue("CustomB", 60, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
-    IntegerValue customB = new IntegerValue("CustomG", 159, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
-    BooleanValue showPing = new BooleanValue("Ping", true, true, null);
-    BooleanValue showCoords = new BooleanValue("Coords", true, true, null);
-    BooleanValue showFPS = new BooleanValue("FPS", true, true, null);
-    BooleanValue showBPS = new BooleanValue("BPS", true, true, null);
-    ArrayList<Module> modules = new ArrayList<>();
+    private final ModeValue fontMode = new ModeValue("Font", "Client", true, null, "Client", "Vanilla");
+    private final BooleanValue shadow = new BooleanValue("FontShadow", true, true, null);
+    private final BooleanValue border = new BooleanValue("Border", true, true, null);
+    private final IntegerValue backgroundOpacity = new IntegerValue("BackgroundOpacity", 50, 0, 255, 1, true, null);
+    private final IntegerValue margin = new IntegerValue( "Margin", 10, 0, 15, 1, true, null);
+    private final ModeValue colorMode = new ModeValue("ColorMode", "Pulse", true, null, "Pulse", "Rainbow", "Custom");
+    private final FloatValue rainbowMulti = new FloatValue("RainbowMulti", 0.4f,0,1,0.1f, true, the -> colorMode.get().equals("Rainbow"));
+    private final IntegerValue customR = new IntegerValue("CustomR", 0, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
+    private final IntegerValue customG = new IntegerValue("CustomB", 60, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
+    private final IntegerValue customB = new IntegerValue("CustomG", 159, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
+    private final BooleanValue showPing = new BooleanValue("Ping", true, true, null);
+    private final BooleanValue showCoords = new BooleanValue("Coords", true, true, null);
+    private final BooleanValue showFPS = new BooleanValue("FPS", true, true, null);
+    private final BooleanValue showBPS = new BooleanValue("BPS", true, true, null);
+    private final ArrayList<Module> modules = new ArrayList<>();
     private final IArraylistRenderer renderer = new VanillaFont();
-    @SuppressWarnings("unused")
     public HUD() {
         super("HUD", "", ModuleCategory.RENDER);
         this.setState(true);
@@ -110,14 +106,6 @@ public class HUD extends Module {
         int z = 0;
         if(showCoords.get()){
             Color colorD = getColor(z);
-            // i hate minecraft coloring
-            /*float x = 2;
-            String[] stA = new String[]{"X§r: "+Math.round(mc.thePlayer.posX), "Y§r: "+Math.round(mc.thePlayer.posY), "Z§r: "+Math.round(mc.thePlayer.posZ)};
-            for (int i = stA.length - 1; i >= 0; i--) {
-                String str = stA[i];
-                f.drawString(str, x, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
-                x += f.getStringWidth(str + " ");
-            }*/
             f.drawString("XYZ§r: "+Math.round(mc.thePlayer.posX) + ", " + Math.round(mc.thePlayer.posY) + ", " + Math.round(mc.thePlayer.posZ), 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
             y += fy;
             z++;

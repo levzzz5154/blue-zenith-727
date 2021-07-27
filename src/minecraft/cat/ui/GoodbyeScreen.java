@@ -15,8 +15,6 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class GoodbyeScreen extends GuiScreen {
-
-    private int niggers = 1;
     private int faggots = 1;
     private String a = nigger[new Random().nextInt(nigger.length)];
     private final boolean isDreamLuck;
@@ -38,19 +36,16 @@ public class GoodbyeScreen extends GuiScreen {
                 mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("hi")));
                 dreamluckTimer.reset();
             }
-            font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, niggers).getRGB());
+            font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, 255 - faggots).getRGB());
             return;
         }
+        faggots += 2;
         if(faggots >= 255)
             faggots = 255;
         drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getMainColor().getRGB());
         drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getEpicColor(10).getRGB());
         drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, faggots).getRGB());
-        faggots += 2;
-        niggers += 4;
-        if(niggers >= 255)
-            niggers = 255;
-        font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, niggers).getRGB());
+        font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, 255 - faggots).getRGB());
     }
 
     @Override

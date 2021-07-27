@@ -2,6 +2,8 @@ package cat.module;
 
 import cat.BlueZenith;
 import cat.module.value.Value;
+import fr.lavache.anime.Animate;
+import fr.lavache.anime.Easing;
 import net.minecraft.client.Minecraft;
 
 import java.lang.reflect.Field;
@@ -9,16 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Module {
+    public final String[] aliases;
     protected final Minecraft mc = Minecraft.getMinecraft();
-    final String name;
+    private final List<Value<?>> values = new ArrayList<>();
     public String displayName;
-    String tag;
-    ModuleCategory category;
+    private final String name;
+    private String tag;
     private boolean state;
+    private final ModuleCategory category;
     public int keyBind;
     public boolean showSettings, hidden;
-    public final String[] aliases;
-    private final List<Value<?>> values = new ArrayList<>();
+    public Animate clickGuiAnim = new Animate().setEase(Easing.QUAD_IN_OUT).setSpeed(300);
     public Module(String name, String tag, ModuleCategory cat, String... aliases){
         this(name, tag, cat, 0, aliases);
     }

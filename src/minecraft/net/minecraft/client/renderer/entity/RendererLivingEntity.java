@@ -4,8 +4,8 @@ import cat.BlueZenith;
 import cat.module.modules.render.NameTags;
 import cat.module.modules.render.Rotations;
 import cat.util.EntityManager;
+import cat.util.MathUtil;
 import cat.util.RenderUtil;
-import cat.util.font.sigma.FontUtil;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -45,7 +45,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
     private static final DynamicTexture field_177096_e = new DynamicTexture(16, 16);
     public ModelBase mainModel;
     protected FloatBuffer brightnessBuffer = GLAllocation.createDirectFloatBuffer(4);
-    protected List<LayerRenderer<T>> layerRenderers = Lists.<LayerRenderer<T>>newArrayList();
+    protected List<LayerRenderer<T>> layerRenderers = Lists.newArrayList();
     protected boolean renderOutlines = false;
     public static float NAME_TAG_RANGE = 64.0F;
     public static float NAME_TAG_RANGE_SNEAK = 32.0F;
@@ -86,10 +86,9 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
      * Example: par1 = 30, par2 = 50, par3 = 0.5, then return = 40
      */
     protected float interpolateRotation(float par1, float par2, float par3) {
-        float f;
-
-        for (f = par2 - par1; f < -180.0F; f += 360.0F) {
-            ;
+        float f = par2 - par1;
+        while(f < -180.0F){
+            f += 360.0F;
         }
 
         while (f >= 180.0F) {
@@ -250,7 +249,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
                 GlStateManager.disableRescaleNormal();
             } catch (Exception exception) {
-                logger.error("Couldn\'t render entity", (Throwable) exception);
+                logger.error("Couldn't render entity", exception);
             }
 
             GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
@@ -264,7 +263,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
             }
 
             if (Reflector.RenderLivingEvent_Post_Constructor.exists()) {
-                Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Post_Constructor, new Object[]{entity, this, Double.valueOf(x), Double.valueOf(y), Double.valueOf(z)});
+                Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Post_Constructor, entity, this, x, y, z);
             }
         }
     }
@@ -404,7 +403,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
             }
 
             this.brightnessBuffer.flip();
-            GL11.glTexEnv(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_COLOR, (FloatBuffer) this.brightnessBuffer);
+            GL11.glTexEnv(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_COLOR, this.brightnessBuffer);
             GlStateManager.setActiveTexture(OpenGlHelper.GL_TEXTURE2);
             GlStateManager.enableTexture2D();
             GlStateManager.bindTexture(field_177096_e.getGlTextureId());
@@ -565,7 +564,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
     }
 
     public void renderName(T entity, double x, double y, double z) {
-        if (!Reflector.RenderLivingEvent_Specials_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Specials_Pre_Constructor, new Object[]{entity, this, Double.valueOf(x), Double.valueOf(y), Double.valueOf(z)})) {
+        if (!Reflector.RenderLivingEvent_Specials_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Specials_Pre_Constructor, entity, this, x, y, z)) {
             if(BlueZenith.moduleManager.getModule(NameTags.class).getState() && EntityManager.isTarget(entity) && Minecraft.getMinecraft().theWorld.loadedEntityList.contains(entity) && !(entity instanceof EntityArmorStand)){
                 GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
                 GL11.glPushMatrix();
@@ -598,10 +597,10 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
                 String name = entity.getDisplayName().getUnformattedText();
 
-                String healthText = "Health: " + NameTags.round(entity.getHealth());
+                String healthText = "Health: " + MathUtil.round(entity.getHealth());
 
                 if (fontRenderer2.getStringWidth(healthText) > fontRenderer.getStringWidth(entity.getDisplayName().getUnformattedText())) {
-                    healthText = "H: " + NameTags.round(entity.getHealth());
+                    healthText = "H: " + MathUtil.round(entity.getHealth());
                 }
 
                 float margin = 8;
@@ -623,7 +622,6 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
                 if (d0 < (double) (f * f)) {
                     String s = entity.getDisplayName().getFormattedText();
-                    float f1 = 0.02666667F;
                     GlStateManager.alphaFunc(516, 0.1F);
 
                     if (entity.isSneaking()) {
@@ -644,10 +642,10 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                         Tessellator tessellator = Tessellator.getInstance();
                         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
                         worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-                        worldrenderer.pos((double) (-i - 1), -1.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
-                        worldrenderer.pos((double) (-i - 1), 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
-                        worldrenderer.pos((double) (i + 1), 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
-                        worldrenderer.pos((double) (i + 1), -1.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
+                        worldrenderer.pos(-i - 1, -1.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
+                        worldrenderer.pos(-i - 1, 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
+                        worldrenderer.pos(i + 1, 8.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
+                        worldrenderer.pos(i + 1, -1.0D, 0.0D).func_181666_a(0.0F, 0.0F, 0.0F, 0.25F).func_181675_d();
                         tessellator.draw();
                         GlStateManager.enableTexture2D();
                         GlStateManager.depthMask(true);
@@ -663,7 +661,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
             }
 
             if (Reflector.RenderLivingEvent_Specials_Post_Constructor.exists()) {
-                Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Specials_Post_Constructor, new Object[]{entity, this, Double.valueOf(x), Double.valueOf(y), Double.valueOf(z)});
+                Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Specials_Post_Constructor, entity, this, x, y, z);
             }
         }
     }

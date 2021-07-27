@@ -15,6 +15,7 @@ public class ClickGUI extends Module {
     public Color backgroundColor = Color.BLACK;
 
     public BooleanValue closePrevious = new BooleanValue("Close previous", true, true, null);
+    public BooleanValue animate = new BooleanValue("Animate", true, true, null);
     public IntegerValue r = new IntegerValue("MainR", 205, 0, 255, 1, true, (p1, p2) -> {updateMainColor(); return p2;}, null);
     public IntegerValue g = new IntegerValue("MainG", 205, 0, 255, 1, true, (p1, p2) -> {updateMainColor(); return p2;}, null);
     public IntegerValue b = new IntegerValue("MainB", 205, 0, 255, 1, true, (p1, p2) -> {updateMainColor(); return p2;}, null);
