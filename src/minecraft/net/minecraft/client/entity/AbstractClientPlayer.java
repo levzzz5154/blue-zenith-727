@@ -86,7 +86,7 @@ public abstract class AbstractClientPlayer extends EntityPlayer {
     }
 
     public ResourceLocation getLocationCape() {
-        if(this == Minecraft.getMinecraft().thePlayer){
+        if(this == Minecraft.getMinecraft().thePlayer && BlueZenith.moduleManager.getModule(CustomCape.class).getState()){
             return ((CustomCape) BlueZenith.moduleManager.getModule(CustomCape.class)).getCapeLocation();
         }
 
