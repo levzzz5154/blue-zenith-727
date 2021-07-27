@@ -12,4 +12,7 @@ public class MathUtil {
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
+    public static int inRange(int value, int min, int max){
+        return Math.max(Math.min(value, max), min);
+    }
 }

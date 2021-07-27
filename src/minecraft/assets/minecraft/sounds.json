@@ -2032,9 +2032,19 @@
       "shabadaduba like a meboo"
     ]
   },
-"shutdown": {
-"sounds":[
-"shutdown"
-]
-}
+  "shutdown": {
+    "sounds":[
+    "shutdown"
+    ]
+  },
+  "LMAOYOURDEADXDD": {
+    "sounds":[
+      "LMAOYOURDEADXDD"
+    ]
+  },
+  "epic fail": {
+    "sounds":[
+      "epic fail"
+    ]
+  }
 }
