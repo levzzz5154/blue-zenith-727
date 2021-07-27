@@ -220,7 +220,7 @@ public class Aura extends Module {
     }
 
     private boolean isValid(EntityLivingBase ent){
-        return EntityManager.isTarget(ent) && mc.theWorld.loadedEntityList.contains(ent);
+        return target != null && EntityManager.isTarget(ent) && mc.theWorld.loadedEntityList.contains(ent);
     }
 
     public float getRange(){
