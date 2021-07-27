@@ -1,5 +1,6 @@
 package cat.util;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -34,8 +35,8 @@ public class RenderUtil extends MinecraftInstance {
         speed = range(speed * 10 / delta, 0, 1);
         float dif = Math.max(target, current) - Math.min(target, current);
         float factor = dif * speed;
-        if (factor < 0f)
-            factor = 0f;
+        if (factor < 0.001f)
+            factor = 0.001f;
         if (larger) {
             current += factor;
         } else {
@@ -78,7 +79,7 @@ public class RenderUtil extends MinecraftInstance {
             e.printStackTrace();
         }
     }
-    public static Framebuffer blur(float x, float y, float x2, float y2, ScaledResolution sc) {
+    public static void blur(float x, float y, float x2, float y2, ScaledResolution sc) {
         int factor = sc.getScaleFactor();
         int factor2 = sc.getScaledWidth();
         int factor3 = sc.getScaledHeight();
@@ -96,8 +97,21 @@ public class RenderUtil extends MinecraftInstance {
         GlStateManager.resetColor();
         blurShader.loadShaderGroup(mc.timer.renderPartialTicks);
         buffer.bindFramebuffer(true);
+        mc.getFramebuffer().bindFramebuffer(true);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        return buffer;
+    }
+    public static void blur(float x, float y, float x2, float y2){
+        GlStateManager.disableAlpha();
+        blur(x, y, x2, y2, new ScaledResolution(mc));
+        GlStateManager.enableAlpha();
+    }
+    public static float drawScaledFont(FontRenderer f, String text, float x, float y, int color, boolean shadow, float scale){
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 0);
+        GlStateManager.scale(scale, scale, 1);
+        f.drawString(text, 0, 0, color, shadow);
+        GlStateManager.popMatrix();
+        return f.getStringWidthF(text) * scale;
     }
     public static void glColor(final Color color) {
         final float red = color.getRed() / 255F;
