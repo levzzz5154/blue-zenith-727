@@ -27,5 +27,6 @@ public class FontUtil {
 	public static FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
 	public static TFFFontRenderer fontSFLight35 = new TFFFontRenderer(getEpicFont("sf-ui-display-light", 35));
 	public static TFFFontRenderer fontSFLight42 = new TFFFontRenderer(getEpicFont("sf-ui-display-light", 42));
-	public static TFFFontRenderer icon = new TFFFontRenderer(getEpicFont("icons", 80));
+	public static TFFFontRenderer fontComicSans42 = new TFFFontRenderer(getEpicFont("comic-sans-ms", 42));
+	public static TFFFontRenderer I_icon = new TFFFontRenderer(getEpicFont("icons", 80));
 }

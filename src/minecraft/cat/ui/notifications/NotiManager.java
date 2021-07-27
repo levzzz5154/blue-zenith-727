@@ -27,7 +27,7 @@ public class NotiManager extends MinecraftInstance {
             float width = 40 + inMargin + t;
             if(System.currentTimeMillis() - n.timeStarted > n.time){
                 n.baixarMinecraftFree2021(-(width + margin), 0, 0.15f);
-                if(n.xOffset >= width + margin){
+                if(n.yOffset <= 0){
                     removeQueue.add(n);
                 }
             }else{
@@ -35,14 +35,13 @@ public class NotiManager extends MinecraftInstance {
                 n.baxiarX(width + margin, 0.15f);
             }
             GlStateManager.pushMatrix();
+            RenderUtil.blur(res.getScaledWidth() - n.xOffset, res.getScaledHeight() - y, res.getScaledWidth() - n.xOffset + width, res.getScaledHeight() - y + height);
             GlStateManager.translate(res.getScaledWidth() - n.xOffset, res.getScaledHeight() - y, 0);
-            GlStateManager.resetColor();
-            //RenderUtil.blur(res.getScaledWidth() - n.xOffset, res.getScaledHeight() - y, res.getScaledWidth() - n.xOffset + width, res.getScaledHeight() - y + height, new ScaledResolution(Minecraft.getMinecraft()));
             RenderUtil.rect(0, 0, width, height, new Color(10,10,30, 120));
             float b = ((n.time - n.getTimePassed()) / n.time) % 1;
             RenderUtil.rect(0, 0, Math.max(width * (1.0f - b), 0.1f), 1, n.type.getColor());
-            f.drawString(n.title, FontUtil.icon.getStringWidthF(n.type.err) + inMargin * 2, height / 2f - f.FONT_HEIGHT / 2f, n.type.getColor().getRGB());
-            FontUtil.icon.drawString(n.type.err, inMargin, height / 2f - FontUtil.icon.FONT_HEIGHT / 2f, n.type.getColor().getRGB());
+            f.drawString(n.title, FontUtil.I_icon.getStringWidthF(n.type.err) + inMargin * 2, height / 2f - f.FONT_HEIGHT / 2f, n.type.getColor().getRGB());
+            FontUtil.I_icon.drawString(n.type.err, inMargin, height / 2f - FontUtil.I_icon.FONT_HEIGHT / 2f, n.type.getColor().getRGB());
             GlStateManager.popMatrix();
             y += n.yOffset;
         }
@@ -85,10 +84,10 @@ public class NotiManager extends MinecraftInstance {
     }
 
     public enum NotiType {
-        ERROR(new Color(255,100,100), "c"),
+        ERROR(new Color(255,0,0), "c"),
         INFO(new Color(255,255,255), "b"),
-        WARNING(new Color(255,255, 100), "c"),
-        SUCCESS(new Color(100,255,100), "a"),
+        WARNING(new Color(255,255, 0), "c"),
+        SUCCESS(new Color(0,255,0), "a"),
         ;
         private final Color color;
         public String err;
