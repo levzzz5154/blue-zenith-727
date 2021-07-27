@@ -95,7 +95,11 @@ public class GuiButton extends Gui {
     private void drawModifiedButton(Minecraft mc, int mouseX, int mouseY){
         TFFFontRenderer f = FontUtil.fontSFLight35;
         this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
-        this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, new Color(0,0,16, 100).getRGB(), new Color(0, 0, 32, 100).getRGB());
+        if(this.enabled){
+            this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, new Color(0,0,16, 100).getRGB(), new Color(0, 0, 32, 100).getRGB());
+        }else{
+            this.drawGradientRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, new Color(32,32,64, 100).getRGB(), new Color(64, 64, 96, 100).getRGB());
+        }
         f.drawCenteredString(this.displayString, this.xPosition + this.width / 2f, this.yPosition + (f.FONT_HEIGHT / 2f), Color.WHITE.getRGB());
         this.mouseDragged(mc, mouseX, mouseY);
     }
