@@ -20,7 +20,9 @@ public class AirWalk extends Module {
         if(mc.thePlayer == null) return;
         if(e.pos.getY() < mc.thePlayer.posY){
             e.blockBB = AxisAlignedBB.fromBounds(-5, -1, -5, 5, 1, 5).offset(e.pos.getX(), e.pos.getY(), e.pos.getZ());
-            MovementUtil.setSpeed(speed.get());
+            if(speed.get() != 0){
+                MovementUtil.setSpeed(speed.get());
+            }
         }
     }
 }
