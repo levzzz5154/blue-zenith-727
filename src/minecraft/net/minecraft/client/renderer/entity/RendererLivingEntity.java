@@ -1,6 +1,7 @@
 package net.minecraft.client.renderer.entity;
 
 import cat.BlueZenith;
+import cat.module.modules.render.Chams;
 import cat.module.modules.render.NameTags;
 import cat.module.modules.render.Rotations;
 import cat.util.EntityManager;
@@ -309,10 +310,12 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
      * Renders the model in RenderLiving
      */
     protected void renderModel(T entitylivingbaseIn, float p_77036_2_, float p_77036_3_, float p_77036_4_, float p_77036_5_, float p_77036_6_, float p_77036_7_) {
+        Chams chams = (Chams) BlueZenith.moduleManager.getModule(Chams.class);
         boolean flag = !entitylivingbaseIn.isInvisible();
         boolean flag1 = !flag && !entitylivingbaseIn.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer);
+        boolean chamsState = chams.getState();
 
-        if (flag || flag1) {
+        if (flag || flag1 || chamsState) {
             if (!this.bindEntityTexture(entitylivingbaseIn)) {
                 return;
             }
@@ -326,7 +329,34 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                 GlStateManager.alphaFunc(516, 0.003921569F);
             }
 
-            this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
+            if(chamsState){
+                GL11.glPushMatrix();
+                GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
+                GL11.glEnable(GL11.GL_BLEND);
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                GL11.glDisable(GL11.GL_TEXTURE_2D);
+                GL11.glDisable(GL11.GL_LIGHTING);
+                //GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+                GL11.glPolygonOffset(1.0F, 1000000.0F);
+                float alpha = entitylivingbaseIn.isInvisible() ? 0.2f : 1f;
+                GL11.glColor4f(0.9f, 0.5f, 0, alpha);
+                this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
+                /*GL11.glColor4f(0, 0, 0, alpha);
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                GL11.glDepthMask(true);
+                this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);*/
+                GL11.glPolygonOffset(1.0F, -1000000.0F);
+
+                GL11.glDisable(GL11.GL_BLEND);
+                GL11.glEnable(GL11.GL_TEXTURE_2D);
+                GL11.glEnable(GL11.GL_LIGHTING);
+                GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
+                GlStateManager.resetColor();
+                GL11.glPopMatrix();
+            }else{
+                this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
+            }
 
             if (flag1) {
                 GlStateManager.disableBlend();
@@ -566,6 +596,9 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
     public void renderName(T entity, double x, double y, double z) {
         if (!Reflector.RenderLivingEvent_Specials_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Specials_Pre_Constructor, entity, this, x, y, z)) {
             if(BlueZenith.moduleManager.getModule(NameTags.class).getState() && EntityManager.isTarget(entity) && Minecraft.getMinecraft().theWorld.loadedEntityList.contains(entity) && !(entity instanceof EntityArmorStand)){
+                GlStateManager.disableLighting();
+                GlStateManager.disableDepth();
+                GlStateManager.disableFog();
                 GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
                 GL11.glPushMatrix();
                 Minecraft mc = Minecraft.getMinecraft();
@@ -616,6 +649,9 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
                 GL11.glPopMatrix();
                 GL11.glPopAttrib();
+                GlStateManager.enableFog();
+                GlStateManager.enableDepth();
+                GlStateManager.enableLighting();
             }else if (this.canRenderName(entity)) {
                 double d0 = entity.getDistanceSqToEntity(this.renderManager.livingPlayer);
                 float f = entity.isSneaking() ? NAME_TAG_RANGE_SNEAK : NAME_TAG_RANGE;

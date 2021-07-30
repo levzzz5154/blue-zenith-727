@@ -59,6 +59,13 @@ public class Animate {
         return this;
     }
 
+    public boolean hasReachedMax(){
+        return getValue() >= getMax();
+    }
+    public boolean hasReachedMin(){
+        return getValue() <= getMin();
+    }
+
     public float getValue() { return value; }
     public float getMin() { return min; }
     public float getMax() { return max; }

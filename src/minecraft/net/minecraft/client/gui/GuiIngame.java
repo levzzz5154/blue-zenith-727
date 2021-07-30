@@ -2,6 +2,7 @@ package net.minecraft.client.gui;
 
 import cat.BlueZenith;
 import cat.events.impl.Render2DEvent;
+import cat.module.modules.render.AntiBlind;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -807,6 +808,10 @@ public class GuiIngame extends Gui {
     }
 
     private void renderPumpkinOverlay(ScaledResolution p_180476_1_) {
+        if(BlueZenith.moduleManager.getModule(AntiBlind.class).getState() && ((AntiBlind) BlueZenith.moduleManager.getModule(AntiBlind.class)).noPumpkin.get()){
+            return;
+        }
+
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);

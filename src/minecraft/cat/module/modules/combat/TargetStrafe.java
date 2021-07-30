@@ -6,9 +6,7 @@ import cat.events.impl.MoveEvent;
 import cat.events.impl.Render3DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
-import cat.util.ColorUtil;
-import cat.util.MovementUtil;
-import cat.util.RenderUtil;
+import cat.util.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
@@ -40,8 +38,11 @@ public class TargetStrafe extends Module {
         double encirclementZ = Math.cos(yaw) * encirclement;
         double strafeX = -Math.sin(strafeYaw) * speed * direction;
         double strafeZ = Math.cos(strafeYaw) * speed * direction;
-
-        if((isAboveGround(mc.thePlayer.posX + encirclementX + (2 * strafeX), mc.thePlayer.posY, mc.thePlayer.posZ + encirclementZ + (2 * strafeZ)) || mc.thePlayer.isCollidedHorizontally)){
+        boolean isFacingPlayer = RotationUtil.isFacingPlayer(target.rotationYaw, target.rotationPitch);
+        if(isFacingPlayer){
+            ClientUtils.fancyMessage("lmao some nigga looked at you");
+        }
+        if((isAboveGround(mc.thePlayer.posX + encirclementX + (2 * strafeX), mc.thePlayer.posY, mc.thePlayer.posZ + encirclementZ + (2 * strafeZ)) || mc.thePlayer.isCollidedHorizontally) || isFacingPlayer){
             direction *= -1;
             strafeX *= -1;
             strafeZ *= -1;

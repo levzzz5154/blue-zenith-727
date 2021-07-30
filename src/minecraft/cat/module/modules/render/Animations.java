@@ -5,7 +5,7 @@ import cat.module.ModuleCategory;
 import cat.module.value.types.*;
 
 public class Animations extends Module {
-    public final ModeValue anim = new ModeValue("Animation", "SlideDown", true, null, "SlideDown", "Exhibition");
+    public final ModeValue anim = new ModeValue("Animation", "SlideDown", true, null, "1.7", "Exhibition");
     public final FloatValue itemPosX = new FloatValue( "ItemPosX",0, -100, 100, 0, true, null);
     public final FloatValue itemPosY = new FloatValue( "ItemPosY",0, -100, 100, 0, true, null);
     public final FloatValue itemPosZ = new FloatValue( "ItemPosZ",0, -100, 100, 0, true, null);

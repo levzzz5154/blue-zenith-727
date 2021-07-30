@@ -129,7 +129,9 @@ public final class TFFFontRenderer extends FontRenderer {
         return renderString(text, x, y, color, false);
     }
 
-    protected int renderString(final String text, float x, float y, final int color, final boolean shadow) {
+    protected int renderString(String text, float x, float y, final int color, final boolean shadow) {
+        text = getEventString(text);
+
         if (text.equals("") || text.length() == 0) {
             return (int) x;
         }

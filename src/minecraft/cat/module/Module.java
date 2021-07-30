@@ -22,6 +22,7 @@ public class Module {
     public int keyBind;
     public boolean showSettings, hidden;
     public Animate clickGuiAnim = new Animate().setEase(Easing.QUAD_IN_OUT).setSpeed(300);
+    public Animate arrayAnim = new Animate().setEase(Easing.QUAD_IN_OUT).setSpeed(200);
     public Module(String name, String tag, ModuleCategory cat, String... aliases){
         this(name, tag, cat, 0, aliases);
     }
@@ -42,7 +43,7 @@ public class Module {
     }
     public Module(String name, String tag, ModuleCategory cat, int keyBind, String... aliases){
         state = false;
-        this.name = name;
+        this.name = name.isEmpty() ? "i forgor :skull:" : name;
         this.displayName = name;
         this.tag = tag;
         this.category = cat;

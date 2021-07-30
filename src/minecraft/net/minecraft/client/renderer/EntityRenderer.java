@@ -2,6 +2,7 @@ package net.minecraft.client.renderer;
 
 import cat.BlueZenith;
 import cat.events.impl.Render3DEvent;
+import cat.module.modules.render.AntiBlind;
 import cat.module.modules.render.CameraClip;
 import cat.module.modules.render.NoHurtCam;
 import cat.ui.notifications.NotiManager;
@@ -2124,6 +2125,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
      * distance and is used for sky rendering.
      */
     private void setupFog(int p_78468_1_, float partialTicks) {
+        AntiBlind antiBlind = (AntiBlind) BlueZenith.moduleManager.getModule(AntiBlind.class);
         this.fogStandard = false;
         Entity entity = this.mc.getRenderViewEntity();
         boolean flag = false;
@@ -2139,12 +2141,12 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         float f = -1.0F;
 
         if (Reflector.ForgeHooksClient_getFogDensity.exists()) {
-            f = Reflector.callFloat(Reflector.ForgeHooksClient_getFogDensity, new Object[]{this, entity, block, Float.valueOf(partialTicks), Float.valueOf(0.1F)});
+            f = Reflector.callFloat(Reflector.ForgeHooksClient_getFogDensity, this, entity, block, partialTicks, 0.1F);
         }
 
         if (f >= 0.0F) {
             GlStateManager.setFogDensity(f);
-        } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(Potion.blindness)) {
+        } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(Potion.blindness) && !(antiBlind.getState() && antiBlind.noBlindnessFog.get())) {
             float f4 = 5.0F;
             int i = ((EntityLivingBase) entity).getActivePotionEffect(Potion.blindness).getDuration();
 
@@ -2168,7 +2170,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         } else if (this.cloudFog) {
             GlStateManager.setFog(2048);
             GlStateManager.setFogDensity(0.1F);
-        } else if (block.getMaterial() == Material.water) {
+        } else if (block.getMaterial() == Material.water && !(antiBlind.getState() && antiBlind.noWaterFog.get())) {
             GlStateManager.setFog(2048);
             float f1 = Config.isClearWater() ? 0.02F : 0.1F;
 
@@ -2178,7 +2180,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                 float f2 = 0.1F - (float) EnchantmentHelper.getRespiration(entity) * 0.03F;
                 GlStateManager.setFogDensity(Config.limit(f2, 0.0F, f1));
             }
-        } else if (block.getMaterial() == Material.lava) {
+        } else if (block.getMaterial() == Material.lava && !(antiBlind.getState() && antiBlind.noLavaFog.get())) {
             GlStateManager.setFog(2048);
             GlStateManager.setFogDensity(2.0F);
         } else {
@@ -2210,7 +2212,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             }
 
             if (Reflector.ForgeHooksClient_onFogRender.exists()) {
-                Reflector.callVoid(Reflector.ForgeHooksClient_onFogRender, new Object[]{this, entity, block, Float.valueOf(partialTicks), Integer.valueOf(p_78468_1_), Float.valueOf(f3)});
+                Reflector.callVoid(Reflector.ForgeHooksClient_onFogRender, this, entity, block, Float.valueOf(partialTicks), Integer.valueOf(p_78468_1_), Float.valueOf(f3));
             }
         }
 

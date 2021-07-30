@@ -31,6 +31,7 @@ public class BlueZenith {
     public static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private static final String applicationID = "865299936043073547";
     private static DiscordRichPresence rpc;
+    public static long startTime;
     public static void start(){
         ClientUtils.getLogger().info("Starting BlueZenith b"+version);
         eventManager = new EventManager();
@@ -52,6 +53,7 @@ public class BlueZenith {
         ClientUtils.getLogger().info("Creating ClickGui...");
         ConfigManager.loadClickGUIPanels();
         ClientUtils.getLogger().info("Finished Starting!");
+        startTime = System.currentTimeMillis();
     }
 
     private static void hook() {

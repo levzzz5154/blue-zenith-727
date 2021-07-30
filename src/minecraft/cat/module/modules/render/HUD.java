@@ -53,7 +53,7 @@ public class HUD extends Module {
         for (Module m : BlueZenith.moduleManager.getModules()) {
             if (m.getState() && !modules.contains(m)) {
                 modules.add(m);
-            } else if (!m.getState()) {
+            } else if (!m.getState() && m.arrayAnim.hasReachedMin()) {
                 modules.remove(m);
             }
         }
@@ -85,15 +85,19 @@ public class HUD extends Module {
             Module d = modules.get(i > 0 ? i - 1 : i);
             if(m.hidden) continue;
             Color c = getColor(i);
-            RenderUtil.rect(sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar, y, sc.getScaledWidth(), y + increment, new Color(0,0,0,backgroundOpacity.get()).getRGB());
+
+            m.arrayAnim.setReversed(!m.getState()).setMax(font.getStringWidthF(m.getTagName()));
+            m.arrayAnim.update();
+            float value = m.arrayAnim.getValue();
+            RenderUtil.rect(sc.getScaledWidth() - value - mar, y, sc.getScaledWidth(), y + increment, new Color(0,0,0,backgroundOpacity.get()).getRGB());
             if(border.get()){
-                RenderUtil.rect(sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar - 1, y, sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar, y + increment, c.getRGB());
-                RenderUtil.rect(sc.getScaledWidth() - font.getStringWidthF(d.getTagName()) - mar - 1, y - 1, sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar, y, c.getRGB());
+                RenderUtil.rect(sc.getScaledWidth() - value - mar - 1, y, sc.getScaledWidth() - value - mar, y + increment, c.getRGB());
+                RenderUtil.rect(sc.getScaledWidth() - font.getStringWidthF(d.getTagName()) - mar - 1, y - 1, sc.getScaledWidth() - value - mar, y, c.getRGB());
                 if(m == modules.get(modules.size() - 1)){
-                    RenderUtil.rect(sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - mar - 1, y + increment - 1, sc.getScaledWidth(), y + increment, c.getRGB());
+                    RenderUtil.rect(sc.getScaledWidth() - value - mar - 1, y + increment - 1, sc.getScaledWidth(), y + increment, c.getRGB());
                 }
             }
-            font.drawString(m.getTagName(), sc.getScaledWidth() - font.getStringWidthF(m.getTagName()) - (mar / 2f), y + (increment / 2f - font.FONT_HEIGHT / 2f), c.getRGB(), shadow.get());
+            font.drawString(m.getTagName(), sc.getScaledWidth() - value - (mar / 2f), y + (increment / 2f - font.FONT_HEIGHT / 2f), c.getRGB(), shadow.get());
             y += increment;
         }
         GlStateManager.resetColor();
@@ -102,29 +106,33 @@ public class HUD extends Module {
     private void drawInfo(ScaledResolution sr){
         FontRenderer f = getFont();
         final float fy = f.FONT_HEIGHT + 2;
-        float y = mc.currentScreen != null && mc.currentScreen instanceof GuiChat ? mc.fontRendererObj.FONT_HEIGHT + 2 + fy : fy;
+        float y = mc.currentScreen != null && mc.currentScreen instanceof GuiChat ? mc.fontRendererObj.FONT_HEIGHT + 4 + fy : fy;
         int z = 0;
         if(showCoords.get()){
+            String displayString = "XYZ§r: "+Math.round(mc.thePlayer.posX) + ", " + Math.round(mc.thePlayer.posY) + ", " + Math.round(mc.thePlayer.posZ);
             Color colorD = getColor(z);
-            f.drawString("XYZ§r: "+Math.round(mc.thePlayer.posX) + ", " + Math.round(mc.thePlayer.posY) + ", " + Math.round(mc.thePlayer.posZ), 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
+            f.drawString(displayString, sr.getScaledWidth() - f.getStringWidthF(displayString) - 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
             y += fy;
             z++;
         }
         if(!mc.isSingleplayer() && this.showPing.get()){
+            String displayString = "Ping§r: " + mc.getCurrentServerData().pingToServer + "ms";
             Color colorD = getColor(z);
-            f.drawString("Ping§r:" + mc.getCurrentServerData().pingToServer + "ms", 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
+            f.drawString(displayString, sr.getScaledWidth() - f.getStringWidthF(displayString) - 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
             y += fy;
             z++;
         }
         if(showFPS.get()){
+            String displayString = "FPS§r: " + Minecraft.getDebugFPS();
             Color colorD = getColor(z);
-            f.drawString("FPS§r: " + Minecraft.getDebugFPS(), 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
+            f.drawString(displayString, sr.getScaledWidth() - f.getStringWidthF(displayString) - 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
             y += fy;
             z++;
         }
         if(showBPS.get()){
+            String displayString = "Blocks/sec§r: " + MathUtil.round(getBPS(), 2);
             Color colorD = getColor(z);
-            f.drawString("Blocks/sec§r: " + MathUtil.round(getBPS(), 2), 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
+            f.drawString(displayString, sr.getScaledWidth() - f.getStringWidthF(displayString) - 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
         }
     }
     private Color getColor(int i){
