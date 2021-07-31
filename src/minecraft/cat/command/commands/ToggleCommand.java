@@ -4,6 +4,7 @@ import cat.BlueZenith;
 import cat.command.Command;
 import cat.module.Module;
 
+@SuppressWarnings("unused")
 public class ToggleCommand extends Command {
     public ToggleCommand() {
         super("Toggle", "Toggle a module.",".t module","t", "enable");

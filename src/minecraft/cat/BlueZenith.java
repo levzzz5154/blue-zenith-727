@@ -19,11 +19,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class BlueZenith {
-    //test commit
     public static String currentServerIP;
     public static String name = "BlueZenith";
-    //no men its 1.5 lmao :rofl:
-    public static String version = "1.5";
+    public static String version = "2.0";
     public static EventManager eventManager;
     public static ModuleManager moduleManager;
     public static CommandManager commandManager;
@@ -33,7 +31,7 @@ public class BlueZenith {
     public static ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     private static final String applicationID = "865299936043073547";
     private static DiscordRichPresence rpc;
- //h
+    public static long startTime;
     public static void start(){
         ClientUtils.getLogger().info("Starting BlueZenith b"+version);
         eventManager = new EventManager();
@@ -51,11 +49,11 @@ public class BlueZenith {
         connection.authenticate();
         guiMain = new GuiMain();
         initRPC();
-        //startup();
         ClickGUI.clickGui = new ClickGui();
         ClientUtils.getLogger().info("Creating ClickGui...");
         ConfigManager.loadClickGUIPanels();
         ClientUtils.getLogger().info("Finished Starting!");
+        startTime = System.currentTimeMillis();
     }
 
     private static void hook() {
@@ -72,7 +70,7 @@ public class BlueZenith {
     }
 
     private static void initRPC() {
-        rpc = new DiscordRichPresence.Builder("Main Menu").setDetails("Hello").setBigImage("main", "hi there").build();
+        rpc = new DiscordRichPresence.Builder("Main Menu").setDetails("Hello").setBigImage("main", "b"+version).build();
         DiscordEventHandlers handlers = new DiscordEventHandlers.Builder().setReadyEventHandler((user) -> {
             ClientUtils.getLogger().info("Initialized Discord RPC!");
         }).build();
@@ -93,22 +91,5 @@ public class BlueZenith {
     public static void updateRPC(String line1, String line2) {
         rpc = new DiscordRichPresence.Builder(line2).setDetails(line1).setBigImage("main", "hi there").build();
         DiscordRPC.discordUpdatePresence(rpc);
-    }
-    public static Color getMainColor(){
-        return new Color(11,120,252);
-    }
-    public static Color getBackgroundColor(){
-        return new Color(0,0,69);
-    }
-    public static Color getEpicColor(int secs){
-        Color color = getBackgroundColor();
-        Color color2 = getMainColor();
-        double delay = Math.abs(System.currentTimeMillis() / 20L) / 100.0 + 6.0F * ((secs * 2) + 2.55) / 60;
-        if (delay > 1.0) {
-            final double n2 = delay % 1.0;
-            delay = (((int) delay % 2 == 0) ? n2 : (1.0 - n2));
-        }
-        final double n3 = 1.0 - delay;
-        return new Color((int) (color.getRed() * n3 + color2.getRed() * delay), (int) (color.getGreen() * n3 + color2.getGreen() * delay), (int) (color.getBlue() * n3 + color2.getBlue() * delay), (int) (color.getAlpha() * n3 + color2.getAlpha() * delay));
     }
 }

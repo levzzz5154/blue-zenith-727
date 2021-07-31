@@ -46,7 +46,6 @@ public class StringValue extends Value<String> {
 
     @Override
     public void fromPrimitive(JsonPrimitive primitive) {
-        ClientUtils.fancyMessage(primitive.getAsString());
         set(primitive.getAsString());
     }
 }

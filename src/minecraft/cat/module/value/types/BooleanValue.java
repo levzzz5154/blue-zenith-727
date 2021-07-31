@@ -8,6 +8,10 @@ import com.google.gson.JsonPrimitive;
 import java.util.function.Predicate;
 
 public final class BooleanValue extends Value<Boolean> {
+    public BooleanValue(String valueName, Boolean value, boolean visible) {
+        super(valueName, value, visible, null, null);
+    }
+
     public BooleanValue(String valueName, Boolean value, boolean visible, Predicate<Boolean> modifier) {
         super(valueName, value, visible, null, modifier);
     }

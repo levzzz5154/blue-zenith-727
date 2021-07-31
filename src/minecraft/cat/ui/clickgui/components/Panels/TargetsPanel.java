@@ -3,7 +3,7 @@ package cat.ui.clickgui.components.Panels;
 import cat.ui.clickgui.components.Panel;
 import cat.util.EntityManager;
 import cat.util.RenderUtil;
-import cat.util.font.jello.FontUtil;
+import cat.util.font.sigma.FontUtil;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 public class TargetsPanel extends Panel {
     private final ArrayList<EntityManager.Targets> targets = new ArrayList<>();
-    //private boolean closed = false;
+    private boolean wasButtonDown = false;
     public TargetsPanel(float x, float y) {
         super(x, y, "Targets");
         f = FontUtil.fontSFLight35;
@@ -20,7 +20,6 @@ public class TargetsPanel extends Panel {
         targets.addAll(Arrays.asList(EntityManager.Targets.values()));
         width = 120;
     }
-    boolean sex, cum = false;
     public void drawPanel(int mouseX, int mouseY, float partialTicks, boolean handleClicks){
         Color main_color = click.main_color;
         Color backgroundColor = click.backgroundColor;
@@ -31,15 +30,12 @@ public class TargetsPanel extends Panel {
         for (EntityManager.Targets tar : targets) {
             RenderUtil.rect(x, y, x + width, y + mHeight, backgroundColor);
             f.drawString(tar.displayName, x + 5, y + (mHeight / 2f - f.FONT_HEIGHT / 2f), tar.on ? main_color.getRGB() : main_color.darker().darker().getRGB());
-            if(i(mouseX, mouseY, x, y, x + width, y + mHeight) && Mouse.isButtonDown(0) && !sex && handleClicks){
+            if(i(mouseX, mouseY, x, y, x + width, y + mHeight) && Mouse.isButtonDown(0) && !wasButtonDown && handleClicks){
                 tar.on = !tar.on;
                 toggleSound();
             }
             y += mHeight;
         }
-        sex = Mouse.isButtonDown(0);
-        if(!Mouse.isButtonDown(1)) {
-            cum = false;
-        }
+        wasButtonDown = Mouse.isButtonDown(0);
     }
 }

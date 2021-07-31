@@ -42,7 +42,7 @@ public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
 
             if (this.mc.getSession() == null)
             {
-                ((GuiButton)this.buttonList.get(1)).enabled = false;
+                this.buttonList.get(1).enabled = false;
             }
         }
 
@@ -139,7 +139,7 @@ public class GuiGameOver extends GuiScreen implements GuiYesNoCallback
         super.updateScreen();
         ++this.enableButtonsTimer;
 
-        if (this.enableButtonsTimer == 20)
+        if (this.enableButtonsTimer > 20)
         {
             for (GuiButton guibutton : this.buttonList)
             {

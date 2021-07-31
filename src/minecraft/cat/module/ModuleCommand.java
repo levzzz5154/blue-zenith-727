@@ -7,7 +7,7 @@ import cat.module.value.types.*;
 import java.util.regex.Pattern;
 
 public class ModuleCommand extends Command {
-    Module parent;
+    private final Module parent;
     public ModuleCommand(Module parent, String... pref) {
         super(parent.getName(), "Auto-generated command.", ".module valuename valueparameter", pref);
         this.parent = parent;

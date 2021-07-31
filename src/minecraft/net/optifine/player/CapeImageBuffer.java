@@ -19,7 +19,6 @@ public class CapeImageBuffer extends ImageBufferDownload {
     }
 
     public BufferedImage parseUserSkin(BufferedImage imageRaw) {
-        //noinspection ConstantConditions
         if(BlueZenith.moduleManager.getModule(MemoryFix.class).getState()){
             return CapeUtils.parseCape(imageRaw);
         }
@@ -30,7 +29,6 @@ public class CapeImageBuffer extends ImageBufferDownload {
     }
 
     public void skinAvailable() {
-        //noinspection ConstantConditions
         if(BlueZenith.moduleManager.getModule(MemoryFix.class).getState()){
             if(this.player != null){
                 player.setLocationOfCape(resourceLocation);

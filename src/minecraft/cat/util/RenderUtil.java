@@ -1,9 +1,12 @@
 package cat.util;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -27,9 +30,88 @@ public class RenderUtil extends MinecraftInstance {
         glEnable(GL_DEPTH_TEST);
         GlStateManager.popMatrix();
     }
+    public static float animate(float target, float current, float speed) {
+        boolean larger = (target > current);
+        speed = range(speed * 10 / delta, 0, 1);
+        float dif = Math.max(target, current) - Math.min(target, current);
+        float factor = dif * speed;
+        if (factor < 0.001f)
+            factor = 0.001f;
+        if (larger) {
+            current += factor;
+        } else {
+            current -= factor;
+        }
+        return current;
+    }
+    public static float range(float v, float min, float max){
+        return Math.max(Math.min(v, max), min);
+    }
+    public static void rect(final float x, final float y, final float x2, final float y2, final int color) {
+        Gui.drawRect(x,y,x2,y2, color);
+        GlStateManager.resetColor();
+    }
     public static void rect(final float x, final float y, final float x2, final float y2, final Color color) {
         Gui.drawRect(x,y,x2,y2,color.getRGB());
         GlStateManager.resetColor();
+    }
+    public static void rect(final double x, final double y, final double x2, final double y2, final Color color) {
+        Gui.drawRect(x,y,x2,y2,color.getRGB());
+        GlStateManager.resetColor();
+    }
+    public static void crop(final float x, final float y, final float x2, final float y2) {
+        final ScaledResolution scaledResolution = new ScaledResolution(mc);
+        final int factor = scaledResolution.getScaleFactor();
+        glScissor((int) (x * factor), (int) ((scaledResolution.getScaledHeight() - y2) * factor), (int) ((x2 - x) * factor), (int) ((y2 - y) * factor));
+    }
+    private static int lastScale;
+    private static int lastScaleWidth;
+    private static int lastScaleHeight;
+    private static Framebuffer buffer;
+    private static final ResourceLocation shader = new ResourceLocation("cat/blur.json");
+    private static ShaderGroup blurShader;
+    public static void initFboAndShader() {
+        try {
+            blurShader = new ShaderGroup(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), shader);
+            blurShader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+            buffer = blurShader.mainFramebuffer;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void blur(float x, float y, float x2, float y2, ScaledResolution sc) {
+        int factor = sc.getScaleFactor();
+        int factor2 = sc.getScaledWidth();
+        int factor3 = sc.getScaledHeight();
+        if (lastScale != factor || lastScaleWidth != factor2 || lastScaleHeight != factor3 || buffer == null
+                || blurShader == null) {
+            initFboAndShader();
+        }
+        lastScale = factor;
+        lastScaleWidth = factor2;
+        lastScaleHeight = factor3;
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        crop(x, y, x2, y2);
+        buffer.framebufferHeight = mc.displayHeight;
+        buffer.framebufferWidth = mc.displayWidth;
+        GlStateManager.resetColor();
+        blurShader.loadShaderGroup(mc.timer.renderPartialTicks);
+        buffer.bindFramebuffer(true);
+        mc.getFramebuffer().bindFramebuffer(true);
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+    }
+    public static void blur(float x, float y, float x2, float y2){
+        GlStateManager.disableAlpha();
+        blur(x, y, x2, y2, new ScaledResolution(mc));
+        GlStateManager.enableAlpha();
+    }
+    public static float drawScaledFont(FontRenderer f, String text, float x, float y, int color, boolean shadow, float scale){
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 0);
+        GlStateManager.scale(scale, scale, 1);
+        f.drawString(text, 0, 0, color, shadow);
+        GlStateManager.popMatrix();
+        return f.getStringWidthF(text) * scale;
     }
     public static void glColor(final Color color) {
         final float red = color.getRed() / 255F;

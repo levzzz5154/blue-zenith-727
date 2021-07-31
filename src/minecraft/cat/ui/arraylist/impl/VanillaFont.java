@@ -1,9 +1,9 @@
 package cat.ui.arraylist.impl;
 
-import cat.BlueZenith;
 import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import cat.ui.arraylist.IArraylistRenderer;
+import cat.util.ColorUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -26,7 +26,7 @@ public class VanillaFont implements IArraylistRenderer {
             Module m = modules.get(i);
             if(m.hidden) continue;
             Module burgir = modules.get(i > 0 ? i - 1 : i);
-            Color c = BlueZenith.getEpicColor(i);
+            Color c = ColorUtil.getEpicColor(i);
             Gui.drawRect(resolution.getScaledWidth() - font.getStringWidth(m.getTagName()) - margin + 2, y, resolution.getScaledWidth(), y + increment, new Color(0,0,0,opacity).getRGB());
             if(shadow){
                 Gui.drawRect(resolution.getScaledWidth() - font.getStringWidth(m.getTagName()) - margin + 0.5f, y, resolution.getScaledWidth() - font.getStringWidth(m.getTagName()) - margin + 2, y + increment, c.getRGB());

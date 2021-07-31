@@ -196,8 +196,6 @@ public class EntityPlayerSP extends AbstractClientPlayer {
             UpdatePlayerEvent event = new UpdatePlayerEvent(this.rotationYaw, this.rotationPitch, this.posX, this.getEntityBoundingBox().minY, this.posZ, this.onGround, EventType.PRE);
             BlueZenith.eventManager.call(event);
             Rotations rt = (Rotations) BlueZenith.moduleManager.getModule(Rotations.class);
-            rt.prevYaw = event.yaw;
-            rt.prevPitch = event.pitch;
             rt.yaw = event.yaw;
             rt.pitch = event.pitch;
             double d0 = event.x - this.lastReportedPosX;

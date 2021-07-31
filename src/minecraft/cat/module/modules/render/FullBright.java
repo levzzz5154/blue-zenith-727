@@ -4,11 +4,12 @@ import cat.module.Module;
 import cat.module.ModuleCategory;
 import org.lwjgl.input.Keyboard;
 
+@SuppressWarnings("unused")
 public class FullBright extends Module {
     public FullBright() {
         super("FullBright", "", ModuleCategory.RENDER, Keyboard.KEY_V);
     }
-    float prevBrightness = 0;
+    private float prevBrightness = 0;
     public void onEnable(){
         prevBrightness = mc.gameSettings.gammaSetting;
         mc.gameSettings.gammaSetting = 10000;

@@ -12,7 +12,7 @@ public class Panel extends MinecraftInstance {
     public float x, y, prevX, prevY, width, height, mHeight;
     public boolean showContent;
     public String id;
-    protected ClickGUI click = (ClickGUI) BlueZenith.moduleManager.getModule(ClickGUI.class);
+    protected final ClickGUI click = (ClickGUI) BlueZenith.moduleManager.getModule(ClickGUI.class);
     public Panel(float x, float y, String id){
         this.x = x;
         this.y = y;

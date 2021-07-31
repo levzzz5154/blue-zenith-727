@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-
+@SuppressWarnings("unused")
 public final class ConfigCommand extends Command {
 
     public ConfigCommand() {

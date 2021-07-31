@@ -1,6 +1,9 @@
 package cat.util;
 
-public class MovementUtil extends MinecraftInstance{
+public class MovementUtil extends MinecraftInstance {
+    public static float currentSpeed() {
+        return (float) Math.sqrt(mc.thePlayer.motionX * mc.thePlayer.motionX + mc.thePlayer.motionZ * mc.thePlayer.motionZ);
+    }
     public static boolean areMovementKeysPressed(){
         return mc.thePlayer.movementInput.moveForward != 0F || mc.thePlayer.movementInput.moveStrafe != 0F;
     }

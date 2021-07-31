@@ -8,8 +8,4 @@ public class NameTags extends Module {
     public NameTags() {
         super("NameTags", "", ModuleCategory.RENDER, "NameTags");
     }
-    public static double round(double value) {
-        int scale = (int) Math.pow(10, 1);
-        return (double) Math.round(value * scale) / scale;
-    }
 }

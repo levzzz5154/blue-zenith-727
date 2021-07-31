@@ -3,6 +3,7 @@ package net.minecraft.client.renderer;
 import cat.BlueZenith;
 import cat.module.modules.combat.Aura;
 import cat.module.modules.render.Animations;
+import cat.module.modules.render.Chams;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -203,7 +204,7 @@ public class ItemRenderer {
         }
     }
 
-    private void func_178095_a(AbstractClientPlayer clientPlayer, float p_178095_2_, float p_178095_3_) {
+    private void renderHand(AbstractClientPlayer clientPlayer, float p_178095_2_, float p_178095_3_) {
         float f = -0.3F * MathHelper.sin(MathHelper.sqrt_float(p_178095_3_) * (float) Math.PI);
         float f1 = 0.4F * MathHelper.sin(MathHelper.sqrt_float(p_178095_3_) * (float) Math.PI * 2.0F);
         float f2 = -0.4F * MathHelper.sin(p_178095_3_ * (float) Math.PI);
@@ -224,8 +225,36 @@ public class ItemRenderer {
         GlStateManager.translate(5.6F, 0.0F, 0.0F);
         Render<AbstractClientPlayer> render = this.renderManager.getEntityRenderObject(this.mc.thePlayer);
         GlStateManager.disableCull();
-        RenderPlayer renderplayer = (RenderPlayer) render;
-        renderplayer.renderRightArm(this.mc.thePlayer);
+        if(BlueZenith.moduleManager.getModule(Chams.class).getState()){
+            GL11.glPushMatrix();
+            GL11.glEnable(GL11.GL_POLYGON_OFFSET_LINE);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            //GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+            GL11.glPolygonOffset(1.0F, 1000000.0F);
+            float alpha = clientPlayer.isInvisible() ? 0.2f : 1f;
+            GL11.glColor4f(0.9f, 0.5f, 0, alpha);
+            RenderPlayer renderplayer = (RenderPlayer) render;
+            renderplayer.renderRightArm(this.mc.thePlayer);
+                /*GL11.glColor4f(0, 0, 0, alpha);
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                GL11.glDepthMask(true);
+                this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);*/
+            GL11.glPolygonOffset(1.0F, -1000000.0F);
+
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glEnable(GL11.GL_LIGHTING);
+            GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
+            GlStateManager.resetColor();
+            GL11.glPopMatrix();
+        }else{
+            RenderPlayer renderplayer = (RenderPlayer) render;
+            renderplayer.renderRightArm(this.mc.thePlayer);
+        }
         GlStateManager.enableCull();
     }
 
@@ -352,8 +381,8 @@ public class ItemRenderer {
                 }
 
                 this.renderItem(abstractclientplayer, this.itemToRender, ItemCameraTransforms.TransformType.FIRST_PERSON);
-            } else if (!abstractclientplayer.isInvisible()) {
-                this.func_178095_a(abstractclientplayer, f, f1);
+            } else if (!abstractclientplayer.isInvisible() || BlueZenith.moduleManager.getModule(Chams.class).getState()) {
+                this.renderHand(abstractclientplayer, f, f1);
             }
 
             GlStateManager.popMatrix();
@@ -367,18 +396,18 @@ public class ItemRenderer {
             float f = -0.4F * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI);
             float f1 = 0.2F * MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI * 2.0F);
             float f2 = -0.2F * MathHelper.sin(swingProgress * (float) Math.PI);
+            GlStateManager.translate(a.itemPosX.get() / 100, a.itemPosY.get() / 100, a.itemPosZ.get() / 100);
             GlStateManager.translate(f, f1, f2);
             GlStateManager.translate(0.56F, -0.52F, -0.71999997F);
             GlStateManager.translate(0.0F, equipProgress * -0.6F, 0.0F);
-            GlStateManager.scale(a.itemScale.get(), a.itemScale.get(), a.itemScale.get());
             GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
             float sex = MathHelper.sin(swingProgress * swingProgress * (float) Math.PI);
             float sex1 = MathHelper.sin(MathHelper.sqrt_float(swingProgress) * (float) Math.PI);
             GlStateManager.rotate(sex * -20.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(sex1 * -20.0F, 0.0F, 0.0F, 1.0F);
             GlStateManager.rotate(sex1 * -80.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.translate(a.itemPosX.get() / 100, a.itemPosY.get() / 100, a.itemPosZ.get() / 100);
-            GlStateManager.scale(0.4F, 0.4F, 0.4F);
+            GlStateManager.scale(0.4f * a.itemScale.get(), 0.4f * a.itemScale.get(), 0.4f * a.itemScale.get());
+            //GlStateManager.scale(0.4F, 0.4F, 0.4F);
         }else{
             this.func_178105_d(swingProgress);
             this.transformFirstPersonItem(equipProgress, swingProgress);
@@ -388,15 +417,21 @@ public class ItemRenderer {
     public void onBlockTranslate(float equipProgress, float swingProgress){
         Animations a = (Animations) BlueZenith.moduleManager.getModule(Animations.class);
         if(a.getState()){
-            //noinspection SwitchStatementWithTooFewBranches
-            switch (a.anim.get()){
-                case "SlideDown":
+            switch (a.anim.get()) {
+                case "1.7":
+                    GlStateManager.translate(a.translatePosX.get() / 100, a.translatePosY.get() / 100, a.translatePosZ.get() / 100);
                     this.transformFirstPersonItem(equipProgress, swingProgress);
+                    this.doBlockTransformations();
+                    GlStateManager.scale(a.translateScale.get(), a.translateScale.get(), a.translateScale.get());
+                    break;
+                case "Exhibition":
+                    this.transformFirstPersonItem(equipProgress, swingProgress);
+                    GlStateManager.translate(0, 0.235F, 0F);
+                    GL11.glRotated(-MathHelper.sin((float) (MathHelper.sqrt_float(swingProgress) * Math.PI)) * 40.0F, MathHelper.sin((float) (MathHelper.sqrt_float(swingProgress) * Math.PI)) / 2, 0.0F, 9.0F);
+                    GL11.glRotated(-MathHelper.sin((float) (MathHelper.sqrt_float(swingProgress) * Math.PI)) * 50.0F, 0.8F, MathHelper.sin((float) (MathHelper.sqrt_float(swingProgress) * Math.PI)) / 2, 0F);
                     this.doBlockTransformations();
                     break;
             }
-            GlStateManager.translate(a.translatePosX.get() / 100, a.translatePosY.get() / 100, a.translatePosZ.get() / 100);
-            GlStateManager.scale(a.translateScale.get(), a.translateScale.get(), a.translateScale.get());
         }else{
             this.transformFirstPersonItem(equipProgress, 0.0F);
             this.doBlockTransformations();

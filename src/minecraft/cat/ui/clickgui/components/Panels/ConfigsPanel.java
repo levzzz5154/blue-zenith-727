@@ -6,7 +6,7 @@ import cat.ui.clickgui.components.Panel;
 import cat.util.ClientUtils;
 import cat.util.FileUtil;
 import cat.util.RenderUtil;
-import cat.util.font.jello.FontUtil;
+import cat.util.font.sigma.FontUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
@@ -26,8 +26,8 @@ public class ConfigsPanel extends Panel {
     private StringValue selectedTextField = null;
     private float textFieldCounter = 0f;
     private String selectedConfig;
-    //private boolean closed = false;
-    ArrayList<File> files = new ArrayList<>();
+    private boolean sex = false;
+    private final ArrayList<File> files = new ArrayList<>();
     public ConfigsPanel(float x, float y) {
         super(x, y, "Configs");
         f = FontUtil.fontSFLight35;
@@ -46,7 +46,6 @@ public class ConfigsPanel extends Panel {
             }
         }
     }
-    boolean sex = false;
     public void drawPanel(int mouseX, int mouseY, float partialTicks, boolean handleClicks) {
         if(!Mouse.isButtonDown(0)) sex = false;
         textFieldCounter += 0.1f;

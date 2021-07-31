@@ -77,6 +77,18 @@ public class Gui {
         GlStateManager.disableBlend();
     }
     public static void drawRect(float x, float y, float x2, float y2, int color) {
+        if (x2 < x) {
+            float i = x2;
+            x2 = x;
+            x = i;
+        }
+
+        if (y2 < y) {
+            float j = y2;
+            y2 = y;
+            y = j;
+        }
+
         float f3 = (float) (color >> 24 & 255) / 255.0F;
         float f = (float) (color >> 16 & 255) / 255.0F;
         float f1 = (float) (color >> 8 & 255) / 255.0F;
@@ -96,13 +108,29 @@ public class Gui {
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
     }
-    public static void drawRect(float x, float y, float x2, float y2, Color color) {
+    public static void drawRect(double x, double y, double x2, double y2, int color) {
+        if (x2 < x) {
+            double i = x2;
+            x2 = x;
+            x = i;
+        }
+
+        if (y2 < y) {
+            double j = y2;
+            y2 = y;
+            y = j;
+        }
+
+        float f3 = (float) (color >> 24 & 255) / 255.0F;
+        float f = (float) (color >> 16 & 255) / 255.0F;
+        float f1 = (float) (color >> 8 & 255) / 255.0F;
+        float f2 = (float) (color & 255) / 255.0F;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+        GlStateManager.color(f, f1, f2, f3);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION);
         worldrenderer.pos(x2, y, 0.0D).func_181675_d();
         worldrenderer.pos(x, y, 0.0D).func_181675_d();

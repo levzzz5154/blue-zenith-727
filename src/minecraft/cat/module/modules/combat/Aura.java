@@ -22,19 +22,19 @@ import org.lwjgl.input.Keyboard;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class Aura extends Module {
     public boolean blockStatus = false;
     
     private final ModeValue mode = new ModeValue("Mode", "Single", true, null, "Single", "Switch", "Multi");
     private final IntegerValue switchDelay = new IntegerValue("Switch Delay", 500, 50, 2000, 50, true, ___ -> mode.get().equals("Switch"));
     private final ModeValue sortMode = new ModeValue("Sort by", "Health", true, (a1, a2) -> { target = null; return a2; }, null, "Health", "Distance", "HurtTime");
-
-    private final IntegerValue minCPS = new IntegerValue("MinCPS", 15, 1, 20, 1, true, (a1, a2) -> { bruh(); return a2; }, null);
-    private final IntegerValue maxCPS = new IntegerValue("MaxCPS", 7, 1, 20, 1, true, (a1, a2) -> { if (minCPS.get() > a2) minCPS.set(a2); return a2; }, null);
+    private final IntegerValue maxCPS = new IntegerValue("MaxCPS", 7, 1, 20, 1, true, (a1, a2) -> { if(a2 < getMinCPS().get()){ return a1; } return a2; }, null);
+    private final IntegerValue minCPS = new IntegerValue("MinCPS", 15, 1, 20, 1, true, (a1, a2) -> { if(a2 > maxCPS.get()) { return a1; } return a2; }, null);
 
     private final FloatValue range = new FloatValue("Range", 3f, 1f, 6f, 1f, true, null);
     private final IntegerValue hurtTime = new IntegerValue("HurtTime", 10, 1, 10, 1, true, __ -> !mode.get().equals("Multi"));
-    private final FloatValue aimHeight = new FloatValue("Aim Height", 1.5f, 0f, 1.5f, 0.1f, true, __ -> unsex());
+    private final FloatValue aimHeight = new FloatValue("Aim Height", 1.5f, 0f, 1.5f, 0.1f, true, __ -> getRotationsValue());
 
     private final BooleanValue swing = new BooleanValue("Swing", true, true, null);
 
@@ -55,15 +55,14 @@ public class Aura extends Module {
         super("Aura", "", ModuleCategory.COMBAT, Keyboard.KEY_R, "aura", "ka", "killaura");
     }
 
-    EntityLivingBase target = null;
-    private final MillisTimer timer = new MillisTimer();
+    private EntityLivingBase target = null;
+    private final MillisTimer attackTimer = new MillisTimer();
     private final MillisTimer switchTimer = new MillisTimer();
 
     @Subscriber
     public void onUpdate(UpdatePlayerEvent e) {
         //filter the list of entities
         List<EntityLivingBase> list = mc.theWorld.loadedEntityList.parallelStream().filter(ent -> ent instanceof EntityLivingBase
-                && ((EntityLivingBase) ent).getHealth() > 0
                 && EntityManager.isTarget(ent)
                 && mc.thePlayer.getDistanceToEntity(ent) <= range.get())
                 .map(j -> (EntityLivingBase) j) //due to the loadedEntityList being a list of Entity by default, you need to cast every entity to EntityLivingBase
@@ -79,54 +78,46 @@ public class Aura extends Module {
                             return Float.compare(ent1.getHealth(), ent2.getHealth());
                     }
                 }).collect(Collectors.toList());
-
         if (list.isEmpty()) {
             if (blockStatus) {
                 unBlock();
             }
             return;
         }
-
-        if (e.post()) return;
         switch (mode.get()) { // la mode
             case "Single":
                 if (target == null || mc.thePlayer.getDistanceToEntity(target) > range.get()) {
                     target = list.get(0);
                 }
-                attack(target, e);
                 break;
 
             case "Switch":
                 if (target == null || switchTimer.hasTimeReached(switchDelay.get())) {
-                    костыль(list);
+                    setTargetToNext(list);
                     switchTimer.reset();
                 }
-                attack(target, e);
                 break;
 
             case "Multi":
                 if (target == null || target.hurtTime > 0) {
-                    костыль(list);
+                    setTargetToNext(list);
                 }
-                attack(target, e);
                 break;
         }
-    }
+        if (e.post() || !isValid(target)){
+            return;
+        }
 
-    private void костыль(List<EntityLivingBase> f) { // чзх
+        attack(target, e);
+    }
+    private void setTargetToNext(List<EntityLivingBase> f) { // чзх // секс
         int g = f.indexOf(target) + 1;
         if (g >= f.size()) {
             target = f.get(0);
         } else target = f.get(g);
     }
-
+    private long funnyVariable = 0;
     private void attack(EntityLivingBase target, UpdatePlayerEvent e) {
-
-        if (target.getHealth() <= 0) {
-            this.target = null;
-            return;
-        }
-
         if (target.hurtTime <= hurtTime.get()) {
             if (!vanillaAutoBlock.get()) {
                 unBlock();
@@ -134,30 +125,30 @@ public class Aura extends Module {
             if (rotations.get()) {
                 setRotation(e);
             }
-            if (timer.hasTimeReached(ClientUtils.getRandomLong(minCPS.get(), maxCPS.get()))) {
+            if (attackTimer.hasTimeReached(funnyVariable)) {
                 if (swing.get()) {
                     mc.thePlayer.swingItem();
                 } else PacketUtil.send(new C0APacketAnimation());
                 mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
-                timer.reset();
+                funnyVariable = ClientUtils.getRandomLong(minCPS.get(), maxCPS.get());
+                attackTimer.reset();
             }
             block();
         }
     }
 
-
     private void setRotation(UpdatePlayerEvent e) {
-
         AxisAlignedBB bb = target.getEntityBoundingBox();
         // checks if random rots are enabled
         float randRotVertical = randomRotations.get() ? ClientUtils.getRandomFloat(-randomRotVertical.get(), randomRotVertical.get()) : 0f;
         float randRotHorizontal = randomRotations.get() ? ClientUtils.getRandomFloat(-randomRotHorizontal.get(), randomRotHorizontal.get()) : 0f;
-
+        double entHeight = 0.5F - (target.isChild() ? target.height / 2.0F : 0.0F);
+        double entWidth = target.width / 2f;
         final Vec3 eyesPos = new Vec3(mc.thePlayer.posX, mc.thePlayer.getEntityBoundingBox().minY + mc.thePlayer.getEyeHeight(), mc.thePlayer.posZ);
-        final Vec3 entPos = new Vec3(bb.minX + (bb.maxX - bb.minX) * (0.5 * randRotHorizontal), bb.minY + (bb.maxY - bb.minY) * (0.5 * randRotVertical), bb.minZ + (bb.maxZ - bb.minZ) * (0.5 * randRotHorizontal));
+        final Vec3 entPos = new Vec3(bb.minX + (bb.maxX - bb.minX) * (entWidth * randRotHorizontal), bb.minY + (bb.maxY - bb.minY) * (entHeight * randRotVertical), bb.minZ + (bb.maxZ - bb.minZ) * (entWidth * randRotHorizontal));
 
         final double diffX = entPos.xCoord - eyesPos.xCoord + 0.3;
-        final double diffY = entPos.yCoord - eyesPos.yCoord + aimHeight.get();
+        final double diffY = entPos.yCoord - eyesPos.yCoord + (entHeight * aimHeight.get());
         final double diffZ = entPos.zCoord - eyesPos.zCoord + 0.3; // adding 0.3 unfucks the horizontal rotation
 
         final float yaw = (float) MathHelper.wrapAngleTo180_double(Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F);
@@ -202,16 +193,17 @@ public class Aura extends Module {
         }
     }
 
+    @SuppressWarnings("unused")
     @Subscriber
     public void onPacket(PacketEvent e) {
-        if (e.packet instanceof C09PacketHeldItemChange) {
+        if (e.packet instanceof C09PacketHeldItemChange && blockStatus) {
             mc.getNetHandler().getNetworkManager().sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
             blockStatus = false;
         }
     }
 
     public boolean canBlock() {
-        return mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword && autoBlock.get();
+        return autoBlock.get() && mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword;
     }
 
     @Override
@@ -219,13 +211,23 @@ public class Aura extends Module {
         return this.displayName + " §7" + mode.get();
     }
 
-    private void bruh() {
-        if (minCPS.get() > maxCPS.get()) {
-            maxCPS.set(minCPS.get());
-        }
+    private IntegerValue getMinCPS(){
+        return minCPS;
     }
 
-    private boolean unsex() {
+    private boolean getRotationsValue() {
         return rotations.get();
+    }
+
+    private boolean isValid(EntityLivingBase ent){
+        return target != null && EntityManager.isTarget(ent) && mc.theWorld.loadedEntityList.contains(ent);
+    }
+
+    public float getRange(){
+        return this.range.get();
+    }
+
+    public EntityLivingBase getTarget(){
+        return isValid(target) ? target : null;
     }
 }

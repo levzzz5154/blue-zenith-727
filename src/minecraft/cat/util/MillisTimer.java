@@ -1,7 +1,5 @@
 package cat.util;
 
-import net.minecraft.client.Minecraft;
-
 public final class MillisTimer {
     public long millis = -1L;
 
@@ -11,6 +9,10 @@ public final class MillisTimer {
 
     public long getTimeDiff(final long ms) {
         return (ms + millis) - System.currentTimeMillis();
+    }
+
+    public boolean delay(final float milliSec) {
+        return (System.nanoTime() / 1000000f) - this.millis >= milliSec;
     }
 
     public void reset() {

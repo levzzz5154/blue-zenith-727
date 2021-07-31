@@ -2,7 +2,10 @@ package net.minecraft.client.renderer;
 
 import cat.BlueZenith;
 import cat.events.impl.Render3DEvent;
+import cat.module.modules.render.AntiBlind;
+import cat.module.modules.render.CameraClip;
 import cat.module.modules.render.NoHurtCam;
+import cat.ui.notifications.NotiManager;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.gson.JsonSyntaxException;
@@ -723,7 +726,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                     if (movingobjectposition != null) {
                         double d7 = movingobjectposition.hitVec.distanceTo(new Vec3(d0, d1, d2));
 
-                        if (d7 < d3) {
+                        if (d7 < d3 && !(BlueZenith.moduleManager.getModule(CameraClip.class).getState())) {
                             d3 = d7;
                         }
                     }
@@ -1123,8 +1126,8 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         return i > 200 ? 1.0F : 0.7F + MathHelper.sin(((float) i - partialTicks) * (float) Math.PI * 0.2F) * 0.3F;
     }
 
-    public void func_181560_a(float p_181560_1_, long p_181560_2_) {
-        Config.renderPartialTicks = p_181560_1_;
+    public void updateCameraAndRender(float partialTicks, long p_181560_2_) {
+        Config.renderPartialTicks = partialTicks;
         this.frameInit();
         boolean flag = Display.isActive();
 
@@ -1159,8 +1162,8 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             if (this.mc.gameSettings.smoothCamera) {
                 this.smoothCamYaw += f2;
                 this.smoothCamPitch += f3;
-                float f4 = p_181560_1_ - this.smoothCamPartialTicks;
-                this.smoothCamPartialTicks = p_181560_1_;
+                float f4 = partialTicks - this.smoothCamPartialTicks;
+                this.smoothCamPartialTicks = partialTicks;
                 f2 = this.smoothCamFilterX * f4;
                 f3 = this.smoothCamFilterY * f4;
                 this.mc.thePlayer.setAngles(f2, f3 * (float) i);
@@ -1188,7 +1191,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                 j = Math.max(j, 60);
                 long k = System.nanoTime() - p_181560_2_;
                 long l = Math.max((long) (1000000000 / j / 4) - k, 0L);
-                this.renderWorld(p_181560_1_, System.nanoTime() + l);
+                this.renderWorld(partialTicks, System.nanoTime() + l);
 
                 if (OpenGlHelper.shadersSupported) {
                     this.mc.renderGlobal.renderEntityOutlineFramebuffer();
@@ -1197,7 +1200,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                         GlStateManager.matrixMode(5890);
                         GlStateManager.pushMatrix();
                         GlStateManager.loadIdentity();
-                        this.theShaderGroup.loadShaderGroup(p_181560_1_);
+                        this.theShaderGroup.loadShaderGroup(partialTicks);
                         GlStateManager.popMatrix();
                     }
 
@@ -1209,7 +1212,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
 
                 if (!this.mc.gameSettings.hideGUI || this.mc.currentScreen != null) {
                     GlStateManager.alphaFunc(516, 0.1F);
-                    this.mc.ingameGUI.renderGameOverlay(p_181560_1_);
+                    this.mc.ingameGUI.renderGameOverlay(partialTicks);
 
                     if (this.mc.gameSettings.ofShowFps && !this.mc.gameSettings.showDebugInfo) {
                         Config.drawFps();
@@ -1238,9 +1241,9 @@ public class EntityRenderer implements IResourceManagerReloadListener {
 
                 try {
                     if (Reflector.ForgeHooksClient_drawScreen.exists()) {
-                        Reflector.callVoid(Reflector.ForgeHooksClient_drawScreen, new Object[]{this.mc.currentScreen, Integer.valueOf(k1), Integer.valueOf(l1), Float.valueOf(p_181560_1_)});
+                        Reflector.callVoid(Reflector.ForgeHooksClient_drawScreen, new Object[]{this.mc.currentScreen, Integer.valueOf(k1), Integer.valueOf(l1), Float.valueOf(partialTicks)});
                     } else {
-                        this.mc.currentScreen.drawScreen(k1, l1, p_181560_1_);
+                        this.mc.currentScreen.drawScreen(k1, l1, partialTicks);
                     }
                 } catch (Throwable throwable) {
                     CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Rendering screen");
@@ -1272,6 +1275,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         if (this.mc.gameSettings.ofProfiler) {
             this.mc.gameSettings.showDebugProfilerChart = true;
         }
+        NotiManager.render();
     }
 
     public void renderStreamIndicator(float partialTicks) {
@@ -2121,6 +2125,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
      * distance and is used for sky rendering.
      */
     private void setupFog(int p_78468_1_, float partialTicks) {
+        AntiBlind antiBlind = (AntiBlind) BlueZenith.moduleManager.getModule(AntiBlind.class);
         this.fogStandard = false;
         Entity entity = this.mc.getRenderViewEntity();
         boolean flag = false;
@@ -2136,12 +2141,12 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         float f = -1.0F;
 
         if (Reflector.ForgeHooksClient_getFogDensity.exists()) {
-            f = Reflector.callFloat(Reflector.ForgeHooksClient_getFogDensity, new Object[]{this, entity, block, Float.valueOf(partialTicks), Float.valueOf(0.1F)});
+            f = Reflector.callFloat(Reflector.ForgeHooksClient_getFogDensity, this, entity, block, partialTicks, 0.1F);
         }
 
         if (f >= 0.0F) {
             GlStateManager.setFogDensity(f);
-        } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(Potion.blindness)) {
+        } else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(Potion.blindness) && !(antiBlind.getState() && antiBlind.noBlindnessFog.get())) {
             float f4 = 5.0F;
             int i = ((EntityLivingBase) entity).getActivePotionEffect(Potion.blindness).getDuration();
 
@@ -2165,7 +2170,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         } else if (this.cloudFog) {
             GlStateManager.setFog(2048);
             GlStateManager.setFogDensity(0.1F);
-        } else if (block.getMaterial() == Material.water) {
+        } else if (block.getMaterial() == Material.water && !(antiBlind.getState() && antiBlind.noWaterFog.get())) {
             GlStateManager.setFog(2048);
             float f1 = Config.isClearWater() ? 0.02F : 0.1F;
 
@@ -2175,7 +2180,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                 float f2 = 0.1F - (float) EnchantmentHelper.getRespiration(entity) * 0.03F;
                 GlStateManager.setFogDensity(Config.limit(f2, 0.0F, f1));
             }
-        } else if (block.getMaterial() == Material.lava) {
+        } else if (block.getMaterial() == Material.lava && !(antiBlind.getState() && antiBlind.noLavaFog.get())) {
             GlStateManager.setFog(2048);
             GlStateManager.setFogDensity(2.0F);
         } else {
@@ -2207,7 +2212,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             }
 
             if (Reflector.ForgeHooksClient_onFogRender.exists()) {
-                Reflector.callVoid(Reflector.ForgeHooksClient_onFogRender, new Object[]{this, entity, block, Float.valueOf(partialTicks), Integer.valueOf(p_78468_1_), Float.valueOf(f3)});
+                Reflector.callVoid(Reflector.ForgeHooksClient_onFogRender, this, entity, block, Float.valueOf(partialTicks), Integer.valueOf(p_78468_1_), Float.valueOf(f3));
             }
         }
 

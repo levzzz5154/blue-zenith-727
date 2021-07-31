@@ -1,4 +1,4 @@
-package cat.module.modules.fun;
+package cat.module.modules.misc;
 
 import cat.events.Subscriber;
 import cat.events.impl.UpdateEvent;
@@ -19,9 +19,8 @@ import java.awt.datatransfer.DataFlavor;
 
 public class Spammer extends Module {
     public Spammer() {
-        super("Spammer", "", ModuleCategory.FUN);
+        super("Spammer", "", ModuleCategory.MISC);
     }
-    //private final BooleanValue invis = new BooleanValue("Invis Characters", true, true, null);
     private final IntegerValue delay = new IntegerValue("Delay (ms)", 3000, 10, 10000, 10, true, null);
     private final StringValue text = new StringValue("Text", "Buy Blue Zenith", true, null);
     private final ModeValue mode = new ModeValue("Bypass", "Random", true, null, "Random", "Invisible", "None");
