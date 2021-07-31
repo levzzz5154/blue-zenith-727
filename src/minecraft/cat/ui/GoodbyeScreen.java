@@ -15,14 +15,14 @@ import java.util.concurrent.TimeUnit;
 
 public class GoodbyeScreen extends GuiScreen {
 
-    private int niggers = 1;
-    private int faggots = 1;
+    private int fontOpacity = 1;
+    private int rectOpacity = 1;
     private String a = nigger[new Random().nextInt(nigger.length)];
     private final boolean isDreamLuck;
     private final MillisTimer dreamluckTimer = new MillisTimer();
 
     public GoodbyeScreen() {
-        isDreamLuck = new Random().nextInt(100) <= 3;
+        isDreamLuck = new Random().nextInt(100) <= 6;
 
     }
     @Override
@@ -37,19 +37,19 @@ public class GoodbyeScreen extends GuiScreen {
                 mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("hi")));
                 dreamluckTimer.reset();
             }
-            font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, niggers).getRGB());
+            font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, fontOpacity).getRGB());
             return;
         }
-        if(faggots >= 255)
-            faggots = 255;
+        if(rectOpacity >= 255)
+            rectOpacity = 255;
         drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getMainColor().getRGB());
         drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getEpicColor(10).getRGB());
-        drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, faggots).getRGB());
-        faggots += 2;
-        niggers += 4;
-        if(niggers >= 255)
-            niggers = 255;
-        font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, niggers).getRGB());
+        drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, rectOpacity).getRGB());
+        rectOpacity += 2;
+        fontOpacity += 4;
+        if(fontOpacity >= 255)
+            fontOpacity = 255;
+        font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, fontOpacity).getRGB());
     }
 
     @Override
@@ -69,7 +69,7 @@ public class GoodbyeScreen extends GuiScreen {
             "You have been my friend. That in itself is a tremendous thing.",
             "No distance of place or lapse of time can lessen the friendship of those who are thoroughly persuaded of each other’s worth.",
             "The pain of parting is nothing to the joy of meeting again.",
-            "Good friends never say goodbye. They simply say ‘See you soon.’",
+            "Good friends never say goodbye. They simply say \"See you soon.\"",
             "This is not a goodbye, my darling, this is a thank you."
     };
 }

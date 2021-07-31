@@ -6,6 +6,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.io.IOException;
@@ -44,7 +45,9 @@ public class GuiConfirmShutdown extends GuiScreen {
             break;
 
             case 0:
+                if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
                 mc.displayGuiScreen(new GoodbyeScreen());
+                else mc.shutdown();
             break;
         }
     }

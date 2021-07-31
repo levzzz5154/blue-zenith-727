@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public final class  ConfigManager {
+public final class ConfigManager {
     private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public static String currentConfig = "";
     public static void save(String name) {
@@ -28,7 +28,7 @@ public final class  ConfigManager {
             module.add("displayName", new JsonPrimitive(mod.displayName));
             module.add("keybind", new JsonPrimitive(mod.keyBind));
             mod.getValues().forEach(val -> {
-               if(!(val instanceof ActionValue))
+               if(!(val instanceof ActionValue)) //ignore the action value to prevent funny
                    module.add(val.name, val.getPrimitive());
             });
             config.add(mod.getName(), module);

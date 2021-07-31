@@ -59,7 +59,6 @@ public class GuiMain extends GuiScreen {
                 this.mc.displayGuiScreen(new GuiMultiplayer(this));
                 break;
             case 4:
-                //this.mc.shutdown();
                 mc.displayGuiScreen(new GuiConfirmShutdown(this));
                 break;
             case 14:
