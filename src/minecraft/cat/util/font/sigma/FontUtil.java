@@ -29,4 +29,7 @@ public class FontUtil {
 	public static TFFFontRenderer fontSFLight42 = new TFFFontRenderer(getEpicFont("sf-ui-display-light", 42));
 	public static TFFFontRenderer fontComicSans42 = new TFFFontRenderer(getEpicFont("comic-sans-ms", 42));
 	public static TFFFontRenderer I_icon = new TFFFontRenderer(getEpicFont("icons", 80));
+	public static TFFFontRenderer I_testFont = new TFFFontRenderer(getEpicFont("test-font", 20));
+	public static TFFFontRenderer fontSegoeUI28 = new TFFFontRenderer(getEpicFont("segoe-ui", 28));
+	public static TFFFontRenderer fontJetBrainsLight36 = new TFFFontRenderer(getEpicFont("jet-brains-mono-light", 32));
 }
