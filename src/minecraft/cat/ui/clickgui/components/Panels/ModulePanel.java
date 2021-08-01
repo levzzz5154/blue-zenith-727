@@ -49,6 +49,9 @@ public class ModulePanel extends Panel {
         height = pY;
         return this;
     }
+    public ArrayList<Module> getModules(){
+        return modules;
+    }
     public void addModule(Module mod){
         this.modules.add(mod);
         mod.clickGuiAnim.setReversed(true);
