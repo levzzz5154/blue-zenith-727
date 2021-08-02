@@ -36,13 +36,13 @@ public class GuiRegister extends GuiScreen {
 
             case 2:
             case 4:
-                mc.displayGuiScreen(new GuiMain());
+                mc.displayGuiScreen(BlueZenith.guiMain);
             break;
 
             case 3:
                 BlueZenith.connection.username = "§fNot authorized";
                 BlueZenith.connection.status = "§aUser";
-                mc.displayGuiScreen(new GuiMain());
+                mc.displayGuiScreen(BlueZenith.guiMain);
                 BufferedWriter w = FileUtil.getWriter(true, "option.data");
                 w.write("no");
                 w.close();

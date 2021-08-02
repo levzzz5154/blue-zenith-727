@@ -76,7 +76,7 @@ public class RealmsBufferBuilder
 
     public RealmsBufferBuilder color(int p_color_1_, int p_color_2_, int p_color_3_, int p_color_4_)
     {
-        return this.from(this.b.func_181669_b(p_color_1_, p_color_2_, p_color_3_, p_color_4_));
+        return this.from(this.b.color(p_color_1_, p_color_2_, p_color_3_, p_color_4_));
     }
 
     public void faceTex2(int p_faceTex2_1_, int p_faceTex2_2_, int p_faceTex2_3_, int p_faceTex2_4_)

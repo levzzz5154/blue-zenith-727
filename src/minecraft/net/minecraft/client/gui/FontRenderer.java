@@ -143,8 +143,9 @@ public class FontRenderer implements IResourceManagerReloadListener {
     private final float[] charWidthFloat = new float[256];
     private boolean blend = false;
     private final GlBlendState oldBlendState = new GlBlendState();
-
+    protected String name = "";
     public FontRenderer(GameSettings gameSettingsIn, ResourceLocation location, TextureManager textureManagerIn, boolean unicode) {
+        this.name = "Minecraft";
         this.gameSettings = gameSettingsIn;
         this.locationFontTextureBase = location;
         this.locationFontTexture = location;
@@ -183,7 +184,9 @@ public class FontRenderer implements IResourceManagerReloadListener {
 
         this.readGlyphSizes();
     }
-
+    public String getName(){
+        return name;
+    }
     public void onResourceManagerReload(IResourceManager resourceManager) {
         this.locationFontTexture = FontUtils.getHdFontLocation(this.locationFontTextureBase);
 

@@ -2,10 +2,12 @@ package cat.util.font.sigma;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FontUtil {
 	private static Font getEpicFont(String str, float size) {
@@ -23,13 +25,25 @@ public class FontUtil {
 		}
 		return font;
 	}
-
-	public static FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
-	public static TFFFontRenderer fontSFLight35 = new TFFFontRenderer(getEpicFont("sf-ui-display-light", 35));
-	public static TFFFontRenderer fontSFLight42 = new TFFFontRenderer(getEpicFont("sf-ui-display-light", 42));
-	public static TFFFontRenderer fontComicSans42 = new TFFFontRenderer(getEpicFont("comic-sans-ms", 42));
-	public static TFFFontRenderer I_icon = new TFFFontRenderer(getEpicFont("icons", 80));
-	public static TFFFontRenderer I_testFont = new TFFFontRenderer(getEpicFont("test-font", 20));
-	public static TFFFontRenderer fontSegoeUI28 = new TFFFontRenderer(getEpicFont("segoe-ui", 28));
-	public static TFFFontRenderer fontJetBrainsLight36 = new TFFFontRenderer(getEpicFont("jet-brains-mono-light", 32));
+	public static ArrayList<FontRenderer> fonts = new ArrayList<>();
+	public static FontRenderer fontRendererObj = Minecraft.getMinecraft().fontRendererObj;
+	public static TFontRenderer fontJetBrainsLight36 = new TFontRenderer(getEpicFont("jet-brains-mono-light", 32));
+	public static TFontRenderer fontSegoeUI28 = new TFontRenderer(getEpicFont("segoe-ui", 28));
+	public static TFontRenderer fontComicSans42 = new TFontRenderer(getEpicFont("comic-sans-ms", 42));
+	public static TFontRenderer fontSFLight35 = new TFontRenderer(getEpicFont("sf-ui-display-light", 35));
+	public static TFontRenderer fontSFLight42 = new TFontRenderer(getEpicFont("sf-ui-display-light", 42));
+	public static TFontRenderer I_icon = new TFontRenderer(getEpicFont("icons", 80));
+	public static TFontRenderer I_testFont = new TFontRenderer(getEpicFont("test-font", 20));
+	static {
+		for(Field i : FontUtil.class.getDeclaredFields()) {
+			i.setAccessible(true);
+			Object o = null;
+			try {
+				o = i.get(FontUtil.class);
+			} catch(IllegalAccessException ignored) {}
+			if(o instanceof FontRenderer) {
+				fonts.add((FontRenderer) o);
+			}
+		}
+	}
 }

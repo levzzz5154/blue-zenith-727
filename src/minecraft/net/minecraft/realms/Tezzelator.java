@@ -50,7 +50,7 @@ public class Tezzelator
 
     public RealmsBufferBuilder color(int p_color_1_, int p_color_2_, int p_color_3_, int p_color_4_)
     {
-        return new RealmsBufferBuilder(t.getWorldRenderer().func_181669_b(p_color_1_, p_color_2_, p_color_3_, p_color_4_));
+        return new RealmsBufferBuilder(t.getWorldRenderer().color(p_color_1_, p_color_2_, p_color_3_, p_color_4_));
     }
 
     public Tezzelator tex(double p_tex_1_, double p_tex_3_)

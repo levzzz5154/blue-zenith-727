@@ -16,8 +16,8 @@ import org.lwjgl.input.Mouse;
 import java.util.ArrayList;
 
 public class ClickGui extends GuiScreen {
-    ArrayList<Panel> panels = new ArrayList<>();
-    ConfigsPanel configsPanel;
+    private final ArrayList<Panel> panels = new ArrayList<>();
+    private final ConfigsPanel configsPanel;
     public ClickGui(){
         float x = 20;
         float y = 20;
@@ -46,7 +46,7 @@ public class ClickGui extends GuiScreen {
     public void initGui(){
         configsPanel.update();
     }
-    Panel selectedPanel = null;
+    private Panel selectedPanel = null;
     public boolean mousePressed = false;
     public void drawScreen(int mouseX, int mouseY, float partialTicks){
         for (Panel p : panels) {

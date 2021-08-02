@@ -19,4 +19,7 @@ public class MathUtil {
     public static int inRange(int value, int min, int max){
         return Math.max(Math.min(value, max), min);
     }
+    public static float inRange(float value, float min, float max){
+        return Math.max(Math.min(value, max), min);
+    }
 }

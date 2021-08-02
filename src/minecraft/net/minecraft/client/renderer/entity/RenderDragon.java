@@ -138,8 +138,8 @@ public class RenderDragon extends RenderLiving<EntityDragon>
             float f9 = MathHelper.sin((float)(j % 8) * (float)Math.PI * 2.0F / 8.0F) * 0.75F;
             float f10 = MathHelper.cos((float)(j % 8) * (float)Math.PI * 2.0F / 8.0F) * 0.75F;
             float f11 = (float)(j % 8) * 1.0F / 8.0F;
-            worldrenderer.pos((double)(f9 * 0.2F), (double)(f10 * 0.2F), 0.0D).func_181673_a((double)f11, (double)f8).func_181669_b(0, 0, 0, 255).func_181675_d();
-            worldrenderer.pos((double)f9, (double)f10, (double)f6).func_181673_a((double)f11, (double)f7).func_181669_b(255, 255, 255, 255).func_181675_d();
+            worldrenderer.pos((double)(f9 * 0.2F), (double)(f10 * 0.2F), 0.0D).func_181673_a((double)f11, (double)f8).color(0, 0, 0, 255).func_181675_d();
+            worldrenderer.pos((double)f9, (double)f10, (double)f6).func_181673_a((double)f11, (double)f7).color(255, 255, 255, 255).func_181675_d();
         }
 
         tessellator.draw();

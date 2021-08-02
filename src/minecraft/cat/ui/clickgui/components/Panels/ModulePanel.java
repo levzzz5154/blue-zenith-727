@@ -96,7 +96,22 @@ public class ModulePanel extends Panel {
                 RenderUtil.crop(x, y1, x + width, y1 + d(h * vl.size(), m.clickGuiAnim.getValue()) + 1);
                 for (Value<?> v : vl) {
                     float y2r = y2 + h;
-                    if(v instanceof ModeValue) {
+                    if(v instanceof FontValue){
+                        FontValue val = (FontValue) v;
+                        RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
+                        f.drawString(val.name, x + 5, y2 + h / 2f - f.FONT_HEIGHT / 2f, mainColor.getRGB());
+                        f.drawString(val.get().getName(), x + 10 + f.getStringWidth(val.name), y2 + (h / 2f - f.FONT_HEIGHT / 2f), Color.GRAY.getRGB());
+                        if(i(mouseX, mouseY, x, y2, x + width, y2 + h) && !wasPressed && handleClicks) {
+                            if(Mouse.isButtonDown(0)) {
+                                val.next();
+                                toggleSound();
+                            } else if(Mouse.isButtonDown(1)) {
+                                val.previous();
+                                toggleSound();
+                            }
+                        }
+                        y2 += h;
+                    } else if(v instanceof ModeValue) {
                         ModeValue val = (ModeValue) v;
                         RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
                         f.drawString(val.name, x + 5, y2 + h / 2f - f.FONT_HEIGHT / 2f, mainColor.getRGB());

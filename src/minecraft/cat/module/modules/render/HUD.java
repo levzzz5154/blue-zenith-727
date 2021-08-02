@@ -12,30 +12,25 @@ import cat.util.ColorUtil;
 import cat.util.MathUtil;
 import cat.util.RenderUtil;
 import cat.util.font.sigma.FontUtil;
-import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-
+import com.google.common.eventbus.Subscribe;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static cat.BlueZenith.name;
-import static cat.BlueZenith.version;
-
 // god i hate this check
-@SuppressWarnings({"SpellCheckingInspection", "unused"})
+@SuppressWarnings("all")
 public class HUD extends Module {
     private final ModeValue fontMode = new ModeValue("Font", "Client", true, null, "Client", "Vanilla");
-    public final BooleanValue notificationBlur = new BooleanValue("Notification blur", true, true, null);
-    private final BooleanValue shadow = new BooleanValue("Font Shadow", true, true, null);
+    private final BooleanValue shadow = new BooleanValue("FontShadow", true, true, null);
     private final BooleanValue border = new BooleanValue("Border", true, true, null);
-    private final IntegerValue backgroundOpacity = new IntegerValue("Background opacity", 50, 0, 255, 1, true, null);
+    private final IntegerValue backgroundOpacity = new IntegerValue("BackgroundOpacity", 50, 0, 255, 1, true, null);
     private final IntegerValue margin = new IntegerValue( "Margin", 10, 0, 15, 1, true, null);
-    private final ModeValue colorMode = new ModeValue("Color", "Pulse", true, null, "Pulse", "Rainbow", "Custom");
-    private final FloatValue rainbowMulti = new FloatValue("Rainbow multiplier", 0.4f,0,1,0.1f, true, the -> colorMode.get().equals("Rainbow"));
+    private final ModeValue colorMode = new ModeValue("ColorMode", "Pulse", true, null, "Pulse", "Rainbow", "Custom");
+    private final FloatValue rainbowMulti = new FloatValue("RainbowMulti", 0.4f,0,1,0.1f, true, the -> colorMode.get().equals("Rainbow"));
     private final IntegerValue customR = new IntegerValue("CustomR", 0, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
     private final IntegerValue customG = new IntegerValue("CustomB", 60, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
     private final IntegerValue customB = new IntegerValue("CustomG", 159, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
@@ -63,7 +58,7 @@ public class HUD extends Module {
         // checkmate natasha
         FontRenderer font = getFont();
         modules.sort((m, m1) -> Float.compare(font.getStringWidth(m1.getTagName()), font.getStringWidth(m.getTagName())));
-        String str = name + " " + version;
+        String str = BlueZenith.name+" b"+BlueZenith.version;
         char[] strArr = str.toCharArray();
         float x1 = 5;
         for (int i = 0; i < strArr.length; i++) {

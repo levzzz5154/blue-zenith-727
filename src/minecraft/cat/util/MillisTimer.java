@@ -20,6 +20,6 @@ public final class MillisTimer {
     }
 
     public boolean hasTicksPassed(final float ticks){
-        return System.currentTimeMillis() >= millis + (ticks * 50);
+        return System.currentTimeMillis() - millis >= (ticks * 50);
     }
 }
