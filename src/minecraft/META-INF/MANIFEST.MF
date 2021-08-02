@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Main-Class: Start
+Class-Path: 1.8.9.jar reflections-0.9.12.jar javassist.jar discord-rpc.j
+ ar gson-2.2.4.jar guava-17.0.jar icu4j-core-mojang-51.2.jar authlib-1.5
+ .21.jar netty-1.6.jar realms-1.7.59.jar codecjorbis-20101023.jar codecw
+ av-20101023.jar libraryjavasound-20101123.jar librarylwjglopenal-201008
+ 24.jar soundsystem-20120107.jar commons-codec-1.9.jar commons-io-2.4.ja
+ r commons-logging-1.1.3.jar netty-all-4.0.23.Final.jar jna-3.4.0.jar pl
+ atform-3.4.0.jar jinput-2.0.5.jar jinput-platform-2.0.5-natives-windows
+ .jar jutils-1.0.0.jar jopt-simple-4.6.jar commons-compress-1.8.1.jar co
+ mmons-lang3-3.3.2.jar httpclient-4.3.3.jar httpcore-4.3.2.jar log4j-api
+ -2.0-beta9.jar log4j-core-2.0-beta9.jar lwjgl-2.9.4-nightly-20150209.ja
+ r lwjgl-platform-2.9.4-nightly-20150209-natives-windows.jar lwjgl_util-
+ 2.9.4-nightly-20150209.jar oshi-core-1.1.jar twitch-6.5.jar twitch-exte
+ rnal-platform-4.5-natives-windows-64.jar twitch-platform-6.5-natives-wi
+ ndows-64.jar
+
