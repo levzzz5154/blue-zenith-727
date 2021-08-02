@@ -9,7 +9,9 @@ public enum ModuleCategory {
     RENDER("Render");
    //WORLD("World");
     public String displayName;
+    public boolean showContent;
     ModuleCategory(String displayName) {
         this.displayName = displayName;
+        this.showContent = false;
     }
 }
