@@ -1,16 +1,15 @@
 package cat.module.modules.movement;
 
-import cat.events.Subscriber;
 import cat.events.impl.MoveEvent;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
-import cat.module.value.types.BooleanValue;
 import cat.module.value.types.ModeValue;
 import cat.util.BypassUtil;
 import cat.util.MathUtil;
 import cat.util.MovementUtil;
 import cat.util.PlayerUtil;
+import com.google.common.eventbus.Subscribe;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class LongJump extends Module {
@@ -37,7 +36,7 @@ public class LongJump extends Module {
             c = 0;
         }
     }
-    @Subscriber
+    @Subscribe
     public void onMove(MoveEvent e){
         if(b[0] <= jumps && bypassMode.get().equals("New")){
             e.x = 0;
@@ -47,7 +46,7 @@ public class LongJump extends Module {
     public boolean canFly(){
         return bypassMode.get().equals("None") || bypassMode.get().equals("Old") || (bypassMode.get().equals("New") && b[0] > jumps);
     }
-    @Subscriber
+    @Subscribe
     public void onPlayerUpdate(UpdatePlayerEvent e){
         if(bypassMode.get().equals("New") && !PlayerUtil.damageVerus(e, jumps, b)){
             return;

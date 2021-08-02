@@ -3,7 +3,7 @@ package cat.ui.alt;
 import cat.BlueZenith;
 import cat.util.ColorUtil;
 import cat.util.font.sigma.FontUtil;
-import cat.util.font.sigma.TFFFontRenderer;
+import cat.util.font.sigma.TFontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -49,7 +49,7 @@ public final class GuiAltLogin extends GuiScreen {
     }
 
     public void drawScreen(int x, int y, float z) {
-        TFFFontRenderer font = FontUtil.fontSFLight42;
+        TFontRenderer font = FontUtil.fontSFLight42;
         String directLoginText = "Direct Login";
         String statusText = this.thread == null ? "Waiting..." : this.thread.getStatus();
         drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getMainColor().getRGB());

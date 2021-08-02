@@ -5,6 +5,7 @@ import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.BooleanValue;
 import cat.module.value.types.StringValue;
+import cat.util.ColorUtil;
 import com.google.common.eventbus.Subscribe;
 
 @SuppressWarnings("unused")
@@ -20,7 +21,8 @@ public class StreamerMode extends Module {
     public void onTextEvent(TextEvent e){
         String username = mc.session.getUsername();
         if(e.getText().contains("omegacraft.cl")){
-            e.setText("sigmaclient.info");
+            System.out.println(ColorUtil.getFirstColor(e.getText()));
+            e.setText(ColorUtil.getFirstColor(e.getText()) + "sigmaclient.info");
         }
         if(hideName.get() && e.getText().contains(username)) {
             e.setText(e.getText().replace(username, fakeName.get()));

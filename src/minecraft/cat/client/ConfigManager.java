@@ -6,6 +6,7 @@ import cat.module.ModuleCategory;
 import cat.module.modules.render.ClickGUI;
 import cat.module.value.Value;
 import cat.module.value.types.ActionValue;
+import cat.module.value.types.ListValue;
 import cat.ui.clickgui.components.Panel;
 import cat.ui.notifications.NotificationManager;
 import cat.ui.notifications.NotificationType;
@@ -32,6 +33,14 @@ public final class ConfigManager {
             module.add("keybind", new JsonPrimitive(mod.keyBind));
             mod.getValues().forEach(val -> {
                if(!(val instanceof ActionValue)) //ignore the action value to prevent funny
+                   if(val instanceof ListValue) { //i might have autism
+                       final JsonObject options = new JsonObject();
+                       ListValue value = (ListValue) val;
+                       value.getOptions().forEach(option ->
+                           options.add(option, new JsonPrimitive(value.getOptionState(option)))
+                       );
+                       module.add(val.name, options);
+                   } else
                    module.add(val.name, val.getPrimitive());
             });
             config.add(mod.getName(), module);
@@ -84,6 +93,11 @@ public final class ConfigManager {
                         default:
                             Value<?> val = module.getValue(settings.getKey());
                             if(val == null) return;
+                            if(val instanceof ListValue && entry.getValue().isJsonObject()) {
+                                ListValue value = (ListValue) val;
+                                System.out.println(entry.getValue().getAsJsonObject().get(val.name).getAsJsonObject());
+                                value.fromObject(entry.getValue().getAsJsonObject().get(val.name).getAsJsonObject());
+                            } else
                             val.fromPrimitive(settings.getValue().getAsJsonPrimitive());
                         break;
                     }
