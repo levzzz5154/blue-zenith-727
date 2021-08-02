@@ -1,11 +1,11 @@
 package cat.events.impl;
 
-import cat.events.Event;
 import cat.events.EventType;
+import cat.events.MultiTypeEvent;
 import net.minecraft.entity.Entity;
 
 @SuppressWarnings("unused")
-public class AttackEvent extends Event {
+public class AttackEvent extends MultiTypeEvent {
 
     public final Entity target;
     public EventType type;

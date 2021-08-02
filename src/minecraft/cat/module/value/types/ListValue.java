@@ -46,7 +46,7 @@ public class ListValue extends Value<List<String>> {
 
 
     public List<String> getOptions() {
-        return new ArrayList<>(choices.keySet());
+        return choices.keySet().stream().collect(Collectors.toList());
     }
 
     public List<String> getSelectedOptions() {

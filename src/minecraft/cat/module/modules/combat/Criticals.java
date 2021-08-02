@@ -1,13 +1,11 @@
 package cat.module.modules.combat;
 
-import cat.events.EventType;
 import cat.events.impl.AttackEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
-import cat.ui.notifications.NotificationManager;
-import cat.ui.notifications.NotificationType;
+import cat.util.PacketUtil;
 import com.google.common.eventbus.Subscribe;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class Criticals extends Module {
 
@@ -17,8 +15,9 @@ public class Criticals extends Module {
 
     @Subscribe
     public void onAttack(AttackEvent event) {
-        if(event.type == EventType.PRE && event.target instanceof EntityLivingBase) {
-            NotificationManager.publish("attackin nigga " + event.target.getDisplayName().getFormattedText(), NotificationType.INFO, 2000);
-        }
+        PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.2f, mc.thePlayer.posZ, false));
+        PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.11f, mc.thePlayer.posZ, false));
+        PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.02f, mc.thePlayer.posZ, false));
+        PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
     }
 }

@@ -2,6 +2,8 @@ package cat.command.commands;
 
 import cat.BlueZenith;
 import cat.command.Command;
+import cat.module.modules.render.HUD;
+import cat.module.value.types.StringValue;
 import cat.ui.notifications.NotificationManager;
 import cat.ui.notifications.NotificationType;
 
@@ -27,7 +29,7 @@ public class ClientnameCommand extends Command {
             arg += " ";
             output.append(arg);
         }
-        BlueZenith.name = output.toString();
-        NotificationManager.publish("Set client name to §7" + BlueZenith.name, NotificationType.INFO, 3000);
+        ((StringValue)BlueZenith.moduleManager.getModule(HUD.class).getValue("Client name")).set(output.toString());
+        NotificationManager.publish("Set client name to §7" + output.toString(), NotificationType.INFO, 3000);
     }
 }

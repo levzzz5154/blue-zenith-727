@@ -1,9 +1,9 @@
 package cat.events.impl;
 
-import cat.events.Event;
 import cat.events.EventType;
+import cat.events.MultiTypeEvent;
 
-public class UpdatePlayerEvent extends Event {
+public class UpdatePlayerEvent extends MultiTypeEvent {
     private EventType type;
     public float yaw, pitch;
     public double x, y, z;

@@ -67,12 +67,12 @@ public class Aura extends Module {
         //filter the list of entities
         List<EntityLivingBase> list = mc.theWorld.loadedEntityList.parallelStream().filter(ent -> ent instanceof EntityLivingBase
                 && EntityManager.isTarget(ent)
-                && mc.thePlayer.getDistanceToEntity(ent) <= range.get())
+                && mc.thePlayer.getDistanceSqToEntity(ent) <= range.get() * range.get())
                 .map(j -> (EntityLivingBase) j) //due to the loadedEntityList being a list of Entity by default, you need to cast every entity to EntityLivingBase
                 .sorted((ent1, ent2) -> {
                     switch (sortMode.get()) { //this language fucking sucks
                         case "Distance":
-                            return Float.compare(mc.thePlayer.getDistanceToEntity(ent1), mc.thePlayer.getDistanceToEntity(ent2));
+                            return Double.compare(mc.thePlayer.getDistanceSqToEntity(ent2), mc.thePlayer.getDistanceSqToEntity(ent2));
 
                         case "HurtTime":
                             return Integer.compare(ent1.hurtTime, ent2.hurtTime);
@@ -136,11 +136,11 @@ public class Aura extends Module {
                     mc.thePlayer.swingItem();
                 } else PacketUtil.send(new C0APacketAnimation());
                 PacketUtil.send(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
+                //post attack
+                AttackEvent event2 = new AttackEvent(target, EventType.POST);
+                BlueZenith.eventManager.call(event2);
                 funnyVariable = ClientUtils.getRandomLong(minCPS.get(), maxCPS.get());
                 attackTimer.reset();
-                //post attack
-                event.type = EventType.POST;
-                BlueZenith.eventManager.call(event);
             }
             block();
         }
