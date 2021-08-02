@@ -1,5 +1,8 @@
 package cat.ui.notifications;
 
+import cat.BlueZenith;
+import cat.module.modules.render.HUD;
+import cat.module.value.types.BooleanValue;
 import cat.util.MinecraftInstance;
 import cat.util.RenderUtil;
 import cat.util.font.sigma.FontUtil;
@@ -12,7 +15,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 @SuppressWarnings("SpellCheckingInspection")
-public class NotiManager extends MinecraftInstance {
+public class NotificationManager extends MinecraftInstance {
     private static final ArrayList<Notification> notis = new ArrayList<>();
     private static final ArrayList<Notification> removeQueue = new ArrayList<>();
     public static void render() {
@@ -35,6 +38,7 @@ public class NotiManager extends MinecraftInstance {
                 n.baxiarX(width + margin, 0.15f);
             }
             GlStateManager.pushMatrix();
+            if(((BooleanValue) BlueZenith.moduleManager.getModule(HUD.class).getValue("Notification blur")).get())
             RenderUtil.blur(res.getScaledWidth() - n.xOffset, res.getScaledHeight() - y, res.getScaledWidth() - n.xOffset + width, res.getScaledHeight() - y + height);
             GlStateManager.translate(res.getScaledWidth() - n.xOffset, res.getScaledHeight() - y, 0);
             RenderUtil.rect(0, 0, width, height, new Color(10,10,30, 120));
@@ -48,18 +52,23 @@ public class NotiManager extends MinecraftInstance {
         notis.removeAll(removeQueue);
         removeQueue.clear();
     }
-    public static void addNoti(String title, String desc, NotiType notiType, long time){
+    public static void addNoti(String title, String desc, NotificationType notiType, long time){
         // i know that desc is unused, i don't what to do that now.
         notis.add(new Notification(title, desc, notiType, time));
     }
+
+    public static void publish(String content, NotificationType type, long ms) {
+        notis.add(new Notification(content, "", type, ms));
+    }
+
     public static class Notification {
         public String title, desc;
         public long time;
-        public NotiType type;
+        public NotificationType type;
         public long timeStarted;
         public float xOffset;
         public float yOffset;
-        public Notification(String title, String desc, NotiType notiType, long time){
+        public Notification(String title, String desc, NotificationType notiType, long time){
             this.title = title;
             this.desc = desc;
             this.time = time;
@@ -83,20 +92,4 @@ public class NotiManager extends MinecraftInstance {
         }
     }
 
-    public enum NotiType {
-        ERROR(new Color(255,0,0), "c"),
-        INFO(new Color(255,255,255), "b"),
-        WARNING(new Color(255,255, 0), "c"),
-        SUCCESS(new Color(0,255,0), "a"),
-        ;
-        private final Color color;
-        public String err;
-        NotiType(Color color, String f) {
-            this.color = color;
-            this.err = f;
-        }
-        public Color getColor(){
-            return color;
-        }
-    }
 }
