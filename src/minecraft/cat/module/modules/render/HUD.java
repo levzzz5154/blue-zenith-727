@@ -4,10 +4,7 @@ import cat.BlueZenith;
 import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
-import cat.module.value.types.BooleanValue;
-import cat.module.value.types.FloatValue;
-import cat.module.value.types.IntegerValue;
-import cat.module.value.types.ModeValue;
+import cat.module.value.types.*;
 import cat.util.ColorUtil;
 import cat.util.MathUtil;
 import cat.util.RenderUtil;
@@ -24,7 +21,7 @@ import java.util.ArrayList;
 // god i hate this check
 @SuppressWarnings("all")
 public class HUD extends Module {
-    private final ModeValue fontMode = new ModeValue("Font", "Client", true, null, "Client", "Vanilla");
+    private final FontValue fontValue = new FontValue("Font", FontUtil.fontSFLight42, true, null);
     private final BooleanValue shadow = new BooleanValue("FontShadow", true, true, null);
     private final BooleanValue border = new BooleanValue("Border", true, true, null);
     private final IntegerValue backgroundOpacity = new IntegerValue("BackgroundOpacity", 50, 0, 255, 1, true, null);
@@ -150,6 +147,6 @@ public class HUD extends Module {
         return mc.thePlayer.getDistance(mc.thePlayer.lastTickPosX, mc.thePlayer.lastTickPosY, mc.thePlayer.lastTickPosZ) * (Minecraft.getMinecraft().timer.ticksPerSecond * Minecraft.getMinecraft().timer.timerSpeed);
     }
     private FontRenderer getFont(){
-        return fontMode.get().equals("Client") ? FontUtil.fontSFLight42 : mc.fontRendererObj;
+        return fontValue.get();
     }
 }

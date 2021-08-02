@@ -46,7 +46,7 @@ public class FontValue extends Value<FontRenderer> {
     @Override
     public void previous() {
         if(index < FontUtil.fonts.size()) index = FontUtil.fonts.size();
-        set(FontUtil.fonts.get(MathUtil.inRange(index, 0, FontUtil.fonts.size())));
+        set(FontUtil.fonts.get(MathUtil.inRange(index, 0, FontUtil.fonts.size() - 1)));
         index--;
     }
     //TODO: Implement methods
