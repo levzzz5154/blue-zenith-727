@@ -1,6 +1,5 @@
 package cat.module.modules.player;
 
-import cat.events.Subscriber;
 import cat.events.impl.UpdateEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
@@ -8,6 +7,7 @@ import cat.module.value.types.BooleanValue;
 import cat.module.value.types.FloatValue;
 import cat.module.value.types.IntegerValue;
 import cat.module.value.types.ModeValue;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.item.ItemFood;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
@@ -15,7 +15,7 @@ public class FastEat extends Module {
     private final ModeValue mode = new ModeValue("Mode", "Packet", true, null, "Packet", "Timer");
     private final BooleanValue groundCheck = new BooleanValue("Ground Check", true, true, null);
     private final FloatValue timer = new FloatValue("Timer", 2f, 1.1f, 10f, 0.5f, true, __ -> mode.is("Timer"));
-    private final IntegerValue packet = new IntegerValue("Packet", 5, 1, 30, 1, true, __ -> mode.is("Packet"));
+    private final IntegerValue packet = new IntegerValue("Packet amount", 5, 1, 30, 1, true, __ -> mode.is("Packet"));
 
     public FastEat() {
         super("FastEat", "", ModuleCategory.PLAYER, "fastuse");
@@ -24,7 +24,7 @@ public class FastEat extends Module {
     private boolean sentPackets = false;
     private boolean usedTimer = false;
 
-    @Subscriber
+    @Subscribe
     public void onUpdate(UpdateEvent e) {
         if(!mc.thePlayer.isEating()) {
             sentPackets = false;

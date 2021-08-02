@@ -7,6 +7,8 @@ import cat.module.modules.render.ClickGUI;
 import cat.module.value.Value;
 import cat.module.value.types.ActionValue;
 import cat.ui.clickgui.components.Panel;
+import cat.ui.notifications.NotificationManager;
+import cat.ui.notifications.NotificationType;
 import cat.util.ClientUtils;
 import cat.util.FileUtil;
 import com.google.gson.*;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public final class ConfigManager {
+    private static int configsLoaded = 0;
     private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public static String currentConfig = "";
     public static void save(String name) {
@@ -41,12 +44,14 @@ public final class ConfigManager {
         } catch(IOException exception) {
             exception.printStackTrace();
         }
-        ClientUtils.fancyMessage("Saved config " + name);
+        NotificationManager.publish("Saved config §7" + name, NotificationType.SUCCESS, 2500);
+        //ClientUtils.fancyMessage("Saved config " + name);
     }
 
     public static void load(String name, boolean changeBinds, boolean ignoreRender) {
             if(!FileUtil.exists(false, FileUtil.configFolder, name + ".json")) {
-                ClientUtils.fancyMessage("Couldn't find that config.");
+                NotificationManager.publish("Couldn't find that config.", NotificationType.ERROR, 2500);
+                //ClientUtils.fancyMessage("Couldn't find that config.");
                 return;
             }
             BufferedReader reader = FileUtil.getReader(false, FileUtil.configFolder + File.separator + name + ".json");
@@ -84,7 +89,9 @@ public final class ConfigManager {
                     }
                 });
             });
-            ClientUtils.fancyMessage("Loaded config " + name + " " + (changeBinds ? "with binds " : "") + (ignoreRender ? "and ignored render modules." : ""));
+            if(configsLoaded > 0)
+            NotificationManager.publish("Loaded config " + name + " " + (changeBinds ? "with binds " : "") + (ignoreRender ? "and ignored render modules." : ""), NotificationType.SUCCESS, 3000);
+            configsLoaded++;
             try {
                 reader.close();
             } catch(IOException ignored) {

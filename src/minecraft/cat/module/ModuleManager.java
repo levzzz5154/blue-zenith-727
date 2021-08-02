@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public final class ModuleManager {
     private final ArrayList<Module> modules = new ArrayList<>();
-    public ModuleManager(){
+    public ModuleManager() {
         new Reflections("cat.module.modules").getSubTypesOf(Module.class).forEach(mod -> {
             try {
                 modules.add(mod.getDeclaredConstructor().newInstance());
@@ -17,9 +17,11 @@ public final class ModuleManager {
         //keep this at the bottom
         modules.forEach(Module::loadValues);
     }
+
     public ArrayList<Module> getModules(){
         return modules;
     }
+
     public Module getModule(String name) {
         for (Module m : modules) {
             if(m.getName().equalsIgnoreCase(name)){
@@ -33,9 +35,11 @@ public final class ModuleManager {
         }
         return null;
     }
-    public Module getModule(Class<?> clazz){
+
+    public Module getModule(Class<?> clazz) {
        return modules.stream().filter(mod -> mod.getClass() == clazz).findFirst().orElse(null);
     }
+
     public void handleKey(int keyCode){
         for (Module m : modules) {
             if(m.keyBind != 0 && keyCode == m.keyBind){

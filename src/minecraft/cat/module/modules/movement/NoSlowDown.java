@@ -1,10 +1,10 @@
 package cat.module.modules.movement;
 
-import cat.events.Subscriber;
 import cat.events.impl.SlowdownEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.FloatValue;
+import com.google.common.eventbus.Subscribe;
 
 @SuppressWarnings("unused")
 public class NoSlowDown extends Module {
@@ -13,7 +13,7 @@ public class NoSlowDown extends Module {
         super("NoSlowDown", "", ModuleCategory.MOVEMENT, "noslow");
     }
 
-    @Subscriber
+    @Subscribe
     public void onSlowdown(SlowdownEvent event) {
         if(itemMulti.get() == 0F) event.cancel();
         event.reducer = itemMulti.get();

@@ -1,12 +1,12 @@
 package cat.module.modules.fun;
 
-import cat.events.Subscriber;
 import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.util.MathUtil;
 import cat.util.RenderUtil;
 import cat.util.font.sigma.FontUtil;
+import com.google.common.eventbus.Subscribe;
 import fr.lavache.anime.Animate;
 import fr.lavache.anime.Easing;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -20,6 +20,8 @@ import java.awt.*;
 public class DeathScreen extends Module {
     public DeathScreen() {
         super("DeathScreen", "", ModuleCategory.FUN);
+        this.setState(true);
+        this.hidden = true;
     }
     Animate ImageAnim = new Animate().setEase(Easing.BOUNCE_OUT).setSpeed(300);
     Animate arrowAnim = new Animate().setEase(Easing.QUAD_IN_OUT).setSpeed(200).setMax(80).setMin(0);
@@ -27,7 +29,7 @@ public class DeathScreen extends Module {
     PositionedSoundRecord er = PositionedSoundRecord.create(new ResourceLocation("epic fail"));
     boolean sexy = false;
     int alpha = 255;
-    @Subscriber
+    @Subscribe
     public void render2D(Render2DEvent e){
         int w = 200;
         int h = 100;

@@ -1,11 +1,11 @@
 package cat.module.modules.player;
 
-import cat.events.Subscriber;
 import cat.events.impl.BlockBBEvent;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.ModeValue;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.AxisAlignedBB;
 
 public class NoFall extends Module {
@@ -17,7 +17,7 @@ public class NoFall extends Module {
     public String getTag(){
         return this.mode.get();
     }
-    @Subscriber
+    @Subscribe
     public void onBlockBB(BlockBBEvent e){
         if(mode.get().equals("Verus")){
             if(mc.thePlayer.fallDistance >= 2.5 && e.pos.getY() < mc.thePlayer.posY && e.pos.getY() > mc.thePlayer.posY - 1){
@@ -25,7 +25,7 @@ public class NoFall extends Module {
             }
         }
     }
-    @Subscriber
+    @Subscribe
     public void onPacket(UpdatePlayerEvent e){
         if (mode.get().equals("Edit")) {
             if(mc.thePlayer.fallDistance >= 3){

@@ -1,12 +1,13 @@
 package cat.module.modules.movement;
 
-import cat.events.Subscriber;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.BooleanValue;
-import cat.ui.notifications.NotiManager;
+import cat.ui.notifications.NotificationManager;
+import cat.ui.notifications.NotificationType;
 import cat.util.MovementUtil;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 @SuppressWarnings("SpellCheckingInspection")
@@ -25,14 +26,14 @@ public class LongJump extends Module {
                 mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
                 mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, true));
             }else{
-                NotiManager.addNoti("Couldn't damage you: not enough space", "", NotiManager.NotiType.ERROR, 3000);
+                NotificationManager.addNoti("Couldn't damage you: not enough space", "", NotificationType.ERROR, 3000);
             }
             c = 0;
         }
     }
-    boolean maccacokkk = Boolean.FALSE;
+    boolean maccacokkk = false;
     float lol = 0;
-    @Subscriber
+    @Subscribe
     public void onPlayerUpdate(UpdatePlayerEvent e){
         if(mc.thePlayer.hurtTime == 9){
             c = 0;

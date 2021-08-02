@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.MathHelper;
 
+import java.awt.*;
+
 public class GuiTextField extends Gui
 {
     private final int id;
@@ -528,8 +530,14 @@ public class GuiTextField extends Gui
         {
             if (this.getEnableBackgroundDrawing())
             {
-                drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, -6250336);
-                drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, -16777216);
+                float width = 1f;
+                int outlineColor = new Color(189, 189, 189, 70).getRGB();
+                drawRect(this.xPosition - width, this.yPosition - width, this.xPosition, this.yPosition + this.height + width, outlineColor);
+                drawRect(this.xPosition + this.width + width, this.yPosition - width, this.xPosition + this.width, this.yPosition + this.height + width, outlineColor);
+                drawRect(this.xPosition, this.yPosition - width, this.xPosition + this.width, this.yPosition, outlineColor);
+                drawRect(this.xPosition, this.yPosition + this.height + width, this.xPosition + this.width, this.yPosition + this.height, outlineColor);
+
+                drawGradientRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, new Color(0,0,16, 100).getRGB(), new Color(0, 0, 32, 100).getRGB());
             }
 
             int i = this.isEnabled ? this.enabledColor : this.disabledColor;

@@ -1,11 +1,11 @@
 package cat.module.modules.movement;
 
-import cat.events.Subscriber;
 import cat.events.impl.UpdateEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.FloatValue;
 import cat.util.MovementUtil;
+import com.google.common.eventbus.Subscribe;
 import org.lwjgl.input.Keyboard;
 
 @SuppressWarnings("unused")
@@ -14,7 +14,7 @@ public class Speed extends Module {
     public Speed() {
         super("Speed", "", ModuleCategory.MOVEMENT, Keyboard.KEY_ADD,"bhop");
     }
-    @Subscriber
+    @Subscribe
     public void onUpdate(UpdateEvent e){
         if(MovementUtil.areMovementKeysPressed()){
             if(mc.thePlayer.onGround){

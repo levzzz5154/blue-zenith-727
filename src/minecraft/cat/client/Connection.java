@@ -105,6 +105,7 @@ public final class Connection extends MinecraftInstance {
             buffer.append(Integer.toHexString(0xFF & b));
         }
         hwid = buffer.toString();
+        System.out.println(hwid);
     }
 
     private String getSerialNumber() {

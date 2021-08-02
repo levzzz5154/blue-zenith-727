@@ -1,8 +1,9 @@
 package cat.ui;
 
 import cat.BlueZenith;
+import cat.util.ColorUtil;
 import cat.util.MillisTimer;
-import cat.util.font.jello.FontUtil;
+import cat.util.font.sigma.FontUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,15 +15,13 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class GoodbyeScreen extends GuiScreen {
-
-    private int fontOpacity = 1;
-    private int rectOpacity = 1;
+    private int faggots = 1;
     private String a = nigger[new Random().nextInt(nigger.length)];
     private final boolean isDreamLuck;
     private final MillisTimer dreamluckTimer = new MillisTimer();
 
     public GoodbyeScreen() {
-        isDreamLuck = new Random().nextInt(100) <= 6;
+        isDreamLuck = new Random().nextInt(100) <= 10;
 
     }
     @Override
@@ -31,32 +30,29 @@ public class GoodbyeScreen extends GuiScreen {
         FontRenderer font = FontUtil.fontSFLight42;
         if(isDreamLuck) {
             a = "You're dream-lucky today. Hope you didn't set your volume too high.";
-            drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getMainColor().getRGB());
-            drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getEpicColor(10).getRGB());
+            drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getMainColor().getRGB());
+            drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getEpicColor(10).getRGB());
             if(dreamluckTimer.hasTimeReached(500)) {
                 mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("hi")));
                 dreamluckTimer.reset();
             }
-            font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, fontOpacity).getRGB());
+            font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, 255 - faggots).getRGB());
             return;
         }
-        if(rectOpacity >= 255)
-            rectOpacity = 255;
-        drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getMainColor().getRGB());
-        drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), BlueZenith.getEpicColor(10).getRGB());
-        drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, rectOpacity).getRGB());
-        rectOpacity += 2;
-        fontOpacity += 4;
-        if(fontOpacity >= 255)
-            fontOpacity = 255;
-        font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, fontOpacity).getRGB());
+        faggots += 2;
+        if(faggots >= 255)
+            faggots = 255;
+        drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getMainColor().getRGB());
+        drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getEpicColor(10).getRGB());
+        drawRect(0, 0, this.width, this.height, new Color(0, 0, 0, faggots).getRGB());
+        font.drawStringWithShadow(a, res.getScaledWidth()/2f - font.getStringWidth(a)/2f, res.getScaledHeight()/2f, new Color(255, 255, 255, 255 - faggots).getRGB());
     }
 
     @Override
     public void initGui() {
         if(!isDreamLuck)
-        mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("shutdown")));
-        BlueZenith.scheduledExecutorService.schedule(() -> mc.shutdown(), 4500, TimeUnit.MILLISECONDS);
+            mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("shutdown")));
+        BlueZenith.scheduledExecutorService.schedule(() -> mc.shutdown(), 4000, TimeUnit.MILLISECONDS);
     }
 
     private final static String[] nigger = {
@@ -69,7 +65,7 @@ public class GoodbyeScreen extends GuiScreen {
             "You have been my friend. That in itself is a tremendous thing.",
             "No distance of place or lapse of time can lessen the friendship of those who are thoroughly persuaded of each other’s worth.",
             "The pain of parting is nothing to the joy of meeting again.",
-            "Good friends never say goodbye. They simply say \"See you soon.\"",
+            "Good friends never say goodbye. They simply say ‘See you soon.’",
             "This is not a goodbye, my darling, this is a thank you."
     };
 }

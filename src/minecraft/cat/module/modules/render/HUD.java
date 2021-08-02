@@ -1,7 +1,6 @@
 package cat.module.modules.render;
 
 import cat.BlueZenith;
-import cat.events.Subscriber;
 import cat.events.impl.Render2DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
@@ -9,12 +8,11 @@ import cat.module.value.types.BooleanValue;
 import cat.module.value.types.FloatValue;
 import cat.module.value.types.IntegerValue;
 import cat.module.value.types.ModeValue;
-import cat.ui.arraylist.IArraylistRenderer;
-import cat.ui.arraylist.impl.VanillaFont;
 import cat.util.ColorUtil;
 import cat.util.MathUtil;
 import cat.util.RenderUtil;
 import cat.util.font.sigma.FontUtil;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
@@ -24,16 +22,20 @@ import net.minecraft.client.renderer.GlStateManager;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static cat.BlueZenith.name;
+import static cat.BlueZenith.version;
+
 // god i hate this check
 @SuppressWarnings({"SpellCheckingInspection", "unused"})
 public class HUD extends Module {
     private final ModeValue fontMode = new ModeValue("Font", "Client", true, null, "Client", "Vanilla");
-    private final BooleanValue shadow = new BooleanValue("FontShadow", true, true, null);
+    public final BooleanValue notificationBlur = new BooleanValue("Notification blur", true, true, null);
+    private final BooleanValue shadow = new BooleanValue("Font Shadow", true, true, null);
     private final BooleanValue border = new BooleanValue("Border", true, true, null);
-    private final IntegerValue backgroundOpacity = new IntegerValue("BackgroundOpacity", 50, 0, 255, 1, true, null);
+    private final IntegerValue backgroundOpacity = new IntegerValue("Background opacity", 50, 0, 255, 1, true, null);
     private final IntegerValue margin = new IntegerValue( "Margin", 10, 0, 15, 1, true, null);
-    private final ModeValue colorMode = new ModeValue("ColorMode", "Pulse", true, null, "Pulse", "Rainbow", "Custom");
-    private final FloatValue rainbowMulti = new FloatValue("RainbowMulti", 0.4f,0,1,0.1f, true, the -> colorMode.get().equals("Rainbow"));
+    private final ModeValue colorMode = new ModeValue("Color", "Pulse", true, null, "Pulse", "Rainbow", "Custom");
+    private final FloatValue rainbowMulti = new FloatValue("Rainbow multiplier", 0.4f,0,1,0.1f, true, the -> colorMode.get().equals("Rainbow"));
     private final IntegerValue customR = new IntegerValue("CustomR", 0, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
     private final IntegerValue customG = new IntegerValue("CustomB", 60, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
     private final IntegerValue customB = new IntegerValue("CustomG", 159, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
@@ -42,12 +44,11 @@ public class HUD extends Module {
     private final BooleanValue showFPS = new BooleanValue("FPS", true, true, null);
     private final BooleanValue showBPS = new BooleanValue("BPS", true, true, null);
     private final ArrayList<Module> modules = new ArrayList<>();
-    private final IArraylistRenderer renderer = new VanillaFont();
     public HUD() {
         super("HUD", "", ModuleCategory.RENDER);
         this.setState(true);
     }
-    @Subscriber
+    @Subscribe
     public void onRender2D(Render2DEvent e) {
         if(mc.gameSettings.showDebugInfo) return;
         for (Module m : BlueZenith.moduleManager.getModules()) {
@@ -62,7 +63,7 @@ public class HUD extends Module {
         // checkmate natasha
         FontRenderer font = getFont();
         modules.sort((m, m1) -> Float.compare(font.getStringWidth(m1.getTagName()), font.getStringWidth(m.getTagName())));
-        String str = BlueZenith.name+" b"+BlueZenith.version;
+        String str = name + " " + version;
         char[] strArr = str.toCharArray();
         float x1 = 5;
         for (int i = 0; i < strArr.length; i++) {

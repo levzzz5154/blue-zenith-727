@@ -1,12 +1,12 @@
 package cat.module.modules.combat;
 
 import cat.BlueZenith;
-import cat.events.Subscriber;
 import cat.events.impl.MoveEvent;
 import cat.events.impl.Render3DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.util.*;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
@@ -20,7 +20,8 @@ public class TargetStrafe extends Module {
     private float direction = 1;
     private EntityLivingBase target = null;
     //blatantly skidded from czechhek
-    @Subscriber
+
+    @Subscribe
     public void onMove(MoveEvent e){
         target = ((Aura) BlueZenith.moduleManager.getModule(Aura.class)).getTarget();
         if(target == null) return;
@@ -50,7 +51,7 @@ public class TargetStrafe extends Module {
         e.x = encirclementX + strafeX;
         e.z = encirclementZ + strafeZ;
     }
-    @Subscriber
+    @Subscribe
     public void onRender3D(Render3DEvent e){
         if(target == null) return;
         GL11.glPushMatrix();

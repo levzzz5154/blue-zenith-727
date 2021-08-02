@@ -1,11 +1,11 @@
 package cat.module.modules.combat;
 
-import cat.events.Subscriber;
 import cat.events.impl.PacketEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.BooleanValue;
 import cat.module.value.types.FloatValue;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S27PacketExplosion;
@@ -17,7 +17,7 @@ public class Velocity extends Module {
     private final FloatValue horizontal = new FloatValue("Horizontal", 100F, 0F, 500F, 1F, true, null);
     private final FloatValue vertical = new FloatValue("Vertical", 100F, 0F, 100F, 1F, true, null);
     private final BooleanValue explosions = new BooleanValue("Explosions", true, true, null);
-    @Subscriber
+    @Subscribe
     public void onPacket(PacketEvent e){
         Packet<?> packet = e.packet;
         if(packet instanceof S12PacketEntityVelocity){

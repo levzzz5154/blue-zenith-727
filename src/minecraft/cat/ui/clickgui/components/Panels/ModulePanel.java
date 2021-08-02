@@ -7,7 +7,7 @@ import cat.module.value.types.*;
 import cat.ui.clickgui.components.Panel;
 import cat.util.MillisTimer;
 import cat.util.RenderUtil;
- import cat.util.font.sigma.FontUtil;
+import cat.util.font.sigma.FontUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -150,19 +150,26 @@ public class ModulePanel extends Panel {
                         y2 += h;
                     } else if (v instanceof StringValue) {
                         StringValue val = (StringValue) v;
+                        String typingIndicator = (selectedTextField != null && selectedTextField == val && textFieldCounter > partialTicks % 0.5 ? "_" : "");
                         RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
-                        f.drawString(val.name + ": "+val.get() + (selectedTextField != null && selectedTextField == val && textFieldCounter > partialTicks % 0.5 ? "_" : ""), x + 5, y2 + (h / 2f - f.FONT_HEIGHT / 2f), Color.WHITE.getRGB());
+                        if(val.get().isEmpty())
+                        f.drawString(val.name + "... " + typingIndicator, x + width/2f - f.getStringWidthF(val.name + "... ")/2f, y2 + (h / 2f - f.FONT_HEIGHT / 2f), Color.GRAY.getRGB());
+                        else f.drawString(val.get() + typingIndicator, x + width/2f - f.getStringWidthF(val.get() + " ")/2f, y2 + (h / 2f - f.FONT_HEIGHT / 2f), Color.WHITE.getRGB());
                         if (i(mouseX, mouseY, x, y2, x + width, y2 + h) && (Mouse.isButtonDown(0)) && !wasPressed && handleClicks) {
                             this.selectedTextField = val;
                             toggleSound();
+                        } else if(this.selectedTextField != null && Mouse.isButtonDown(0) && !i(mouseX, mouseY, x, y, x + width, y + 10) && handleClicks && !wasPressed) {
+                            this.selectedTextField = null;
+                            wasPressed = true;
                         }
                         y2 += h;
                     } else if (v instanceof BooleanValue) {
+                        float downscale = 0.45f;
                         BooleanValue val = (BooleanValue) v;
                         RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
-                        RenderUtil.rect(x + width - 14, y2 + 2f, x + width - 3.2f, y2 + h - 2f, new Color(60, 60, 60));
+                        RenderUtil.rect(x + width - 14.5 + downscale, y2 + 2f + downscale, x + width - 2.2f - downscale, y2 + h - 2f - downscale, new Color(60, 60, 60));
                         if(val.get())
-                            RenderUtil.rect(x + width - 12.5f, y2 + 3.5f, x + width - 4.5f, y2 + h - 3.5f, mainColor);
+                            RenderUtil.rect(x + width - 13f + downscale, y2 + 3.5f + downscale, x + width - 3.5f - downscale, y2 + h - 3.5f - downscale, mainColor);
                         f.drawString(val.name, x + 5, y2 + (h / 2f - f.FONT_HEIGHT / 2f), mainColor.getRGB());
                         if (i(mouseX, mouseY, x, y2, x + width, y2 + h) && (Mouse.isButtonDown(0) || Mouse.isButtonDown(1)) && !wasPressed && handleClicks) {
                             val.next();

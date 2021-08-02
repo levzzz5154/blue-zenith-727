@@ -4,6 +4,10 @@ import cat.BlueZenith;
 import cat.command.Command;
 import cat.module.Module;
 
+import static cat.ui.notifications.NotificationManager.publish;
+import static cat.ui.notifications.NotificationType.ERROR;
+import static cat.ui.notifications.NotificationType.INFO;
+
 @SuppressWarnings("unused")
 public class ToggleCommand extends Command {
     public ToggleCommand() {
@@ -14,13 +18,13 @@ public class ToggleCommand extends Command {
         if(args.length > 1){
             Module m = BlueZenith.moduleManager.getModule(args[1]);
             if(m == null){
-                chat("Invalid module.");
+                publish("Couldn't find that module.", ERROR, 2500);
                 return;
             }
             m.toggle();
-            chat(m.getState() ? "Enabled module "+m.getName()+"." : "Disabled module "+m.getName()+".");
+            publish(m.getState() ? "Enabled "+m.getName() : "Disabled "+m.getName()+"", INFO, 2500);
         }else{
-            chat("Syntax: .t <module>");
+            publish("Usage: " + this.syntax, INFO, 3000);
         }
     }
 }

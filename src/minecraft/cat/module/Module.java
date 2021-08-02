@@ -53,10 +53,10 @@ public class Module {
 
     public void toggle(){
         if(state){
-            BlueZenith.eventManager.unregisterListener(this);
+            BlueZenith.unregister(this);
             onDisable();
         }else{
-            BlueZenith.eventManager.registerListener(this);
+            BlueZenith.register(this);
             onEnable();
         }
         state = !state;
@@ -68,6 +68,7 @@ public class Module {
     public void onDisable(){}
     public void onEnable() {}
 
+    @Deprecated
     public String getTagName(){
         return displayName + "§7" + (getTag().isEmpty() ? "" : " " + getTag());
     }

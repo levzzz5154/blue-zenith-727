@@ -1,10 +1,10 @@
 package cat.module.modules.misc;
 
-import cat.events.Subscriber;
 import cat.events.impl.UpdateEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.IntegerValue;
+import com.google.common.eventbus.Subscribe;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
@@ -20,7 +20,7 @@ public class FPSLimiter extends Module {
     private int fps = 0;
     private boolean wasActive = true;
 
-    @Subscriber
+    @Subscribe
     public void aa(UpdateEvent e) throws LWJGLException {
         if(!Display.isActive()) {
             Display.sync(limit.get());

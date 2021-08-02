@@ -1,11 +1,11 @@
 package cat.module.modules.movement;
 
-import cat.events.Subscriber;
 import cat.events.impl.UpdateEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.util.MillisTimer;
 import cat.util.MovementUtil;
+import com.google.common.eventbus.Subscribe;
 
 @SuppressWarnings("unused")
 public class Sprint extends Module {
@@ -15,7 +15,7 @@ public class Sprint extends Module {
 
     private final MillisTimer timer = new MillisTimer();
 
-    @Subscriber
+    @Subscribe
     public void onUpdate(UpdateEvent e) {
         if (MovementUtil.areMovementKeysPressed()) {
             if (!mc.thePlayer.isCollidedHorizontally) {

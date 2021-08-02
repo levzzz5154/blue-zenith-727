@@ -1,11 +1,12 @@
 package net.minecraft.client.gui;
 
 import com.google.common.collect.Lists;
-import java.io.IOException;
-import java.util.TreeMap;
-import java.util.Map.Entry;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
+
+import java.io.IOException;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 public class GuiSnooper extends GuiScreen
 {
@@ -102,7 +103,7 @@ public class GuiSnooper extends GuiScreen
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        this.drawDefaultBackground();
+        //this.drawDefaultBackground();
         this.field_146606_s.drawScreen(mouseX, mouseY, partialTicks);
         this.drawCenteredString(this.fontRendererObj, this.field_146610_i, this.width / 2, 8, 16777215);
         int i = 22;

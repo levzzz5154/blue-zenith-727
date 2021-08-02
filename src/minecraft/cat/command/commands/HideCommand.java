@@ -3,6 +3,8 @@ package cat.command.commands;
 import cat.BlueZenith;
 import cat.command.Command;
 import cat.module.Module;
+import cat.ui.notifications.NotificationManager;
+import cat.ui.notifications.NotificationType;
 
 @SuppressWarnings("unused")
 public class HideCommand extends Command {
@@ -19,10 +21,10 @@ public class HideCommand extends Command {
         }
         Module mod = BlueZenith.moduleManager.getModule(args[1]);
         if(mod == null) {
-            chat("Couldn't find that module!");
+            NotificationManager.publish("Couldn't find that module.", NotificationType.ERROR, 2500);
             return;
         }
         mod.hidden = !mod.hidden;
-        chat(mod.getName() + (mod.hidden ? " is now hidden." : " is now shown."));
+        NotificationManager.publish(mod.getName() + (mod.hidden ? " is now hidden." : " is now shown."), NotificationType.INFO, 2500);
     }
 }

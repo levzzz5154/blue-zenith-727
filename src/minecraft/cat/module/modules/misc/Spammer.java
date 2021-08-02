@@ -1,6 +1,5 @@
 package cat.module.modules.misc;
 
-import cat.events.Subscriber;
 import cat.events.impl.UpdateEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
@@ -11,6 +10,7 @@ import cat.module.value.types.StringValue;
 import cat.util.ClientUtils;
 import cat.util.MillisTimer;
 import cat.util.PacketUtil;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -31,7 +31,7 @@ public class Spammer extends Module {
 
     private final MillisTimer timer = new MillisTimer();
 
-    @Subscriber
+    @Subscribe
     public void spam(UpdateEvent event) {
         if (timer.hasTimeReached(delay.get())) {
            if(mode.is("Random")) switch (randomMode.get()) {

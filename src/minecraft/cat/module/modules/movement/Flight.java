@@ -1,6 +1,5 @@
 package cat.module.modules.movement;
 
-import cat.events.Subscriber;
 import cat.events.impl.BlockBBEvent;
 import cat.events.impl.MoveEvent;
 import cat.events.impl.UpdatePlayerEvent;
@@ -10,6 +9,7 @@ import cat.module.value.types.FloatValue;
 import cat.module.value.types.ModeValue;
 import cat.util.MillisTimer;
 import cat.util.MovementUtil;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
 
@@ -22,7 +22,7 @@ public class Flight extends Module {
     }
     public final float[] movementSpeed = new float[]{0, 0, 0};
     private final MillisTimer verusTimer = new MillisTimer();
-    @Subscriber
+    @Subscribe
     public void onUpdate(UpdatePlayerEvent e) {
         switch (mode.get()) {
             case "Vanilla":
@@ -75,14 +75,14 @@ public class Flight extends Module {
                 break;
         }
     }
-    @Subscriber
+    @Subscribe
     public void onMove(MoveEvent e){
         if(movementSpeed[2] <= f && this.mode.get().equals("OldVerus")){
             e.x = 0;
             e.z = 0;
         }
     }
-    @Subscriber
+    @Subscribe
     public void onBlockBB(BlockBBEvent e){
         assert mc.thePlayer != null;
         if(!e.block.getMaterial().isSolid() && e.pos.getY() < mc.thePlayer.posY){

@@ -21,15 +21,15 @@ public class TargetsPanel extends Panel {
         width = 120;
     }
     public void drawPanel(int mouseX, int mouseY, float partialTicks, boolean handleClicks){
-        Color main_color = click.main_color;
+        Color mainColor = click.main_color;
         Color backgroundColor = click.backgroundColor;
-        RenderUtil.rect(x, y, x + width, y + mHeight, main_color);
+        RenderUtil.rect(x, y, x + width, y + mHeight, new Color(mainColor.getRed(), mainColor.getGreen(), mainColor.getBlue(), click.ba.get()));
         f.drawString("Targets", x + 4, y + mHeight / 2f - f.FONT_HEIGHT / 2f, Color.WHITE.getRGB());
         if(!showContent) return;
         float y = this.y + mHeight;
         for (EntityManager.Targets tar : targets) {
             RenderUtil.rect(x, y, x + width, y + mHeight, backgroundColor);
-            f.drawString(tar.displayName, x + 5, y + (mHeight / 2f - f.FONT_HEIGHT / 2f), tar.on ? main_color.getRGB() : main_color.darker().darker().getRGB());
+            f.drawString(tar.displayName, x + 5, y + (mHeight / 2f - f.FONT_HEIGHT / 2f), tar.on ? mainColor.getRGB() : mainColor.darker().darker().getRGB());
             if(i(mouseX, mouseY, x, y, x + width, y + mHeight) && Mouse.isButtonDown(0) && !wasButtonDown && handleClicks){
                 tar.on = !tar.on;
                 toggleSound();

@@ -2,23 +2,10 @@ package net.minecraft.client.gui;
 
 import cat.BlueZenith;
 import cat.events.impl.SentMessageEvent;
+import cat.util.ColorUtil;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
-import java.awt.Toolkit;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
 import net.minecraft.client.renderer.GlStateManager;
@@ -47,6 +34,19 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import tv.twitch.chat.ChatUserInfo;
+
+import java.awt.*;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -99,13 +99,15 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
      * Draws the screen and all the components in it. Args : mouseX, mouseY, renderPartialTicks
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        for (int i = 0; i < this.buttonList.size(); ++i) {
-            ((GuiButton) this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY);
+        this.buttonList.forEach(button -> button.drawButton(this.mc, mouseX, mouseY));
+        this.labelList.forEach(label -> label.drawLabel(this.mc, mouseX, mouseY));
+       /* for (int i = 0; i < this.buttonList.size(); ++i) {
+            this.buttonList.get(i).drawButton(this.mc, mouseX, mouseY);
         }
 
         for (int j = 0; j < this.labelList.size(); ++j) {
-            ((GuiLabel) this.labelList.get(j)).drawLabel(this.mc, mouseX, mouseY);
-        }
+            this.labelList.get(j).drawLabel(this.mc, mouseX, mouseY);
+        }*/
     }
 
     /**
@@ -557,7 +559,9 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         if (this.mc.theWorld != null) {
             this.drawGradientRect(0, 0, this.width, this.height, -1072689136, -804253680);
         } else {
-            this.drawBackground(tint);
+            drawGradientRect(0, 0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getMainColor().getRGB());
+            drawGradientRect(0,0, this.width, this.height, new Color(0, 0, 69).getRGB(), ColorUtil.getEpicColor(10).getRGB());
+            //this.drawBackground(tint);
         }
     }
 
@@ -573,10 +577,10 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         float f = 32.0F;
         worldrenderer.begin(7, DefaultVertexFormats.field_181709_i);
-        worldrenderer.pos(0.0D, (double) this.height, 0.0D).func_181673_a(0.0D, (double) ((float) this.height / 32.0F + (float) tint)).func_181669_b(64, 64, 64, 255).func_181675_d();
-        worldrenderer.pos((double) this.width, (double) this.height, 0.0D).func_181673_a((double) ((float) this.width / 32.0F), (double) ((float) this.height / 32.0F + (float) tint)).func_181669_b(64, 64, 64, 255).func_181675_d();
-        worldrenderer.pos((double) this.width, 0.0D, 0.0D).func_181673_a((double) ((float) this.width / 32.0F), (double) tint).func_181669_b(64, 64, 64, 255).func_181675_d();
-        worldrenderer.pos(0.0D, 0.0D, 0.0D).func_181673_a(0.0D, (double) tint).func_181669_b(64, 64, 64, 255).func_181675_d();
+        worldrenderer.pos(0.0D, this.height, 0.0D).func_181673_a(0.0D, (float) this.height / 32.0F + (float) tint).func_181669_b(64, 64, 64, 255).func_181675_d();
+        worldrenderer.pos(this.width, this.height, 0.0D).func_181673_a((float) this.width / 32.0F, (float) this.height / 32.0F + (float) tint).func_181669_b(64, 64, 64, 255).func_181675_d();
+        worldrenderer.pos(this.width, 0.0D, 0.0D).func_181673_a((float) this.width / 32.0F, tint).func_181669_b(64, 64, 64, 255).func_181675_d();
+        worldrenderer.pos(0.0D, 0.0D, 0.0D).func_181673_a(0.0D, tint).func_181669_b(64, 64, 64, 255).func_181675_d();
         tessellator.draw();
     }
 
