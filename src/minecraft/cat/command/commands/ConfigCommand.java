@@ -3,7 +3,10 @@ package cat.command.commands;
 import cat.BlueZenith;
 import cat.client.ConfigManager;
 import cat.command.Command;
+import cat.ui.notifications.NotificationManager;
+import cat.ui.notifications.NotificationType;
 import cat.util.FileUtil;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.util.Arrays;
@@ -27,7 +30,7 @@ public final class ConfigCommand extends Command {
                         final File configs = new File(FileUtil.configFolder);
                         final String[] list = configs.list();
                         if(list == null || list.length == 0) {
-                            chat("Couldn't find any configs!");
+                            NotificationManager.publish("Couldn't find any configs.", NotificationType.INFO, 2500);
                             return;
                         }
                         chat("All configs:");
@@ -35,7 +38,7 @@ public final class ConfigCommand extends Command {
                         int amount = 0;
                         for(String filename : list) {
                             amount++;
-                            chat(amount + ": " + filename.replace(".json", ""));
+                            chat(amount + ": " + FilenameUtils.removeExtension(filename));
                         }
                         chat("------------");
                     break;
@@ -47,25 +50,25 @@ public final class ConfigCommand extends Command {
                                 public void run() {
                                     final File cfgs = new File(FileUtil.configFolder);
                                     Arrays.stream(cfgs.listFiles()).forEach(file -> file.delete());
-                                    chat("Cleared all configs!");
+                                    NotificationManager.publish("Cleared all configs!", NotificationType.SUCCESS, 2000);
                                     task = null;
                                 }
                             }, 10, TimeUnit.SECONDS);
                            chat("Your configs will be deleted in 10 seconds");
                            chat("If you do not want them to be deleted, execute .cfg cancel.");
                         } catch(Exception e) {
-                            chat("Failed to clear configs!");
+                            NotificationManager.publish("Failed to clear configs!", NotificationType.ERROR, 2500);
                         }
                     break;
 
                     case "cancel":
                         if(task == null) {
-                            chat("No pending deletion task found.");
+                            NotificationManager.publish("No pending deletion found.", NotificationType.WARNING, 2500);
                             return;
                         }
                         task.cancel(true);
                         task = null;
-                        chat("Cancelled configs deletion!");
+                        NotificationManager.publish("Cancelled configs deletion.", NotificationType.SUCCESS, 2000);
                     break;
                 }
             break;
@@ -100,7 +103,8 @@ public final class ConfigCommand extends Command {
                 }
             break;
             default:
-                chat("Usage: .config <load/save> <name> (binds) (norender)");
+                NotificationManager.publish("Usage: .config <load/save> <name> (binds) (norender)", NotificationType.INFO, 3500);
+                //chat("Usage: .config <load/save> <name> (binds) (norender)");
             break;
         }
     }

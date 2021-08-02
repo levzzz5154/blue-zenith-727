@@ -1,9 +1,9 @@
 package cat.module.modules.movement;
 
-import cat.events.Subscriber;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
+import com.google.common.eventbus.Subscribe;
 
 public class AirJump extends Module {
 
@@ -11,7 +11,7 @@ public class AirJump extends Module {
         super("AirJump", "", ModuleCategory.MOVEMENT);
     }
 
-    @Subscriber
+    @Subscribe
     public void move(UpdatePlayerEvent event) {
         if(mc.gameSettings.keyBindJump.isPressed()) {
             mc.thePlayer.jump();

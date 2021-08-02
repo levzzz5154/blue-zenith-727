@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public final class ConfigManager {
     private static int configsLoaded = 0;
-    private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public final static Gson gson = new GsonBuilder().setPrettyPrinting().enableComplexMapKeySerialization().create();
     public static String currentConfig = "";
     public static void save(String name) {
         JsonObject config = new JsonObject();

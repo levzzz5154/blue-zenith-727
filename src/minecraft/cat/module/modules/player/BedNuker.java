@@ -1,12 +1,12 @@
 package cat.module.modules.player;
 
-import cat.events.Subscriber;
 import cat.events.impl.BlockBBEvent;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.FloatValue;
 import cat.util.ClientUtils;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.init.Blocks;
@@ -23,7 +23,7 @@ public class BedNuker extends Module {
     BlockPos pos = null;
     boolean novolean = false;
 
-    @Subscriber
+    @Subscribe
     public void onUpdatePlayer(UpdatePlayerEvent e) {
         final float r = range.get();
 

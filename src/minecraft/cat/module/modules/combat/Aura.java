@@ -1,6 +1,8 @@
 package cat.module.modules.combat;
 
-import cat.events.Subscriber;
+import cat.BlueZenith;
+import cat.events.EventType;
+import cat.events.impl.AttackEvent;
 import cat.events.impl.PacketEvent;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
@@ -13,6 +15,7 @@ import cat.util.ClientUtils;
 import cat.util.EntityManager;
 import cat.util.MillisTimer;
 import cat.util.PacketUtil;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.*;
@@ -26,7 +29,7 @@ import java.util.stream.Collectors;
 public class Aura extends Module {
     public boolean blockStatus = false;
     
-    private final ModeValue mode = new ModeValue("Mode", "Single", true, null, "Single", "Switch", "Multi");
+    private final ModeValue mode = new ModeValue("Mode", "Single", true, (__, ___) -> { target = null; return ___; }, null, "Single", "Switch", "Multi");
     private final IntegerValue switchDelay = new IntegerValue("Switch Delay", 500, 50, 2000, 50, true, ___ -> mode.get().equals("Switch"));
     private final ModeValue sortMode = new ModeValue("Sort by", "Health", true, (a1, a2) -> { target = null; return a2; }, null, "Health", "Distance", "HurtTime");
     private final IntegerValue maxCPS = new IntegerValue("MaxCPS", 7, 1, 20, 1, true, (a1, a2) -> { if(a2 < getMinCPS().get()){ return a1; } return a2; }, null);
@@ -59,7 +62,7 @@ public class Aura extends Module {
     private final MillisTimer attackTimer = new MillisTimer();
     private final MillisTimer switchTimer = new MillisTimer();
 
-    @Subscriber
+    @Subscribe
     public void onUpdate(UpdatePlayerEvent e) {
         //filter the list of entities
         List<EntityLivingBase> list = mc.theWorld.loadedEntityList.parallelStream().filter(ent -> ent instanceof EntityLivingBase
@@ -86,27 +89,26 @@ public class Aura extends Module {
         }
         switch (mode.get()) { // la mode
             case "Single":
-                if (target == null || mc.thePlayer.getDistanceToEntity(target) > range.get()) {
+                if (!isSex(target)) {
                     target = list.get(0);
                 }
                 break;
 
             case "Switch":
-                if (target == null || switchTimer.hasTimeReached(switchDelay.get())) {
+                if (!isSex(target) || switchTimer.hasTimeReached(switchDelay.get())) {
                     setTargetToNext(list);
                     switchTimer.reset();
                 }
                 break;
 
             case "Multi":
-                if (target == null || target.hurtTime > 0) {
+                if (!isSex(target)|| target.hurtTime > 0) {
                     setTargetToNext(list);
                 }
                 break;
         }
-        if (e.post() || !isValid(target)){
+        if (e.post() || !isValid(target))
             return;
-        }
 
         attack(target, e);
     }
@@ -126,12 +128,19 @@ public class Aura extends Module {
                 setRotation(e);
             }
             if (attackTimer.hasTimeReached(funnyVariable)) {
+                //before attack
+                AttackEvent event = new AttackEvent(target, EventType.PRE);
+                BlueZenith.eventManager.call(event);
+
                 if (swing.get()) {
                     mc.thePlayer.swingItem();
                 } else PacketUtil.send(new C0APacketAnimation());
-                mc.getNetHandler().addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
+                PacketUtil.send(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
                 funnyVariable = ClientUtils.getRandomLong(minCPS.get(), maxCPS.get());
                 attackTimer.reset();
+                //post attack
+                event.type = EventType.POST;
+                BlueZenith.eventManager.call(event);
             }
             block();
         }
@@ -194,7 +203,7 @@ public class Aura extends Module {
     }
 
     @SuppressWarnings("unused")
-    @Subscriber
+    @Subscribe
     public void onPacket(PacketEvent e) {
         if (e.packet instanceof C09PacketHeldItemChange && blockStatus) {
             mc.getNetHandler().getNetworkManager().sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
@@ -211,6 +220,11 @@ public class Aura extends Module {
         return this.displayName + " §7" + mode.get();
     }
 
+    @Override
+    public String getTag() {
+        return this.mode.get();
+    }
+
     private IntegerValue getMinCPS(){
         return minCPS;
     }
@@ -223,11 +237,11 @@ public class Aura extends Module {
         return target != null && EntityManager.isTarget(ent) && mc.theWorld.loadedEntityList.contains(ent);
     }
 
-    public float getRange(){
-        return this.range.get();
-    }
-
     public EntityLivingBase getTarget(){
         return isValid(target) ? target : null;
+    }
+
+    private boolean isSex(EntityLivingBase target) {
+        return target != null && (target.getHealth() > 0  && !target.isDead || EntityManager.Targets.DEAD.on) && mc.thePlayer.getDistanceToEntity(target) <= range.get();
     }
 }

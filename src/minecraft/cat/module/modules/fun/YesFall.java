@@ -14,6 +14,8 @@ public class YesFall extends Module {
         super("YesFall", "", ModuleCategory.FUN);
     }
 
+    //private final ListValue choices = new ListValue("test", true, "sex1", "sex2", "sex3");
+
     @Subscribe
     public void onMove(UpdatePlayerEvent e){
         if(Math.round(mc.thePlayer.fallDistance) % 3 == 0){
@@ -22,4 +24,17 @@ public class YesFall extends Module {
             PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + mc.thePlayer.fallDistance, mc.thePlayer.posZ, false));
         }
     }
+
+    /*@Override
+    public void onEnable() {
+        choices.getAllChoices().forEach(ClientUtils::fancyMessage);
+        ClientUtils.fancyMessage("all choices ^");
+        ClientUtils.fancyMessage(" ");
+        choices.getSelectedChoices().forEach(ClientUtils::fancyMessage);
+        ClientUtils.fancyMessage("selected choices ^");
+        ClientUtils.fancyMessage(" ");
+        choices.toggleChoice(choices.getAllChoices().get(0));
+        choices.getSelectedChoices().forEach(ClientUtils::fancyMessage);
+        ClientUtils.fancyMessage("selected choices ^");
+    }*/
 }

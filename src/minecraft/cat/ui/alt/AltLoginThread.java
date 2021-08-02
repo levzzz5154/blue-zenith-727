@@ -53,16 +53,20 @@ public final class AltLoginThread extends Thread {
         this.status = status;
     }
 
+    //why do notifications look choppy in menus?
     public void run() {
         if (this.password.equalsIgnoreCase("none")) {
             this.mc.session = new Session(this.username, "", "", "mojang");
+            //NotificationManager.publish("fps: " + Minecraft.getMinecraft().fpsCounter +"Logged in as " + this.username + "!", NotificationType.SUCCESS, 3000);
             this.status = EnumChatFormatting.GREEN + "Logged in as " + this.username + ".";
         } else {
             this.status = EnumChatFormatting.GREEN + "Logging in...";
             Session auth = this.createSession(this.username, this.password);
             if (auth == null) {
                 this.status = EnumChatFormatting.RED + "Failed to login!";
+                //NotificationManager.publish("Failed to login!", NotificationType.ERROR, 2000);
             } else {
+                //NotificationManager.publish("fps: " + Minecraft.getMinecraft().fpsCounter +"Logged in as " + auth.getUsername() + "!", NotificationType.SUCCESS, 3000);
                 this.status = EnumChatFormatting.GREEN + "Logged in as " + auth.getUsername() + ".";
                 this.mc.session = auth;
             }

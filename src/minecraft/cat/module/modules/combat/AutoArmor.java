@@ -1,12 +1,12 @@
 package cat.module.modules.combat;
 
-import cat.events.Subscriber;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.IntegerValue;
 import cat.util.ClientUtils;
 import cat.util.MillisTimer;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,8 +17,8 @@ import org.lwjgl.input.Keyboard;
  */
 @SuppressWarnings("SpellCheckingInspection")
 public class AutoArmor extends Module {
-    private final IntegerValue maxDelay = new IntegerValue("MaxDelay", 400, 0, 600, 0, true, (old_, new_) -> {updateTime(); return new_ < getMinDelay().get() ? old_ : new_;}, null);
-    private final IntegerValue minDelay = new IntegerValue("MinDelay", 400, 0, 600, 0, true, (old_, new_) -> {updateTime(); return new_ > maxDelay.get() ? old_ : new_;}, null);
+    private final IntegerValue maxDelay = new IntegerValue("Max delay", 400, 0, 600, 0, true, (old_, new_) -> {updateTime(); return new_ < getMinDelay().get() ? old_ : new_;}, null);
+    private final IntegerValue minDelay = new IntegerValue("Min delay", 400, 0, 600, 0, true, (old_, new_) -> {updateTime(); return new_ > maxDelay.get() ? old_ : new_;}, null);
 
     private IntegerValue getMinDelay() {
         return minDelay;
@@ -41,7 +41,8 @@ public class AutoArmor extends Module {
     public void onEnable() {
         updateTime();
     }
-    @Subscriber
+
+    @Subscribe
     public void onEvent(UpdatePlayerEvent e) {
         if(mc.thePlayer == null){
             return;

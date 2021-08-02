@@ -1,5 +1,8 @@
 package net.minecraft.client.multiplayer;
 
+import cat.BlueZenith;
+import cat.events.EventType;
+import cat.events.impl.AttackEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -497,12 +500,16 @@ public class PlayerControllerMP
     public void attackEntity(EntityPlayer playerIn, Entity targetEntity)
     {
         this.syncCurrentPlayItem();
+        AttackEvent event = new AttackEvent(targetEntity, EventType.PRE);
+        BlueZenith.eventManager.call(event);
         this.netClientHandler.addToSendQueue(new C02PacketUseEntity(targetEntity, C02PacketUseEntity.Action.ATTACK));
 
         if (this.currentGameType != WorldSettings.GameType.SPECTATOR)
         {
             playerIn.attackTargetEntityWithCurrentItem(targetEntity);
         }
+        event.type = EventType.POST;
+        BlueZenith.eventManager.call(event);
     }
 
     /**

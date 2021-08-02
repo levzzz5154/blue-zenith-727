@@ -1,13 +1,13 @@
 
 package cat.module.modules.player;
 
-import cat.events.Subscriber;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.IntegerValue;
 import cat.util.ClientUtils;
 import cat.util.MillisTimer;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.ContainerChest;
@@ -31,7 +31,7 @@ public final class ChestStealer extends Module {
         super("ChestStealer", "", ModuleCategory.PLAYER, "stealer");
     }
 
-    @Subscriber
+    @Subscribe
     public void onUpdate(UpdatePlayerEvent event) {
         final GuiChest chest = (GuiChest) mc.currentScreen;
         if(mc.thePlayer == null){

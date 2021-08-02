@@ -1,11 +1,12 @@
 package cat.module.modules.misc;
 
-import cat.events.Subscriber;
 import cat.events.impl.PacketEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.value.types.BooleanValue;
-import cat.util.ClientUtils;
+import cat.ui.notifications.NotificationManager;
+import cat.ui.notifications.NotificationType;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.network.play.client.C00PacketKeepAlive;
 import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
 
@@ -17,7 +18,7 @@ public class AntiBan extends Module {
         super("AntiBan", "", ModuleCategory.MISC, "antiban");
     }
 
-    @Subscriber
+    @Subscribe
     public void onPacket(PacketEvent e) {
         if (confirm.get()) {
             if (e.packet instanceof C0FPacketConfirmTransaction) {
@@ -31,8 +32,9 @@ public class AntiBan extends Module {
         }
     }
     public void onEnable() {
-        ClientUtils.fancyMessage("DO NOT USE ANTIBAN ON HYPIXEL");
-        ClientUtils.fancyMessage("DO NOT USE ANTIBAN ON HYPIXEL");
+        for(int i = 0; i < 10; i++) {
+            NotificationManager.publish("Do not use AntiBan on Hypixel!", NotificationType.WARNING, 3000);
+        }
     }
 }
 

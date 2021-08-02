@@ -1,9 +1,9 @@
 package cat.module.modules.misc;
 
-import cat.events.Subscriber;
 import cat.events.impl.PacketEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
+import com.google.common.eventbus.Subscribe;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S45PacketTitle;
@@ -14,7 +14,7 @@ public class AutoRegister extends Module {
         super("AutoRegister", "", ModuleCategory.MISC);
     }
     String password = "sigmaclient.info";
-    @Subscriber
+    @Subscribe
     public void onPacket(PacketEvent e){
         Packet<?> packet = e.packet;
         if(packet instanceof S45PacketTitle){

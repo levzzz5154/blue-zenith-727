@@ -16,12 +16,13 @@ public class ClickGUI extends Module {
 
     public BooleanValue closePrevious = new BooleanValue("Close previous", true, true, null);
     public BooleanValue animate = new BooleanValue("Animate", true, true, null);
-    public IntegerValue r = new IntegerValue("MainR", 205, 0, 255, 1, true, (p1, p2) -> {updateMainColor(); return p2;}, null);
-    public IntegerValue g = new IntegerValue("MainG", 205, 0, 255, 1, true, (p1, p2) -> {updateMainColor(); return p2;}, null);
-    public IntegerValue b = new IntegerValue("MainB", 205, 0, 255, 1, true, (p1, p2) -> {updateMainColor(); return p2;}, null);
-    public IntegerValue rg = new IntegerValue("BackgroundR", 35, 0, 255, 1,true, (p1, p2) -> {updateBackgroundColor(); return p2;}, null);
-    public IntegerValue gg = new IntegerValue("BackgroundG", 35, 0, 255, 1, true, (p1, p2) -> {updateBackgroundColor(); return p2;}, null);
-    public IntegerValue bg = new IntegerValue("BackgroundB", 35, 0, 255, 1, true, (p1, p2) -> {updateBackgroundColor(); return p2;}, null);
+    public IntegerValue r = new IntegerValue("Red", 205, 0, 255, 1, true, (p1, p2) -> {updateMainColor(); return p2;}, null);
+    public IntegerValue g = new IntegerValue("Green", 205, 0, 255, 1, true, (p1, p2) -> {updateMainColor(); return p2;}, null);
+    public IntegerValue b = new IntegerValue("Blue", 205, 0, 255, 1, true, (p1, p2) -> {updateMainColor(); return p2;}, null);
+    public IntegerValue bb = new IntegerValue("Background Brightness", 35, 0, 255, 1,true, (p1, p2) -> {updateBackgroundColor(); return p2;}, null);
+    //public IntegerValue rg = new IntegerValue("BackgroundR", 35, 0, 255, 1,true, (p1, p2) -> {updateBackgroundColor(); return p2;}, null);
+    //public IntegerValue gg = new IntegerValue("BackgroundG", 35, 0, 255, 1, true, (p1, p2) -> {updateBackgroundColor(); return p2;}, null);
+    //public IntegerValue bg = new IntegerValue("BackgroundB", 35, 0, 255, 1, true, (p1, p2) -> {updateBackgroundColor(); return p2;}, null);
     public IntegerValue ba = new IntegerValue("Background Alpha", 255, 0, 255, 1, true, (p1, p2) -> {updateBackgroundColor(); return p2;}, null);
     {
         updateMainColor();
@@ -31,7 +32,7 @@ public class ClickGUI extends Module {
         main_color = new Color(r.get(), g.get(), b.get());
     }
     private void updateBackgroundColor(){
-        backgroundColor = new Color(rg.get(), gg.get(), bg.get(), ba.get());
+        backgroundColor = new Color(bb.get(), bb.get(), bb.get(), ba.get());
     }
     public ClickGUI() {
         super("ClickGUI", "", ModuleCategory.RENDER, Keyboard.KEY_RSHIFT);

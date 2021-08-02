@@ -1,9 +1,8 @@
 package cat.command;
 
 import cat.BlueZenith;
-import cat.module.ModuleCommand;
 import cat.events.impl.SentMessageEvent;
-import cat.module.Module;
+import cat.module.ModuleCommand;
 import cat.util.ClientUtils;
 import org.reflections.Reflections;
 
@@ -24,6 +23,7 @@ public class CommandManager {
             }
         });
         BlueZenith.moduleManager.getModules().forEach(mod -> commands.add(new ModuleCommand(mod, mod.getName())));
+
     }
 
     public void dispatch(SentMessageEvent event) {
