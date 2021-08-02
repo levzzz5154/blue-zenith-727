@@ -24,7 +24,7 @@ public class TargetStrafe extends Module {
     public void onMove(MoveEvent e){
         target = ((Aura) BlueZenith.moduleManager.getModule(Aura.class)).getTarget();
         if(target == null) return;
-        int fov = 180;
+        int fov = 360;
         float speed = MovementUtil.currentSpeed();
         double distance = Math.sqrt(Math.pow(mc.thePlayer.posX - target.posX, 2) + Math.pow(mc.thePlayer.posZ - target.posZ, 2));
         double strafeYaw = Math.atan2(target.posZ - mc.thePlayer.posZ, target.posX - mc.thePlayer.posX);

@@ -98,7 +98,7 @@ public class IntellijClickGui extends GuiScreen {
                                 toggleSound();
                             }
                         }
-                        f2.drawString(m.getName() + ".java", x + (strWidth * 2) + 5, tempY + middle2, Color.WHITE.getRGB());
+                        f2.drawString(m.getName() + ".java", x + (strWidth * 2) + 5, tempY + middle2, m.getState() ? Color.WHITE.getRGB() : Color.GRAY.getRGB());
                         tempY += yIncrement2;
                     }
                 }
@@ -133,47 +133,42 @@ public class IntellijClickGui extends GuiScreen {
         float y = aY;
         if(selectedModule != null){
             l = selectedModule.getValues().stream().filter(Value::isVisible).collect(Collectors.toList());
-            String prefix = "public static";
+            String prefix = "public";
             for (int i = 0; i < l.size(); i++) {
                 Value<?> v = l.get(i);
                 f.drawString((i + 1) + "", x, y + (yIncrement / 2f - getHalfHeight()), color6.getRGB());
-                float xOffset = rectWidth + 5;
-                String type = "Module";
-                String value = String.valueOf(v.get());
-                Color typeColor = color3;
-                Color valueColor = color3;
-                if(v instanceof FloatValue){
-                    type = "float";
-                    typeColor = color1;
-                    valueColor = color4;
-                    value = v.get()+"f";
-                }else if(v instanceof IntegerValue){
-                    type = "int";
-                    typeColor = color1;
-                    valueColor = color4;
-                }else if(v instanceof StringValue || v instanceof ModeValue){
-                    type = "String";
-                    value = "\"" + v.get() + "\"";
-                    valueColor = color5;
+                String valueName = v.name.replaceAll(" ", "_");
+                String displayValue = "${"+color3.getRGB()+"}Object ${"+color2.getRGB()+"}"+valueName+" ${"+color3.getRGB()+"}= ${"+color1.getRGB()+"}null";
+                if(v instanceof IntegerValue){
+                    displayValue = "int ${"+color2.getRGB()+"}" + valueName + "${"+color3.getRGB()+"} = ${"+color4.getRGB()+"}" + v.get();
+                }else if(v instanceof FloatValue){
+                    displayValue = "float ${"+color2.getRGB()+"}" + valueName + "${"+color3.getRGB()+"} = ${"+color4.getRGB()+"}" + v.get() + "f";
+                }else if(v instanceof StringValue){
+                    displayValue = "${"+color3.getRGB()+"}String ${"+color2.getRGB()+"}" + valueName + "${"+color3.getRGB()+"} = ${"+color5.getRGB()+"}\"" + v.get() + "\"";
+                }else if(v instanceof ModeValue){
+                    displayValue = "${"+color3.getRGB()+"}String[] ${"+color2.getRGB()+"}" + valueName + "${"+color3.getRGB()+"} = ${"+color1.getRGB()+"}new ${"+color3.getRGB()+"}String[]{${"+color5.getRGB()+"}\""+ v.get() + "\"${"+color3.getRGB()+"}}";
+                    String[] f = new String[]{};
+                    ModeValue l = (ModeValue) v;
+                    if(i(mouseX, mouseY, x, y, x + width, y + yIncrement) && Mouse.isButtonDown(0) && !mousePressed){
+                        l.next();
+                        toggleSound();
+                    }
                 }else if(v instanceof BooleanValue){
-                    type = "boolean";
-                    typeColor = color1;
-                    valueColor = color1;
+                    displayValue = "boolean ${"+color2.getRGB()+"}" + valueName + "${"+color3.getRGB()+"} = ${"+color1.getRGB()+"}" + v.get();
+                    BooleanValue f = (BooleanValue) v;
+                    if(i(mouseX, mouseY, x, y, x + width, y + yIncrement) && Mouse.isButtonDown(0) && !mousePressed){
+                        f.set(!f.get());
+                        toggleSound();
+                    }
                 }else if(v instanceof ActionValue){
-                    type = "Runnable";
-                    value = "() -> {}";
+                    displayValue = "${"+color3.getRGB()+"}Runnable ${"+color2.getRGB()+"}" + valueName + "${"+color3.getRGB()+"} = () -> {}";
+                    ActionValue f = (ActionValue) v;
+                    if(i(mouseX, mouseY, x, y, x + width, y + yIncrement) && Mouse.isButtonDown(0) && !mousePressed){
+                        f.next();
+                        toggleSound();
+                    }
                 }
-                f.drawString(prefix, x + xOffset, y + lol, color1.getRGB());
-                xOffset += f.getStringWidthF(prefix + " ");
-                f.drawString(type, x + xOffset, y + lol, typeColor.getRGB());
-                xOffset += f.getStringWidthF(type + " ");
-                f.drawString(v.name, x + xOffset, y + lol, color2.getRGB());
-                xOffset += f.getStringWidthF(v.name + " ");
-                f.drawString("= ", x + xOffset, y + lol, color3.getRGB());
-                xOffset += f.getStringWidthF("= ");
-                f.drawString(value, x + xOffset, y + lol, valueColor.getRGB());
-                xOffset += f.getStringWidthF(value);
-                f.drawString(";", x + xOffset, y + lol, color1.getRGB());
+                f.drawString(prefix + " " + displayValue + "${"+color1.getRGB()+"};", x + rectWidth + 5, y + lol, color1.getRGB());
                 y += yIncrement;
             }
         }

@@ -7,6 +7,7 @@ import cat.events.impl.UpdateEvent;
 import cat.events.impl.UpdatePlayerEvent;
 import cat.module.modules.combat.Aura;
 import cat.module.modules.movement.Flight;
+import cat.module.modules.movement.LongJump;
 import cat.module.modules.movement.NoSlowDown;
 import cat.module.modules.render.Rotations;
 import net.minecraft.client.Minecraft;
@@ -690,7 +691,8 @@ public class EntityPlayerSP extends AbstractClientPlayer {
             this.setSprinting(true);
         }
         Flight fly = (Flight) BlueZenith.moduleManager.getModule(Flight.class);
-        if (this.isSprinting() && (this.movementInput.moveForward < f || this.isCollidedHorizontally || !flag3 || (fly.getState() && fly.movementSpeed[2] > fly.f))) {
+        LongJump longJump = (LongJump) BlueZenith.moduleManager.getModule(LongJump.class);
+        if (this.isSprinting() && (this.movementInput.moveForward < f || this.isCollidedHorizontally || !flag3 || (fly.getState() && fly.movementSpeed[2] > fly.f) || (longJump.getState() && longJump.canFly()))) {
             this.setSprinting(false);
         }
 

@@ -573,10 +573,10 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         float f = 32.0F;
         worldrenderer.begin(7, DefaultVertexFormats.field_181709_i);
-        worldrenderer.pos(0.0D, (double) this.height, 0.0D).func_181673_a(0.0D, (double) ((float) this.height / 32.0F + (float) tint)).func_181669_b(64, 64, 64, 255).func_181675_d();
-        worldrenderer.pos((double) this.width, (double) this.height, 0.0D).func_181673_a((double) ((float) this.width / 32.0F), (double) ((float) this.height / 32.0F + (float) tint)).func_181669_b(64, 64, 64, 255).func_181675_d();
-        worldrenderer.pos((double) this.width, 0.0D, 0.0D).func_181673_a((double) ((float) this.width / 32.0F), (double) tint).func_181669_b(64, 64, 64, 255).func_181675_d();
-        worldrenderer.pos(0.0D, 0.0D, 0.0D).func_181673_a(0.0D, (double) tint).func_181669_b(64, 64, 64, 255).func_181675_d();
+        worldrenderer.pos(0.0D, (double) this.height, 0.0D).func_181673_a(0.0D, (double) ((float) this.height / 32.0F + (float) tint)).color(64, 64, 64, 255).func_181675_d();
+        worldrenderer.pos((double) this.width, (double) this.height, 0.0D).func_181673_a((double) ((float) this.width / 32.0F), (double) ((float) this.height / 32.0F + (float) tint)).color(64, 64, 64, 255).func_181675_d();
+        worldrenderer.pos((double) this.width, 0.0D, 0.0D).func_181673_a((double) ((float) this.width / 32.0F), (double) tint).color(64, 64, 64, 255).func_181675_d();
+        worldrenderer.pos(0.0D, 0.0D, 0.0D).func_181673_a(0.0D, (double) tint).color(64, 64, 64, 255).func_181675_d();
         tessellator.draw();
     }
 

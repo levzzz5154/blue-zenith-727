@@ -315,7 +315,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
         boolean flag1 = !flag && !entitylivingbaseIn.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer);
         boolean chamsState = chams.getState();
 
-        if (flag || flag1 || chamsState) {
+        if (flag || flag1 || (chamsState && EntityManager.isTarget(entitylivingbaseIn))) {
             if (!this.bindEntityTexture(entitylivingbaseIn)) {
                 return;
             }
@@ -336,17 +336,20 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glDisable(GL11.GL_LIGHTING);
-                //GL11.glDisable(GL11.GL_DEPTH_TEST);
+                GL11.glDisable(GL11.GL_DEPTH_TEST);
 
                 GL11.glPolygonOffset(1.0F, 1000000.0F);
-                float alpha = entitylivingbaseIn.isInvisible() ? 0.2f : 1f;
-                GL11.glColor4f(0.9f, 0.5f, 0, alpha);
+                float alpha = !entitylivingbaseIn.isInvisible() ? chams.a.get() / 255f : 0.2f;
+                float alpha2 = !entitylivingbaseIn.isInvisible() ? chams.a2.get() / 255f : 0.2f;
+                GL11.glColor4f(chams.r.get() / 255f, chams.g.get() / 255f, chams.b.get() / 255f, alpha);
                 this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
-                /*GL11.glColor4f(0, 0, 0, alpha);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
-                GL11.glDepthMask(true);
-                this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);*/
-                GL11.glPolygonOffset(1.0F, -1000000.0F);
+                if(chams.r2.get() != -1){
+                    GL11.glColor4f(chams.r2.get() / 255f, chams.g2.get() / 255f, chams.b2.get() / 255f, alpha2);
+                    GL11.glEnable(GL11.GL_DEPTH_TEST);
+                    GL11.glDepthMask(true);
+                    this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
+                    GL11.glPolygonOffset(1.0F, -1000000.0F);
+                }
 
                 GL11.glDisable(GL11.GL_BLEND);
                 GL11.glEnable(GL11.GL_TEXTURE_2D);

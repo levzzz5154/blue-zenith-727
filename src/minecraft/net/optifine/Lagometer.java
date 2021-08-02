@@ -222,8 +222,8 @@ public class Lagometer
         }
         else
         {
-            tessellator.pos((double)((float)frameNum + 0.5F), (double)(baseHeight - (float)i + 0.5F), 0.0D).func_181669_b(r, g, b, 255).func_181675_d();
-            tessellator.pos((double)((float)frameNum + 0.5F), (double)(baseHeight + 0.5F), 0.0D).func_181669_b(r, g, b, 255).func_181675_d();
+            tessellator.pos((double)((float)frameNum + 0.5F), (double)(baseHeight - (float)i + 0.5F), 0.0D).color(r, g, b, 255).func_181675_d();
+            tessellator.pos((double)((float)frameNum + 0.5F), (double)(baseHeight + 0.5F), 0.0D).color(r, g, b, 255).func_181675_d();
             return i;
         }
     }
@@ -238,8 +238,8 @@ public class Lagometer
         }
         else
         {
-            tessellator.pos((double)((float)frameStart + 0.5F), (double)(baseHeight - (float)i + 0.5F), 0.0D).func_181669_b(r, g, b, 255).func_181675_d();
-            tessellator.pos((double)((float)frameEnd + 0.5F), (double)(baseHeight - (float)i + 0.5F), 0.0D).func_181669_b(r, g, b, 255).func_181675_d();
+            tessellator.pos((double)((float)frameStart + 0.5F), (double)(baseHeight - (float)i + 0.5F), 0.0D).color(r, g, b, 255).func_181675_d();
+            tessellator.pos((double)((float)frameEnd + 0.5F), (double)(baseHeight - (float)i + 0.5F), 0.0D).color(r, g, b, 255).func_181675_d();
             return i;
         }
     }

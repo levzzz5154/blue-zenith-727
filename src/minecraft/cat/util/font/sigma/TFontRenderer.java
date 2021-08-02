@@ -1,5 +1,6 @@
 package cat.util.font.sigma;
 
+import cat.util.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,8 +15,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
-public final class TFFFontRenderer extends FontRenderer {
+public final class TFontRenderer extends FontRenderer {
     private final boolean antiAlias;
     private final Font font;
     private final boolean fractionalMetrics;
@@ -25,17 +27,18 @@ public final class TFFFontRenderer extends FontRenderer {
     private final int[] colorCodes = new int[32];
     private static final int RANDOM_OFFSET = 1;
 
-    public TFFFontRenderer(final Font font) {
+    public TFontRenderer(final Font font) {
         this(font, 256);
     }
 
-    public TFFFontRenderer(final Font font, final int characterCount) {
+    public TFontRenderer(final Font font, final int characterCount) {
         this(font, characterCount, true);
     }
 
-    public TFFFontRenderer(final Font font, final int characterCount, final boolean antiAlias) {
+    public TFontRenderer(final Font font, final int characterCount, final boolean antiAlias) {
         super(Minecraft.getMinecraft().gameSettings,
                 new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().getTextureManager(), false);
+        this.name = font.getName() + " - " + (font.getSize() * 2);
         this.font = font;
         fractionalMetrics = true;
         this.antiAlias = antiAlias;
@@ -128,7 +131,6 @@ public final class TFFFontRenderer extends FontRenderer {
         }
         return renderString(text, x, y, color, false);
     }
-
     protected int renderString(String text, float x, float y, final int color, final boolean shadow) {
         text = getEventString(text);
 
@@ -149,15 +151,16 @@ public final class TFFFontRenderer extends FontRenderer {
         boolean underlined = false;
         boolean strikethrough = false;
         boolean obfuscated = false;
+        int colorProgress = 0;
         final int length = text.length();
         final double multiplier = 255.0 * (shadow ? 4 : 1);
         final Color c2 = new Color(color);
+        String customColour = "";
         GL11.glColor4d(c2.getRed() / multiplier, c2.getGreen() / multiplier, c2.getBlue() / multiplier,
                 (color >> 24 & 255) / 255.0);
         for (int i = 0; i < length; ++i) {
-            int previous;
+            int previous = i > 0 ? (int) text.charAt(i - 1) : 46;
             char character = text.charAt(i);
-            previous = i > 0 ? (int) text.charAt(i - 1) : 46;
             if (previous == 167) {
                 continue;
             }
@@ -213,6 +216,25 @@ public final class TFFFontRenderer extends FontRenderer {
             if (obfuscated) {
                 character = (char) (character + (char) RANDOM_OFFSET);
             }
+            if(character == '$'){
+                colorProgress = 1;
+                continue;
+            }else if(colorProgress == 1 && character == '{'){
+                colorProgress = 2;
+                continue;
+            }else if(colorProgress == 2){
+                if(character == '}'){
+                    colorProgress = 3;
+                }else{
+                    customColour += character;
+                }
+                continue;
+            }else if(colorProgress == 3){
+                int secs = Integer.parseInt(customColour);
+                GL11.glColor4d((secs >> 16 & 0x000000FF) / 255.0, (secs >> 8 & 0x000000FF) / 255.0, (secs & 0x000000FF) / 255.0, (secs >> 24 & 0x000000FF) / 255.0);
+                colorProgress = 0;
+                customColour = "";
+            }
             drawChar(character, characterData, x, y);
             final CharacterData charData = characterData[character];
             if (strikethrough) {
@@ -238,6 +260,7 @@ public final class TFFFontRenderer extends FontRenderer {
         float width = 0.0f;
         CharacterData[] characterData = regularData;
         final int length = text.length();
+        int colorProgress = 0;
         for (int i = 0; i < length; ++i) {
             int previous;
             final char character = text.charAt(i);
@@ -262,6 +285,17 @@ public final class TFFFontRenderer extends FontRenderer {
                 continue;
             }
             if (character > '\u00ff') {
+                continue;
+            }
+            if(character == '$'){
+                colorProgress = 1;
+                continue;
+            }else if(character == '{'){
+                colorProgress = 2;
+                continue;
+            }else if(colorProgress == 2){
+                if(character == '}')
+                    colorProgress = 0;
                 continue;
             }
             final CharacterData charData = characterData[character];

@@ -4,6 +4,7 @@ import cat.events.Subscriber;
 import cat.events.impl.TextEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
+import cat.util.ColorUtil;
 
 public class StreamerMode extends Module {
     public StreamerMode(){
@@ -12,7 +13,8 @@ public class StreamerMode extends Module {
     @Subscriber
     public void onTextEvent(TextEvent e){
         if(e.getText().contains("omegacraft.cl")){
-            e.setText("sigmaclient.info");
+            System.out.println(ColorUtil.getFirstColor(e.getText()));
+            e.setText(ColorUtil.getFirstColor(e.getText()) + "sigmaclient.info");
         }
     }
 }

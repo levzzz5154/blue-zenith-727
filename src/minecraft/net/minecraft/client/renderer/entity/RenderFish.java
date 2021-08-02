@@ -97,7 +97,7 @@ public class RenderFish extends Render<EntityFishHook>
             for (int l = 0; l <= 16; ++l)
             {
                 float f10 = (float)l / 16.0F;
-                worldrenderer.pos(x + d9 * (double)f10, y + d11 * (double)(f10 * f10 + f10) * 0.5D + 0.25D, z + d12 * (double)f10).func_181669_b(0, 0, 0, 255).func_181675_d();
+                worldrenderer.pos(x + d9 * (double)f10, y + d11 * (double)(f10 * f10 + f10) * 0.5D + 0.25D, z + d12 * (double)f10).color(0, 0, 0, 255).func_181675_d();
             }
 
             tessellator.draw();

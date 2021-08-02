@@ -26,7 +26,7 @@ public class EntityManager extends MinecraftInstance{
         }
     }
     public static boolean isTarget(Entity ent){
-        if(ent == mc.thePlayer)
+        if(ent == mc.thePlayer || ent instanceof EntityArmorStand)
             return false;
         if(ent instanceof EntityLivingBase && ((EntityLivingBase) ent).getHealth() <= 0 && !Targets.DEAD.on)
             return false;
