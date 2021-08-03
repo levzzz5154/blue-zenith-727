@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class HUD extends Module {
     // bruh its the 3rd time im doing this
     private final ListValue elements = new ListValue("Elements", true, "Arraylist", "Ping", "Speed", "FPS", "Coords");
+    {elements.toggleOptions("Arraylist", "Ping", "Speed", "FPS", "Coords");}
     private final FontValue bypassMode = new FontValue("Font", FontUtil.fontSFLight42, true, null);
     private final StringValue clientName = new StringValue("Client name", BlueZenith.name, true, null);
     private final BooleanValue notifBlur = new BooleanValue("Notification blur", true, true, null);

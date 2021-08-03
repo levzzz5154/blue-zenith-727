@@ -59,6 +59,12 @@ public class ListValue extends Value<List<String>> {
         choices.put(key, !choices.get(key));
     }
 
+    public void toggleOptions(String...key) {
+        for (String s : key) {
+            toggleOption(s);
+        }
+    }
+
     public boolean getOptionState(String key) {
         if(!choices.containsKey(key)) throw new NullPointerException("Couldn't find option " + key + " for value " + name);
         return choices.get(key);
