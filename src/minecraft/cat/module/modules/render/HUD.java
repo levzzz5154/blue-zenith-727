@@ -21,16 +21,18 @@ import java.util.ArrayList;
 // god i hate this check
 @SuppressWarnings("all")
 public class HUD extends Module {
-    private final FontValue fontValue = new FontValue("Font", FontUtil.fontSFLight42, true, null);
-    private final BooleanValue shadow = new BooleanValue("FontShadow", true, true, null);
+    private final ModeValue fontMode = new ModeValue("Font", "Client", true, null, "Client", "Vanilla");
+    private final StringValue clientName = new StringValue("Client name", BlueZenith.name, true, null);
+    private final BooleanValue notifBlur = new BooleanValue("Notification blur", true, true, null);
+    private final BooleanValue shadow = new BooleanValue("Text shadow", true, true, null);
     private final BooleanValue border = new BooleanValue("Border", true, true, null);
-    private final IntegerValue backgroundOpacity = new IntegerValue("BackgroundOpacity", 50, 0, 255, 1, true, null);
+    private final IntegerValue backgroundOpacity = new IntegerValue("Background opacity", 50, 0, 255, 1, true, null);
     private final IntegerValue margin = new IntegerValue( "Margin", 10, 0, 15, 1, true, null);
-    private final ModeValue colorMode = new ModeValue("ColorMode", "Pulse", true, null, "Pulse", "Rainbow", "Custom");
-    private final FloatValue rainbowMulti = new FloatValue("RainbowMulti", 0.4f,0,1,0.1f, true, the -> colorMode.get().equals("Rainbow"));
-    private final IntegerValue customR = new IntegerValue("CustomR", 0, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
-    private final IntegerValue customG = new IntegerValue("CustomB", 60, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
-    private final IntegerValue customB = new IntegerValue("CustomG", 159, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
+    private final ModeValue colorMode = new ModeValue("Color mode", "Pulse", true, null, "Pulse", "Rainbow", "Custom");
+    private final FloatValue rainbowMulti = new FloatValue("Rainbow multiplier", 0.4f,0,1,0.1f, true, the -> colorMode.get().equals("Rainbow"));
+    private final IntegerValue customR = new IntegerValue("Red", 0, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
+    private final IntegerValue customG = new IntegerValue("Blue", 60, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
+    private final IntegerValue customB = new IntegerValue("Green", 159, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
     private final BooleanValue showPing = new BooleanValue("Ping", true, true, null);
     private final BooleanValue showCoords = new BooleanValue("Coords", true, true, null);
     private final BooleanValue showFPS = new BooleanValue("FPS", true, true, null);
@@ -55,7 +57,7 @@ public class HUD extends Module {
         // checkmate natasha
         FontRenderer font = getFont();
         modules.sort((m, m1) -> Float.compare(font.getStringWidth(m1.getTagName()), font.getStringWidth(m.getTagName())));
-        String str = BlueZenith.name+" b"+BlueZenith.version;
+        String str = clientName.get() + " " + BlueZenith.version;
         char[] strArr = str.toCharArray();
         float x1 = 5;
         for (int i = 0; i < strArr.length; i++) {
@@ -147,6 +149,6 @@ public class HUD extends Module {
         return mc.thePlayer.getDistance(mc.thePlayer.lastTickPosX, mc.thePlayer.lastTickPosY, mc.thePlayer.lastTickPosZ) * (Minecraft.getMinecraft().timer.ticksPerSecond * Minecraft.getMinecraft().timer.timerSpeed);
     }
     private FontRenderer getFont(){
-        return fontValue.get();
+        return fontMode.get().equals("Client") ? FontUtil.fontSFLight42 : mc.fontRendererObj;
     }
 }

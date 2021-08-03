@@ -1,5 +1,8 @@
 package cat.ui.notifications;
 
+import cat.BlueZenith;
+import cat.module.modules.render.HUD;
+import cat.module.value.types.BooleanValue;
 import cat.util.MinecraftInstance;
 import cat.util.RenderUtil;
 import cat.util.font.sigma.FontUtil;
@@ -35,7 +38,7 @@ public class NotificationManager extends MinecraftInstance {
                 n.baxiarX(width + margin, 0.15f);
             }
             GlStateManager.pushMatrix();
-            //if(((BooleanValue) BlueZenith.moduleManager.getModule(HUD.class).getValue("Notification blur")).get())
+            if(((BooleanValue) BlueZenith.moduleManager.getModule(HUD.class).getValue("Notification blur")).get())
             RenderUtil.blur(res.getScaledWidth() - n.xOffset, res.getScaledHeight() - y, res.getScaledWidth() - n.xOffset + width, res.getScaledHeight() - y + height);
             GlStateManager.translate(res.getScaledWidth() - n.xOffset, res.getScaledHeight() - y, 0);
             RenderUtil.rect(0, 0, width, height, new Color(10,10,30, 120));

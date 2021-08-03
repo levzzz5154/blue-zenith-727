@@ -30,7 +30,7 @@ public class ConfigsPanel extends Panel {
     private boolean sex = false;
     private final ArrayList<File> files = new ArrayList<>();
     public ConfigsPanel(float x, float y) {
-        super(x, y, "Configs");
+        super(x , y, "Configs");
         f = FontUtil.fontSFLight35;
         mHeight = f.FONT_HEIGHT + 14;
         width = 120;

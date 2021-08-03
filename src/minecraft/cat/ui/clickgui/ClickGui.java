@@ -4,10 +4,12 @@ import cat.BlueZenith;
 import cat.module.Module;
 import cat.module.ModuleCategory;
 import cat.module.modules.render.ClickGUI;
+import cat.module.value.types.BooleanValue;
 import cat.ui.clickgui.components.Panels.ConfigsPanel;
 import cat.ui.clickgui.components.Panels.ModulePanel;
 import cat.ui.clickgui.components.Panel;
 import cat.ui.clickgui.components.Panels.TargetsPanel;
+import cat.util.RenderUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
@@ -49,6 +51,8 @@ public class ClickGui extends GuiScreen {
     private Panel selectedPanel = null;
     public boolean mousePressed = false;
     public void drawScreen(int mouseX, int mouseY, float partialTicks){
+        if(((BooleanValue) BlueZenith.moduleManager.getModule(ClickGUI.class).getValue("blur")).get())
+        RenderUtil.blur(0, 0, this.width, this.height);
         for (Panel p : panels) {
             p.drawPanel(mouseX, mouseY, partialTicks, selectedPanel == null);
             boolean d = i(mouseX, mouseY, p.x, p.y, p.x + p.width, p.y + p.mHeight);

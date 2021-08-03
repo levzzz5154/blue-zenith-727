@@ -5,6 +5,7 @@ import cat.events.impl.MoveEvent;
 import cat.events.impl.Render3DEvent;
 import cat.module.Module;
 import cat.module.ModuleCategory;
+import cat.module.value.types.BooleanValue;
 import cat.util.*;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,6 +17,8 @@ public class TargetStrafe extends Module {
     public TargetStrafe() {
         super("TargetStrafe", "", ModuleCategory.COMBAT);
     }
+    private final BooleanValue jumpOnly = new BooleanValue("Jump Only", true, true, null);
+    private final BooleanValue drawCircle = new BooleanValue("Draw circle", true, true, null);
     private final float range = 2;
     private float direction = 1;
     private EntityLivingBase target = null;
@@ -23,6 +26,7 @@ public class TargetStrafe extends Module {
 
     @Subscribe
     public void onMove(MoveEvent e){
+        if(!jumpOnly.get() || !mc.gameSettings.keyBindJump.pressed) return;
         target = ((Aura) BlueZenith.moduleManager.getModule(Aura.class)).getTarget();
         if(target == null) return;
         int fov = 360;
@@ -53,7 +57,7 @@ public class TargetStrafe extends Module {
     }
     @Subscribe
     public void onRender3D(Render3DEvent e){
-        if(target == null) return;
+        if(target == null || !drawCircle.get()) return;
         GL11.glPushMatrix();
         //GL11.glDepthMask(true);
         GL11.glTranslated(
