@@ -30,7 +30,7 @@ public class BlueZenith {
     private static final String[] devs = {"3c120deab28db9574f345f62f4fbca55acf2fb53930a0c7758610e4975997", "2129e0c24fc31b3c1963c7ff6732b233ca58c4e135dfe43b52e5abd5df0339e", "ea5259b2e38173c336a8fee84c4cb7edce5e066a3189a4bbce882ec3670638"};
     public static String currentServerIP;
     public static String name = "Blue Zenith";
-    public static String version = "2.0";
+    public static String version = "b2.0";
     public static boolean useExperimentalEventBus = true;
     public static EventManager eventManager;
     public static EventBus eventBus;
@@ -52,7 +52,7 @@ public class BlueZenith {
         startTime = System.currentTimeMillis();
         HWID.getHWID();
         isDeveloper = Arrays.stream(devs).anyMatch(hwid -> hwid.equalsIgnoreCase(HWID.hwid));
-        ClientUtils.getLogger().info("Starting BlueZenith b" + version);
+        ClientUtils.getLogger().info("Starting BlueZenith " + version);
         if(useExperimentalEventBus)
         eventBus = new EventBus();
         eventManager = new EventManager();
@@ -72,7 +72,7 @@ public class BlueZenith {
         ClickGUI.clickGui = new ClickGui();
         ConfigManager.loadClickGUIPanels();
         ClientUtils.getLogger().info("Created ClickGUI.");
-        Display.setTitle(name + " | 1.8.9 | b" + version + (isDeveloper ? " | Developer" : " Beta"));
+        Display.setTitle(name + " | 1.8.9 | " + version + (isDeveloper ? " | Developer" : " Beta"));
         ClientUtils.getLogger().info("Started in " + (System.currentTimeMillis() - startTime) + " ms.");
         NotificationManager.addNoti("Started in " + (System.currentTimeMillis() - startTime) + " ms.", "", NotificationType.SUCCESS, 5000);
     }
@@ -114,14 +114,14 @@ public class BlueZenith {
         //developer badge :flushed:
         if(isDeveloper) {
             rpc = new DiscordRichPresence.Builder(line2)
-                    .setBigImage("main", "b" + version)
+                    .setBigImage("main", version)
                     .setSmallImage("developer_badge", "Maintainer")
                     .setDetails(line1)
                     .setStartTimestamps(System.currentTimeMillis())
                     .build();
         } else {
             rpc = new DiscordRichPresence.Builder(line2)
-                    .setBigImage("main", "b" + version)
+                    .setBigImage("main", version)
                     .setDetails(line1)
                     .setStartTimestamps(System.currentTimeMillis())
                     .build();
