@@ -9,8 +9,9 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 
-public class InventoryMove extends Module {
-    public InventoryMove() {
+@SuppressWarnings("unused")
+public class InvMove extends Module {
+    public InvMove() {
         super("InvMove", "", ModuleCategory.MISC, "InventoryMove");
     }
 
