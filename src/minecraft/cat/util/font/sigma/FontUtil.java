@@ -41,7 +41,7 @@ public class FontUtil {
 			try {
 				o = i.get(FontUtil.class);
 			} catch(IllegalAccessException ignored) {}
-			if(o instanceof FontRenderer) {
+			if(o instanceof FontRenderer && !i.getName().startsWith("I_")) {
 				fonts.add((FontRenderer) o);
 			}
 		}
