@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ClickGui extends GuiScreen {
@@ -89,6 +90,12 @@ public class ClickGui extends GuiScreen {
             p.keyTyped(typedChar, keyCode);
         }
     }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        panels.stream().filter(p -> p instanceof ModulePanel).forEach(panel -> ((ModulePanel)panel).onClick(mouseButton));
+    }
+
     public ArrayList<Panel> getPanels(){
         return panels;
     }

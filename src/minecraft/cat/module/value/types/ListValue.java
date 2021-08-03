@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 public class ListValue extends Value<List<String>> {
 
+    public boolean expanded = false;
     private final HashMap<String, Boolean> choices = new HashMap<>();
 
     public ListValue(String name, boolean visible, String... options) {

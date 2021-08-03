@@ -18,7 +18,7 @@ import java.nio.file.Files;
 @SuppressWarnings("unused")
 public class CustomCape extends Module {
     private ResourceLocation d = null;
-    private final ActionValue selectCape = new ActionValue("SelectCape", () -> {
+    private final ActionValue selectCape = new ActionValue("Select cape", () -> {
         File temp = ClientUtils.openFileChooser(null, new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.jpeg"));
         if(temp == null || !temp.exists()){
             ClientUtils.fancyMessage("The selected path doesn't exist.");
@@ -37,7 +37,7 @@ public class CustomCape extends Module {
         }
     });
     public CustomCape() {
-        super("CustomCape", "", ModuleCategory.RENDER, "customcape", "cape");
+        super("Cape", "", ModuleCategory.RENDER, "customcape", "cape");
     }
     public ResourceLocation getCapeLocation(){
         return d == null ? new ResourceLocation("cat/cape.png") : d;

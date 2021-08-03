@@ -24,6 +24,7 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class HUD extends Module {
     // bruh its the 3rd time im doing this
+    private final ListValue elements = new ListValue("Elements", true, "Arraylist", "Ping", "Speed", "FPS", "Coords");
     private final FontValue bypassMode = new FontValue("Font", FontUtil.fontSFLight42, true, null);
     private final StringValue clientName = new StringValue("Client name", BlueZenith.name, true, null);
     private final BooleanValue notifBlur = new BooleanValue("Notification blur", true, true, null);
@@ -36,10 +37,6 @@ public class HUD extends Module {
     private final IntegerValue customR = new IntegerValue("Red", 0, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
     private final IntegerValue customG = new IntegerValue("Blue", 60, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
     private final IntegerValue customB = new IntegerValue("Green", 159, 0, 255, 1, true, __ -> colorMode.get().equals("Custom"));
-    private final BooleanValue showPing = new BooleanValue("Ping", true, true, null);
-    private final BooleanValue showCoords = new BooleanValue("Coords", true, true, null);
-    private final BooleanValue showFPS = new BooleanValue("FPS", true, true, null);
-    private final BooleanValue showBPS = new BooleanValue("BPS", true, true, null);
     private final ArrayList<Module> modules = new ArrayList<>();
     public HUD() {
         super("HUD", "", ModuleCategory.RENDER);
@@ -71,6 +68,7 @@ public class HUD extends Module {
 
         drawInfo(e.resolution);
 
+        if(!elements.getOptionState("Arraylist")) return;
         float mar = margin.get();
         float increment = font.FONT_HEIGHT + (mar / 2f);
         //if(fontMode.is("Vanilla")) {
@@ -106,28 +104,28 @@ public class HUD extends Module {
         final float fy = f.FONT_HEIGHT + 2;
         float y = mc.currentScreen != null && mc.currentScreen instanceof GuiChat ? mc.fontRendererObj.FONT_HEIGHT + 4 + fy : fy;
         int z = 0;
-        if(showCoords.get()){
+        if(elements.getOptionState("Coords")){
             String displayString = "XYZ§r: "+Math.round(mc.thePlayer.posX) + ", " + Math.round(mc.thePlayer.posY) + ", " + Math.round(mc.thePlayer.posZ);
             Color colorD = getColor(z);
             f.drawString(displayString, sr.getScaledWidth() - f.getStringWidthF(displayString) - 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
             y += fy;
             z++;
         }
-        if(!mc.isSingleplayer() && this.showPing.get()){
+        if(!mc.isSingleplayer() && elements.getOptionState("Ping")){
             String displayString = "Ping§r: " + mc.getCurrentServerData().pingToServer + "ms";
             Color colorD = getColor(z);
             f.drawString(displayString, sr.getScaledWidth() - f.getStringWidthF(displayString) - 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
             y += fy;
             z++;
         }
-        if(showFPS.get()){
+        if(elements.getOptionState("FPS")){
             String displayString = "FPS§r: " + Minecraft.getDebugFPS();
             Color colorD = getColor(z);
             f.drawString(displayString, sr.getScaledWidth() - f.getStringWidthF(displayString) - 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
             y += fy;
             z++;
         }
-        if(showBPS.get()){
+        if(elements.getOptionState("Speed")){
             String displayString = "Blocks/sec§r: " + MathUtil.round(getBPS(), 2);
             Color colorD = getColor(z);
             f.drawString(displayString, sr.getScaledWidth() - f.getStringWidthF(displayString) - 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());

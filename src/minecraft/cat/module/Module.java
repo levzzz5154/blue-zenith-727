@@ -2,9 +2,12 @@ package cat.module;
 
 import cat.BlueZenith;
 import cat.module.value.Value;
+import cat.ui.notifications.NotificationManager;
+import cat.ui.notifications.NotificationType;
 import fr.lavache.anime.Animate;
 import fr.lavache.anime.Easing;
 import net.minecraft.client.Minecraft;
+import org.lwjgl.input.Keyboard;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -68,6 +71,11 @@ public class Module {
     }
     public void onDisable(){}
     public void onEnable() {}
+
+    public void setKeybind(int bind) {
+        keyBind = bind;
+        NotificationManager.publish("Bound " + name + " to " + Keyboard.getKeyName(bind), NotificationType.INFO, 1700);
+    }
 
     @Deprecated
     public String getTagName(){

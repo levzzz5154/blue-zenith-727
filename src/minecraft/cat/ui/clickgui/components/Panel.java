@@ -33,4 +33,5 @@ public class Panel extends MinecraftInstance {
     public final void toggleSound(){
         mc.getSoundHandler().playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F));
     }
+
 }

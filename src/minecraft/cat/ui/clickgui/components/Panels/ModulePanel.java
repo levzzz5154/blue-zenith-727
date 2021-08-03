@@ -5,6 +5,7 @@ import cat.module.ModuleCategory;
 import cat.module.value.Value;
 import cat.module.value.types.*;
 import cat.ui.clickgui.components.Panel;
+import cat.util.ClientUtils;
 import cat.util.MillisTimer;
 import cat.util.RenderUtil;
 import cat.util.font.sigma.FontUtil;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ModulePanel extends Panel {
+public class ModulePanel extends Panel implements MouseClickedThing {
     private final ArrayList<Module> modules = new ArrayList<>();
     private final MillisTimer timer = new MillisTimer();
     private final ModuleCategory category;
@@ -32,6 +33,8 @@ public class ModulePanel extends Panel {
     private Value<?> sliderVal = null;
     private Module lastMod = null;
     private final FontRenderer f2;
+    boolean listeningForKey = false;
+    List<Module> bindListeners = new ArrayList<>();
     public ModulePanel(float x, float y, ModuleCategory category){
         super(x, y, "Modules " + category.displayName);
         this.category = category;
@@ -73,7 +76,13 @@ public class ModulePanel extends Panel {
             if(!this.showContent) continue;
 
             List<Value<?>> vl = m.getValues().stream().filter(Value::isVisible).collect(Collectors.toList());
-            if(i(mouseX, mouseY, x, y1, x + width, y1 + mHeight) && !wasPressed){
+            boolean hovering = i(mouseX, mouseY, x, y1, x + width, y1 + mHeight);
+            if(hovering && !wasPressed) {
+                if(Mouse.isButtonDown(2)) {
+                    listeningForKey = true;
+                    if(!bindListeners.contains(m))
+                    bindListeners.add(m);
+                }
                 if(Mouse.isButtonDown(0)){
                     m.toggle();
                     toggleSound();
@@ -90,6 +99,14 @@ public class ModulePanel extends Panel {
 
             RenderUtil.rect(x, y1, x + width, y1 + mHeight, backgroundColor);
             f.drawString(m.getName(), x + 5, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), m.getState() ? mainColor.getRGB() : mainColor.darker().darker().getRGB());
+            if((hovering || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) && m.keyBind > 0 && !bindListeners.contains(m)) {
+                String bindString = "[" + Keyboard.getKeyName(m.keyBind) + "]";
+                f.drawString(bindString, x + width - f.getStringWidthF(bindString) - 3, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), Color.GRAY.getRGB());
+            } else if(bindListeners.contains(m)) {
+                String bindString = "[...]";
+                f.drawString(bindString, x + width - f.getStringWidthF(bindString) - 3, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), Color.GRAY.getRGB());
+            }
+            //else f.drawString(m.keyBind > 0 ? "[" + Keyboard.getKeyName(m.keyBind) + "...]" : "[...]", x + 5, y1 + (mHeight / 2f - f.FONT_HEIGHT / 2f), mainColor.getRGB());
             y1 += mHeight;
             if(canRender(m) && (timer.hasTimeReached(35) || !click.closePrevious.get())){
                 float y2 = y1; // im sorry for too many variables :(
@@ -198,7 +215,7 @@ public class ModulePanel extends Panel {
                             y2 += h;
                             why += h;
                             break;
-                        case "BooleanValue":
+                        case "BooleanValue" :
                             float downscale = 0.45f;
                             BooleanValue bValue = (BooleanValue) v;
                             RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
@@ -224,21 +241,23 @@ public class ModulePanel extends Panel {
                             why += h;
                             break;
                         //TODO: Fix this bullshit
-                        case "ListValue":
+                        case "ListValue" :
                             ListValue lValue = (ListValue) v;
                             RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
-                            f.drawString(lValue.name, x + 5, y2 + she_lied, Color.GRAY.getRGB());
+                            f.drawString(lValue.name, x + width/2f - f.getStringWidth(lValue.name)/2f, y2 + she_lied, Color.GRAY.getRGB(), true);
                             if (i(mouseX, mouseY, x, y2, x + width, y2 + h) && (Mouse.isButtonDown(0)) && !wasPressed && handleClicks) {
+                                lValue.expanded = !lValue.expanded;
                                 toggleSound();
                             }
                             y2 += h;
                             why += h;
                             for (String i : lValue.getOptions()) {
-                                boolean free_download = lValue.getSelectedOptions().contains(i);
+                                if(!lValue.expanded) continue;
+                                boolean free_download = lValue.getOptionState(i);
                                 String z = free_download ? "F" : "D";
                                 RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
-                                f2.drawString(z, x + 6, y2 + (h / 2f - f2.FONT_HEIGHT / 2f), mainColor.getRGB());
-                                f.drawString(i, x + 10 + f2.getStringWidthF(z) + 2, y2 + she_lied, Color.WHITE.getRGB());
+                                f2.drawString(z, x + 6, y2 + (h / 2f - f2.FONT_HEIGHT / 2f) + 1, mainColor.getRGB());
+                                f.drawString(i, x + width/2f - f.getStringWidth(i)/2f, y2 + she_lied, Color.WHITE.getRGB());
                                 if (i(mouseX, mouseY, x, y2, x + width, y2 + h) && (Mouse.isButtonDown(0)) && !wasPressed && handleClicks) {
                                     toggleSound();
                                     lValue.toggleOption(i);
@@ -264,7 +283,14 @@ public class ModulePanel extends Panel {
     private boolean canRender(Module m){
         return click.animate.get() ? m.clickGuiAnim.isReversed() ? m.clickGuiAnim.getValue() != m.clickGuiAnim.getMin() : m.clickGuiAnim.getValue() <= m.clickGuiAnim.getMax() : m.showSettings;
     }
+
     public void keyTyped(char charTyped, int keyCode){
+        if(listeningForKey && !Mouse.isButtonDown(2) && keyCode != 28 && keyCode != 1 && keyCode != 54 && keyCode != 42) {
+            ClientUtils.fancyMessage("sexed at " + bindListeners.size());
+            bindListeners.forEach(k -> k.setKeybind(keyCode));
+            listeningForKey = false;
+            bindListeners.clear();
+        }
         Keyboard.enableRepeatEvents(true);
         if(selectedTextField == null || selectedTextField.get() == null){
             if (keyCode == 1 && selectedTextField == null) {
@@ -283,6 +309,27 @@ public class ModulePanel extends Panel {
             selectedTextField = null;
         }else if(!Character.isISOControl(charTyped)){
             selectedTextField.set(fieldText + charTyped);
+        }
+    }
+
+    @Override
+    public void onClick(int button) {
+        if(listeningForKey) {
+            switch (button) {
+                case 0:
+                    bindListeners.clear();
+                    listeningForKey = false;
+                break;
+
+                case 1:
+                    bindListeners.forEach(mod -> {
+                       if(mod.keyBind > 0)
+                       mod.setKeybind(0);
+                    });
+                    bindListeners.clear();
+                    listeningForKey = false;
+                break;
+            }
         }
     }
 }
