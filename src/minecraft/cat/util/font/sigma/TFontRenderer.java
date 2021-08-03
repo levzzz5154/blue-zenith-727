@@ -160,6 +160,7 @@ public final class TFontRenderer extends FontRenderer {
                 (color >> 24 & 255) / 255.0);
         for (int i = 0; i < length; ++i) {
             int previous = i > 0 ? (int) text.charAt(i - 1) : 46;
+            char next = i < text.length() - 1 ? text.charAt(i + 1) : 46;
             char character = text.charAt(i);
             if (previous == 167) {
                 continue;
@@ -216,11 +217,14 @@ public final class TFontRenderer extends FontRenderer {
             if (obfuscated) {
                 character = (char) (character + (char) RANDOM_OFFSET);
             }
-            if(character == '$'){
+            //TODO: Improve this coloring system
+            if(character == '$' && next == '{'){
                 colorProgress = 1;
                 continue;
-            }else if(colorProgress == 1 && character == '{'){
-                colorProgress = 2;
+            }else if(character == '{' && previous == '$'){
+                if(colorProgress == 1){
+                    colorProgress = 2;
+                }
                 continue;
             }else if(colorProgress == 2){
                 if(character == '}'){
@@ -229,8 +233,8 @@ public final class TFontRenderer extends FontRenderer {
                     customColour += character;
                 }
                 continue;
-            }else if(colorProgress == 3){
-                int secs = Integer.parseInt(customColour);
+            }else if(colorProgress == 3 && !customColour.isEmpty() && customColour.matches("[0-9]+")){
+                int secs = (int) Long.parseLong(customColour);
                 GL11.glColor4d((secs >> 16 & 0x000000FF) / 255.0, (secs >> 8 & 0x000000FF) / 255.0, (secs & 0x000000FF) / 255.0, (secs >> 24 & 0x000000FF) / 255.0);
                 colorProgress = 0;
                 customColour = "";
@@ -265,6 +269,7 @@ public final class TFontRenderer extends FontRenderer {
             int previous;
             final char character = text.charAt(i);
             previous = i > 0 ? (int) text.charAt(i - 1) : 46;
+            char next = i < text.length() - 1 ? text.charAt(i + 1) : 46;
             if (previous == 167) {
                 continue;
             }
@@ -287,10 +292,10 @@ public final class TFontRenderer extends FontRenderer {
             if (character > '\u00ff') {
                 continue;
             }
-            if(character == '$'){
+            if(character == '$' && next == '{'){
                 colorProgress = 1;
                 continue;
-            }else if(character == '{'){
+            }else if(character == '{' && previous == '$'){
                 colorProgress = 2;
                 continue;
             }else if(colorProgress == 2){

@@ -95,7 +95,7 @@ public final class ConfigManager {
                             if(val == null) return;
                             if(val instanceof ListValue && entry.getValue().isJsonObject()) {
                                 ListValue value = (ListValue) val;
-                                System.out.println(entry.getValue().getAsJsonObject().get(val.name).getAsJsonObject());
+                                //System.out.println(entry.getValue().getAsJsonObject().get(val.name).getAsJsonObject());
                                 value.fromObject(entry.getValue().getAsJsonObject().get(val.name).getAsJsonObject());
                             } else
                             val.fromPrimitive(settings.getValue().getAsJsonPrimitive());
