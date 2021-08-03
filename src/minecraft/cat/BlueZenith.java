@@ -112,20 +112,12 @@ public class BlueZenith {
 
     public static void updateRPC(String line1, String line2) {
         //developer badge :flushed:
-        if(isDeveloper) {
-            rpc = new DiscordRichPresence.Builder(line2)
-                    .setBigImage("main", version)
-                    .setSmallImage("developer_badge", "Maintainer")
-                    .setDetails(line1)
-                    .setStartTimestamps(System.currentTimeMillis())
-                    .build();
-        } else {
-            rpc = new DiscordRichPresence.Builder(line2)
-                    .setBigImage("main", version)
-                    .setDetails(line1)
-                    .setStartTimestamps(System.currentTimeMillis())
-                    .build();
+        DiscordRichPresence.Builder f = new DiscordRichPresence.Builder(line2);
+        f.setBigImage("main", version).setDetails(line1).setStartTimestamps(startTime).build();
+        if(isDeveloper){
+            f.setSmallImage("developer_badge", "Maintainer");
         }
+        rpc = f.build();
         DiscordRPC.discordUpdatePresence(rpc);
     }
 
