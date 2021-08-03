@@ -23,6 +23,7 @@ public class Module {
     public boolean showSettings, hidden;
     public Animate clickGuiAnim = new Animate().setEase(Easing.QUAD_IN_OUT).setSpeed(300);
     public Animate arrayAnim = new Animate().setEase(Easing.QUAD_IN_OUT).setSpeed(200);
+    public float arrayListHeight = 0;
     public Module(String name, String tag, ModuleCategory cat, String... aliases){
         this(name, tag, cat, 0, aliases);
     }
