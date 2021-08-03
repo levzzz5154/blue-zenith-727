@@ -104,7 +104,7 @@ public class ModulePanel extends Panel {
                             FontValue fontValue = (FontValue) v;
                             RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
                             f.drawString(fontValue.name, x + 5, y2 + she_lied, mainColor.getRGB());
-                            f.drawString(fontValue.get().getName(), x + 10 + f.getStringWidth(fontValue.name), y2 + she_lied, Color.GRAY.getRGB());
+                            f.drawString(fontValue.get().getName(), x + width - f.getStringWidth(fontValue.get().getName()) - 5, y2 + she_lied, Color.GRAY.getRGB());
                             if(i(mouseX, mouseY, x, y2, x + width, y2 + h) && !wasPressed && handleClicks) {
                                 if(Mouse.isButtonDown(0)) {
                                     fontValue.next();
@@ -121,7 +121,7 @@ public class ModulePanel extends Panel {
                             ModeValue modeValue = (ModeValue) v;
                             RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
                             f.drawString(modeValue.name, x + 5, y2 + she_lied, mainColor.getRGB());
-                            f.drawString(modeValue.get(), x + 10 + f.getStringWidth(modeValue.name), y2 + she_lied, Color.GRAY.getRGB());
+                            f.drawString(modeValue.get(), x + width - f.getStringWidth(modeValue.get()) - 5, y2 + she_lied, Color.GRAY.getRGB());
                             if(i(mouseX, mouseY, x, y2, x + width, y2 + h) && !wasPressed && handleClicks) {
                                 if(Mouse.isButtonDown(0)) {
                                     modeValue.next();

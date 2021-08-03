@@ -15,7 +15,6 @@ import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +63,7 @@ public class IntellijClickGui extends GuiScreen {
         mousePressed = Mouse.isButtonDown(0) || Mouse.isButtonDown(1);
         panelHeight = Math.max(400, sussyRectHeight + 4 + (yIncrement * l.size()) + sussyRectHeight);
     }
-    private float drawModulesTree(float x, float y, int mouseX, int mouseY, float width){
+    private float drawModulesTree(float x, float y, int mouseX, int mouseY, float width) {
         RenderUtil.rect(x, y, x + moduleTreeWidth, y + panelHeight, background6);
         boolean isOpen = true;
         final String str1 = (isOpen ? "B" : "C") + " A ";

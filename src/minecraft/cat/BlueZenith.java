@@ -106,14 +106,16 @@ public class BlueZenith {
 
         scheduledExecutorService.scheduleAtFixedRate(() -> { //update presence every second
             DiscordRPC.discordRunCallbacks();
+            rpc.startTimestamp = System.currentTimeMillis();
+            rpc.endTimestamp = System.currentTimeMillis() + 447600;
             DiscordRPC.discordUpdatePresence(rpc);
-        }, 0, 1, TimeUnit.SECONDS);
+        }, 0, 700, TimeUnit.MILLISECONDS);
     }
 
     public static void updateRPC(String line1, String line2) {
         //developer badge :flushed:
         DiscordRichPresence.Builder f = new DiscordRichPresence.Builder(line2);
-        f.setBigImage("main", version).setDetails(line1).setStartTimestamps(startTime).build();
+        f.setBigImage("main", version).setDetails(line1).build();
         if(isDeveloper){
             f.setSmallImage("developer_badge", "Maintainer");
         }

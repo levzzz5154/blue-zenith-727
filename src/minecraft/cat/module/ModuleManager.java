@@ -47,4 +47,8 @@ public final class ModuleManager {
             }
         }
     }
+
+    public void handleMousePress(int mouseButton) {
+
+    }
 }

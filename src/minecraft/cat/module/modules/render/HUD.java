@@ -15,6 +15,8 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import com.google.common.eventbus.Subscribe;
+import org.apache.commons.lang3.StringUtils;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -58,7 +60,7 @@ public class HUD extends Module {
         // checkmate natasha
         FontRenderer font = getFont();
         modules.sort((m, m1) -> Float.compare(font.getStringWidth(m1.getTagName()), font.getStringWidth(m.getTagName())));
-        String str = clientName.get() + " " + BlueZenith.version;
+        String str = (StringUtils.isBlank(clientName.get()) ? BlueZenith.name : clientName.get()) + " " + BlueZenith.version;
         char[] strArr = str.toCharArray();
         float x1 = 5;
         for (int i = 0; i < strArr.length; i++) {

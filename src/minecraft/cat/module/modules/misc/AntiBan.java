@@ -32,9 +32,7 @@ public class AntiBan extends Module {
         }
     }
     public void onEnable() {
-        for(int i = 0; i < 10; i++) {
-            NotificationManager.publish("Do not use AntiBan on Hypixel!", NotificationType.WARNING, 3000);
-        }
+        NotificationManager.publish("Do not use AntiBan on Hypixel!", NotificationType.WARNING, 3000);
     }
 }
 

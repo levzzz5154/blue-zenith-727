@@ -19,6 +19,7 @@ public class StreamerMode extends Module {
 
     @Subscribe
     public void onTextEvent(TextEvent e){
+        if(mc.thePlayer == null) return;
         String username = mc.session.getUsername();
         if(e.getText().contains("omegacraft.cl")){
             System.out.println(ColorUtil.getFirstColor(e.getText()));

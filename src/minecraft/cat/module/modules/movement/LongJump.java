@@ -11,6 +11,8 @@ import cat.util.MovementUtil;
 import cat.util.PlayerUtil;
 import com.google.common.eventbus.Subscribe;
 
+import static cat.util.MovementUtil.stopMoving;
+
 @SuppressWarnings("SpellCheckingInspection")
 public class LongJump extends Module {
     public ModeValue mode = new ModeValue("Mode", "OldVerus", true, null, "OldVerus");
@@ -71,5 +73,10 @@ public class LongJump extends Module {
         if(mc.thePlayer.onGround && lol == 0 && c > 3 && maccacokkk){
             setState(false);
         }
+    }
+
+    @Override
+    public void onDisable() {
+        stopMoving();
     }
 }
