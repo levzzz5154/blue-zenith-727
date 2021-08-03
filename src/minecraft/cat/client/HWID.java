@@ -21,7 +21,7 @@ public class HWID {
             buffer.append(Integer.toHexString(0xFF & b));
         }
         hwid = buffer.toString();
-        System.out.println(hwid);
+        //System.out.println(hwid);
     }
 
     private static String getSerialNumber() {
