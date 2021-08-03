@@ -34,6 +34,7 @@ public class FontUtil {
 	public static TFontRenderer fontSFLight42 = new TFontRenderer(getEpicFont("sf-ui-display-light", 42));
 	public static TFontRenderer I_icon = new TFontRenderer(getEpicFont("icons", 80));
 	public static TFontRenderer I_testFont = new TFontRenderer(getEpicFont("test-font", 20));
+	public static TFontRenderer I_testFont2 = new TFontRenderer(getEpicFont("test-font", 28));
 	static {
 		for(Field i : FontUtil.class.getDeclaredFields()) {
 			i.setAccessible(true);

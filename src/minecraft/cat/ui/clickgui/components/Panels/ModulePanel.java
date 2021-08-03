@@ -9,6 +9,7 @@ import cat.util.MillisTimer;
 import cat.util.RenderUtil;
 import cat.util.font.sigma.FontUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
@@ -30,10 +31,12 @@ public class ModulePanel extends Panel {
     private boolean wasPressed = false;
     private Value<?> sliderVal = null;
     private Module lastMod = null;
+    private final FontRenderer f2;
     public ModulePanel(float x, float y, ModuleCategory category){
         super(x, y, "Modules " + category.displayName);
         this.category = category;
         f = FontUtil.fontSFLight35;
+        f2 = FontUtil.I_testFont2;
         mHeight = f.FONT_HEIGHT + 14;
     }
     public Panel calculateSize(){
@@ -225,13 +228,21 @@ public class ModulePanel extends Panel {
                             ListValue lValue = (ListValue) v;
                             RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
                             f.drawString(lValue.name, x + 5, y2 + she_lied, Color.GRAY.getRGB());
-                            y2 += h;
-                            why += h;
                             if (i(mouseX, mouseY, x, y2, x + width, y2 + h) && (Mouse.isButtonDown(0)) && !wasPressed && handleClicks) {
                                 toggleSound();
                             }
+                            y2 += h;
+                            why += h;
                             for (String i : lValue.getOptions()) {
-                                f.drawString(i, x + 10, y2 + she_lied, Color.GRAY.getRGB());
+                                boolean free_download = lValue.getSelectedOptions().contains(i);
+                                String z = free_download ? "F" : "D";
+                                RenderUtil.rect(x, y2, x + width, y2 + h, settingsColor);
+                                f2.drawString(z, x + 6, y2 + (h / 2f - f2.FONT_HEIGHT / 2f), mainColor.getRGB());
+                                f.drawString(i, x + 10 + f2.getStringWidthF(z) + 2, y2 + she_lied, Color.WHITE.getRGB());
+                                if (i(mouseX, mouseY, x, y2, x + width, y2 + h) && (Mouse.isButtonDown(0)) && !wasPressed && handleClicks) {
+                                    toggleSound();
+                                    lValue.toggleOption(i);
+                                }
                                 y2 += h;
                                 why += h;
                             }
