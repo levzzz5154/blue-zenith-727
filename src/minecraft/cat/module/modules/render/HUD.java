@@ -21,7 +21,8 @@ import java.util.ArrayList;
 // god i hate this check
 @SuppressWarnings("all")
 public class HUD extends Module {
-    private final ModeValue fontMode = new ModeValue("Font", "Client", true, null, "Client", "Vanilla");
+    // bruh its the 3rd time im doing this
+    private final FontValue bypassMode = new FontValue("Font", FontUtil.fontSFLight42, true, null);
     private final StringValue clientName = new StringValue("Client name", BlueZenith.name, true, null);
     private final BooleanValue notifBlur = new BooleanValue("Notification blur", true, true, null);
     private final BooleanValue shadow = new BooleanValue("Text shadow", true, true, null);
@@ -149,6 +150,6 @@ public class HUD extends Module {
         return mc.thePlayer.getDistance(mc.thePlayer.lastTickPosX, mc.thePlayer.lastTickPosY, mc.thePlayer.lastTickPosZ) * (Minecraft.getMinecraft().timer.ticksPerSecond * Minecraft.getMinecraft().timer.timerSpeed);
     }
     private FontRenderer getFont(){
-        return fontMode.get().equals("Client") ? FontUtil.fontSFLight42 : mc.fontRendererObj;
+        return bypassMode.get();
     }
 }
