@@ -5,7 +5,7 @@ import cat.module.ModuleCategory;
 import cat.module.value.types.*;
 
 public class Animations extends Module {
-    public final ModeValue anim = new ModeValue("Animation", "SlideDown", true, null, "1.7", "Exhibition");
+    public final ModeValue anim = new ModeValue("Animation", "1.7", true, null, "1.7", "Exhibition");
     public final FloatValue itemPosX = new FloatValue( "ItemPosX",0, -100, 100, 0, true, null);
     public final FloatValue itemPosY = new FloatValue( "ItemPosY",0, -100, 100, 0, true, null);
     public final FloatValue itemPosZ = new FloatValue( "ItemPosZ",0, -100, 100, 0, true, null);
@@ -18,7 +18,7 @@ public class Animations extends Module {
     public final IntegerValue slowSwingValue = new IntegerValue("SlowSwingValue", 50, 0,100,0,true, __ -> slowSwing.get());
     @SuppressWarnings("unused")
     private final ActionValue reset = new ActionValue("Reset",() -> {
-        this.anim.set("SlideDown");
+        this.anim.set("1.7");
         this.itemPosX.set(0f);
         this.itemPosY.set(0f);
         this.itemPosZ.set(0f);
@@ -32,5 +32,9 @@ public class Animations extends Module {
     });
     public Animations() {
         super("Animations", "", ModuleCategory.RENDER, "animations", "anim");
+    }
+    @Override
+    public String getTag(){
+        return anim.get();
     }
 }
