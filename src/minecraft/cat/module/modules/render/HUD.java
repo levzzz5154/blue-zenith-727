@@ -21,8 +21,7 @@ import java.util.ArrayList;
 // god i hate this check
 @SuppressWarnings("all")
 public class HUD extends Module {
-    private final ModeValue fontMode = new ModeValue("Font", "Client", true, null, "Client", "Vanilla");
-    private final StringValue clientName = new StringValue("Client name", BlueZenith.name, true, null);
+    private final FontValue fontValue = new FontValue("Font", FontUtil.fontSFLight42, true, null);    private final StringValue clientName = new StringValue("Client name", BlueZenith.name, true, null);
     private final BooleanValue notifBlur = new BooleanValue("Notification blur", true, true, null);
     private final BooleanValue shadow = new BooleanValue("Text shadow", true, true, null);
     private final BooleanValue border = new BooleanValue("Border", true, true, null);
@@ -130,7 +129,7 @@ public class HUD extends Module {
             f.drawString(displayString, sr.getScaledWidth() - f.getStringWidthF(displayString) - 2, sr.getScaledHeight() - y, colorD.getRGB(), shadow.get());
         }
     }
-    private Color getColor(int i){
+    private Color getColor(int i) {
         switch (colorMode.get()){
             case "Rainbow":
                 return ColorUtil.rainbow(i, rainbowMulti.get());
@@ -149,6 +148,6 @@ public class HUD extends Module {
         return mc.thePlayer.getDistance(mc.thePlayer.lastTickPosX, mc.thePlayer.lastTickPosY, mc.thePlayer.lastTickPosZ) * (Minecraft.getMinecraft().timer.ticksPerSecond * Minecraft.getMinecraft().timer.timerSpeed);
     }
     private FontRenderer getFont(){
-        return fontMode.get().equals("Client") ? FontUtil.fontSFLight42 : mc.fontRendererObj;
+        return fontValue.get();
     }
 }

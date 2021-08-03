@@ -16,7 +16,7 @@ ao:0
 renderClouds:fast
 resourcePacks:[]
 incompatibleResourcePacks:[]
-lastServer:
+lastServer:dffff
 lang:en_US
 chatVisibility:0
 chatColors:true
