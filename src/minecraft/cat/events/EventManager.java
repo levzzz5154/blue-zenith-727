@@ -22,7 +22,7 @@ public final class EventManager {
 
     public void registerListener(Object listener) {
         for (Method method : listener.getClass().getMethods()) {
-            if(method.isAnnotationPresent(Subscribe.class) && method.getParameterTypes().length == 1 && method.getParameterTypes()[0].getSuperclass() == Event.class) {
+            if(method.isAnnotationPresent(Subscribe.class) && method.getParameterTypes().length == 1 && (method.getParameterTypes()[0].getSuperclass() == Event.class || method.getParameterTypes()[0].getSuperclass().getSuperclass() == Event.class)) {
                 Class<?> ev = method.getParameterTypes()[0];
                 if(!listeners.containsKey(ev)) {
                     CopyOnWriteArrayList<Method> m = new CopyOnWriteArrayList<>();
@@ -44,7 +44,6 @@ public final class EventManager {
             BlueZenith.eventBus.post(event);
         else dispatch(event);
     }
-
     private void dispatch(Event event) {
         listeners.forEach((targetEvent, methods) -> {
             if(targetEvent == event.getClass()){
