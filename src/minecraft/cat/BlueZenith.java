@@ -30,7 +30,7 @@ public class BlueZenith {
     private static final String[] devs = {"3c120deab28db9574f345f62f4fbca55acf2fb53930a0c7758610e4975997", "2129e0c24fc31b3c1963c7ff6732b233ca58c4e135dfe43b52e5abd5df0339e", "ea5259b2e38173c336a8fee84c4cb7edce5e066a3189a4bbce882ec3670638"};
     public static String currentServerIP;
     public static String name = "Blue Zenith";
-    public static String version = "b2.0";
+    public static String version = "b3.0";
     public static boolean useExperimentalEventBus = true;
     public static EventManager eventManager;
     public static EventBus eventBus;
@@ -134,4 +134,13 @@ public class BlueZenith {
             eventBus.unregister(listener);
         else eventManager.unregisterListener(listener);
     }
+    
+    private static synchronized final String updateWhen(Object angles) {
+        
+        String levzzz = "".toString().toString().toString().toString().toString().toString().toString().toString().toString().toString().toString().toString().toString();
+        
+        return "skill issue";
+        
+    }
+        
 }
